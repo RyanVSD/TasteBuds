@@ -8,11 +8,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('This is the home page'),
+          title: const Text('This is the home page',
+              textDirection: TextDirection.ltr),
         ),
         body: Center(
             child: ElevatedButton(
-                child: const Text('Open route'),
+                child:
+                    const Text('Open route', textDirection: TextDirection.ltr),
                 onPressed: () {
                   Navigator.push(
                     context,
