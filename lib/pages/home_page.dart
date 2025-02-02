@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/pages/account_page.dart';
+import './account_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,15 +12,29 @@ class HomePage extends StatelessWidget {
               textDirection: TextDirection.ltr),
         ),
         body: Center(
-            child: ElevatedButton(
-                child:
-                    const Text('Open route', textDirection: TextDirection.ltr),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountPage()),
-                  );
-                })));
+            child: Column(
+              children: [
+                ElevatedButton(
+                    child:
+                        const Text('Account', textDirection: TextDirection.ltr),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AccountPage()),
+                      );
+                    }),
+                ElevatedButton(
+                    child:
+                        const Text('Post', textDirection: TextDirection.ltr),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AccountPage()),
+                      );
+                    }),
+              ],
+            )));
   }
 }
