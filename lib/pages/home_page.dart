@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './account_page.dart';
+import './post_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const AccountPage()),
+                            builder: (context) => const PostPage()),
                       );
                     }),
               ],
