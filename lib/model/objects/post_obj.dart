@@ -1,32 +1,51 @@
 
 class Post {
-  String _postId = "0";
-  String _title = "untitled";
-  String _imageUrl = "";
-  List<String> _ingredient = List.empty();
-  List<String> _step = List.empty();
-  Map<String, int> _rating = {
+  String postId;
+  String title;
+  String author;
+  String imageUrl;
+  List<String>? ingredient;
+  List<String>? step;
+  Map<String, int>? rating;
+/*
+   {
     "difficulty":0,
     "taste":0,
     "price":0,
-  };
+    }
+*/
+  Post.empty(
+    {
+      this.postId = "0",
+      this.title = "untitled",
+      this.author = "author",
+      this.imageUrl = "https://static.wikia.nocookie.net/fruits-information/images/2/2b/Apple.jpg/revision/latest/thumbnail/width/360/height/450?cb=20180802112257",
+      this.ingredient,
+      this.step,
+      this.rating
+    }
+  );
+  Post(
+    {
+      required this.postId,
+      this.title = "untitled",
+      this.author = "author",
+      this.imageUrl = "https://static.wikia.nocookie.net/fruits-information/images/2/2b/Apple.jpg/revision/latest/thumbnail/width/360/height/450?cb=20180802112257",
+      this.ingredient,
+      this.step,
+      this.rating 
+    }
+  );
 
-  String get getPostId { return _postId;}
-  set setPostId( String id) { _postId = id;}
-
-  String get getTitle { return _title;}
-  set setTitle( String title) { _title = title;}
-
-  String get getImageUrl { return _imageUrl;}
-  set setImageUrl( String url) { _imageUrl = url;}
-
-  List<String> get getIngredient { return _ingredient;}
-  set setIngredient( List<String> list) { _ingredient = list;}
-
-  List<String> get getStep { return _step;}
-  set setStep( List<String> step) { _step = step;}
-
-  Map<String, int> get getRating { return _rating;}
-  set setRating( Map<String, int> rating) { _rating = rating;}
-
+   factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      postId: json['postId'],
+      title: json['title'],
+      author: json['author'],
+      imageUrl: json['imageUrl'],
+      ingredient: List<String>.from(json['ingredient']),
+      step: List<String>.from(json['step']),
+      rating: Map<String, int>.from(json['rating']),
+    );
+  }
 }
