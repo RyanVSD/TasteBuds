@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 // Adjust these imports to the correct paths in your project:
-import '../Screens/home.dart';       
-import '../Screens/profile_screen.dart';
+import '../pages/home_page.dart';
+import '../pages/profile_page.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class BottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => HomePage()),
               );
             },
           ),
@@ -55,7 +55,6 @@ class BottomNavBar extends StatelessWidget {
               );
             },
           ),
-
         ],
       ),
     );
@@ -64,7 +63,7 @@ class BottomNavBar extends StatelessWidget {
 
 // Floating Action Button (for Add Post)
 class AddPostButton extends StatelessWidget {
-  AddPostButton({Key? key}) : super(key: key);
+  const AddPostButton({super.key});
 
   @override
   Widget build(BuildContext context) {
