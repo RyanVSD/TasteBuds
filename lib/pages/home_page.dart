@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
+import './account_page.dart';
+import './post_page.dart';
 import 'package:tastebuds/model/dummy_data.dart';
 import 'package:tastebuds/model/post.dart';
 import '/widgets/bottom_nav_bar.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -137,5 +141,6 @@ class _HomePageState extends State<HomePage> {
             child: Text(page.toString()),
           )
         ][page]);
+
   }
 }
