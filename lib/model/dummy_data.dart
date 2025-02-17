@@ -1,10 +1,11 @@
-import '/Models/post.dart';
+import 'post.dart';
 
 final List<Post> dummyPosts = [
   Post(
     id: 'p1',
     title: 'Granny Sue BLT Sandwich',
-    imageUrl: 'https://www.foodrepublic.com/img/gallery/yes-banana-and-mayo-belong-on-a-sandwich/l-intro-1722889922.jpg',
+    imageUrl:
+        'https://www.foodrepublic.com/img/gallery/yes-banana-and-mayo-belong-on-a-sandwich/l-intro-1722889922.jpg',
     author: 'Granny Sue',
     likes: 478,
     favorites: 1234,
@@ -30,7 +31,8 @@ final List<Post> dummyPosts = [
   Post(
     id: 'p2',
     title: 'Classic Margherita Pizza',
-    imageUrl: 'https://cdn.shopify.com/s/files/1/0274/9503/9079/files/20220211142754-margherita-9920_5a73220e-4a1a-4d33-b38f-26e98e3cd986.jpg?v=1723650067',
+    imageUrl:
+        'https://cdn.shopify.com/s/files/1/0274/9503/9079/files/20220211142754-margherita-9920_5a73220e-4a1a-4d33-b38f-26e98e3cd986.jpg?v=1723650067',
     author: 'Granny Sue',
     likes: 892,
     favorites: 2341,
@@ -62,7 +64,8 @@ final List<Post> dummyPosts = [
   Post(
     id: 'p3',
     title: 'Homemade Chocolate Donuts',
-    imageUrl: 'https://kitchen335co.com/wp-content/uploads/2023/06/glazed-chocolate-donuts-thumbnail.jpg',
+    imageUrl:
+        'https://kitchen335co.com/wp-content/uploads/2023/06/glazed-chocolate-donuts-thumbnail.jpg',
     author: 'Granny Sue',
     likes: 1254,
     favorites: 1987,
@@ -97,7 +100,8 @@ final List<Post> dummyPosts = [
   Post(
     id: 'p4',
     title: 'Fresh Avocado & Quinoa Salad',
-    imageUrl: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/california-quinoa-avocado-salad-820b6ba.jpg?quality=90&resize=440,400',
+    imageUrl:
+        'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/california-quinoa-avocado-salad-820b6ba.jpg?quality=90&resize=440,400',
     author: 'Granny Sue',
     likes: 742,
     favorites: 1395,

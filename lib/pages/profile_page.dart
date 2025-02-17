@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import '../Widgets/bottom_nav_bar.dart';
-import '../data/dummy_data.dart';
-import '../Models/post.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../model/dummy_data.dart';
+import '../model/post.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class _ProfilePageState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   double _appBarOpacity = 0.0; // Initially invisible
 
@@ -19,10 +20,9 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-     _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    
   }
 
   @override
@@ -51,17 +51,15 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
           duration: const Duration(milliseconds: 200),
           child: const Text(
             'Profile',
-          style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black),
           ),
         ),
       ),
-
 
       // 💚 Use NestedScrollView to combine both scrolling behaviors
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          
           // 💚 Profile Header (This will scroll out of view)
           SliverToBoxAdapter(
             child: Container(
@@ -146,13 +144,10 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                   Tab(text: 'Favorites'),
                 ],
               ),
-          
-                         
             ),
           ),
         ],
-         
-        
+
         // 💚 The main body (scrolls with the whole page)
         body: TabBarView(
           controller: _tabController,
@@ -209,7 +204,8 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
             children: [
               // Post Image
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(10)),
                 child: Image.network(
                   post.imageUrl,
                   height: 200,
@@ -252,14 +248,16 @@ class _ProfilePageState extends State<ProfilePage> with SingleTickerProviderStat
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.thumb_up, size: 16, color: Colors.blue),
+                            const Icon(Icons.thumb_up,
+                                size: 16, color: Colors.blue),
                             const SizedBox(width: 4),
                             Text('${post.likes} Likes'),
                           ],
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.favorite, size: 16, color: Colors.red),
+                            const Icon(Icons.favorite,
+                                size: 16, color: Colors.red),
                             const SizedBox(width: 4),
                             Text('${post.favorites} Favorites'),
                           ],
@@ -288,7 +286,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height + 72;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -335,6 +334,3 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
-
-  
-
