@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// A class to represent a Post in the app.
 class Post {
   final String id; // Unique identifier for the post
@@ -11,7 +9,8 @@ class Post {
   final int likes; // Number of likes
   final int comments; // Number of comments
   final int favorites; // Number of shares
-  final Map<String, double> ratings; // Ratings like taste, difficulty, cheapness
+  final Map<String, double>
+      ratings; // Ratings like taste, difficulty, cheapness
 
   Post({
     required this.id,
@@ -26,5 +25,3 @@ class Post {
     required this.ratings,
   });
 }
-
-
