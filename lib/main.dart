@@ -4,7 +4,6 @@ import './pages/post_page.dart';
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -15,12 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context)=> PostModel())
-      ],
+      providers: [ChangeNotifierProvider(create: (context) => PostModel())],
       child: MaterialApp(
-        home: PostPage(),
+        home: HomePage(),
       ),
     );
   }
