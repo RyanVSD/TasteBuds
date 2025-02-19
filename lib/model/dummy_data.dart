@@ -1,4 +1,4 @@
-import 'post.dart';
+import 'objects/post.dart';
 
 final List<Post> dummyPosts = [
   Post(
@@ -22,9 +22,9 @@ final List<Post> dummyPosts = [
       'Spread mayonnaise on the other slice of bread, and place it on top to make a sandwich.',
     ],
     ratings: {
-      'taste': 4.8,
-      'difficulty': 2.1,
-      'cheapness': 3.7,
+      'taste': 4,
+      'difficulty': 2,
+      'cheapness': 4,
     },
   ),
   // Add more posts here if needed
@@ -54,9 +54,9 @@ final List<Post> dummyPosts = [
       'Slice and enjoy!',
     ],
     ratings: {
-      'taste': 4.9,
-      'difficulty': 3.2,
-      'cheapness': 4.0,
+      'taste': 5,
+      'difficulty': 3,
+      'cheapness': 4,
     },
   ),
 
@@ -90,9 +90,9 @@ final List<Post> dummyPosts = [
       'Let cool, then dip in melted chocolate glaze before serving.',
     ],
     ratings: {
-      'taste': 4.7,
-      'difficulty': 3.0,
-      'cheapness': 4.3,
+      'taste': 5,
+      'difficulty': 3,
+      'cheapness': 4,
     },
   ),
 
@@ -123,9 +123,9 @@ final List<Post> dummyPosts = [
       'Serve immediately or chill for 30 minutes for enhanced flavor.',
     ],
     ratings: {
-      'taste': 4.5,
-      'difficulty': 2.0,
-      'cheapness': 4.1,
+      'taste': 4,
+      'difficulty': 2,
+      'cheapness': 4,
     },
   ),
 ];

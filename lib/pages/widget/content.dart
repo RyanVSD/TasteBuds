@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tastebuds/model/objects/post_obj.dart';
+import 'package:tastebuds/model/objects/post.dart';
 import 'package:tastebuds/model/post_model.dart';
 
 class Content extends StatelessWidget {
@@ -33,7 +33,7 @@ class Content extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 16
               )),
-              ...?post.ingredient?.map((ing)=> Text(ing)),
+              ...post.ingredients.map((ing)=> Text(ing)),
              
             ],
           ),
@@ -45,26 +45,26 @@ class Content extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 16
               )),
-              ...?post.step?.map((ing)=> Text(ing))
+              ...post.steps.map((ing)=> Text(ing))
             ],
           ),
         ),
         Row(
           children: [
             Text("Difficulty: "),
-            ...List.generate(post.rating?["difficulty"]??0, (e)=>Text("★"))
+            ...List.generate(post.ratings["difficulty"]??0, (e)=>Text("★"))
           ],
         ),
         Row(
           children: [
             Text("Taste: "),
-            ...List.generate(post.rating?["taste"]??0, (e)=>Text("★"))
+            ...List.generate(post.ratings["taste"]??0, (e)=>Text("★"))
           ],
         ),
         Row(
           children: [
             Text("Price: "),
-            ...List.generate(post.rating?["price"]??0, (e)=>Text("★"))
+            ...List.generate(post.ratings["price"]??0, (e)=>Text("★"))
           ],
         )
       ],

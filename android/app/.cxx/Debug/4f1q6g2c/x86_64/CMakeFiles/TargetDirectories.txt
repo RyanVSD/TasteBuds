@@ -1,0 +1,2 @@
+D:/document/TasteBuds/android/app/.cxx/Debug/4f1q6g2c/x86_64/CMakeFiles/edit_cache.dir
+D:/document/TasteBuds/android/app/.cxx/Debug/4f1q6g2c/x86_64/CMakeFiles/rebuild_cache.dir

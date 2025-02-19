@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../model/dummy_data.dart';
-import '../model/post.dart';
+import '../model/objects/post.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
