@@ -16,8 +16,9 @@ class PostPage extends StatelessWidget
           children: [
             // test button
             ElevatedButton(onPressed: () {
-              context.read<PostModel>().setPost(postId: "0");
-            }, child: Text("Load Page")),
+               Navigator.pop(context);
+              // context.read<PostModel>().setPost(postId: "1");
+            }, child: Text("Back")),
             // Image.imageUrl(File("./static_asset/img1.jpg")),
             Image.network(context.watch<PostModel>().post?.imageUrl??"https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="),
             Row(

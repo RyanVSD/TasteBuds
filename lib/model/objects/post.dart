@@ -9,8 +9,7 @@ class Post {
   final int likes; // Number of likes
   final int comments; // Number of comments
   final int favorites; // Number of shares
-  final Map<String, int>
-      ratings; // Ratings like taste, difficulty, cheapness
+  final Map<String, int> ratings; // Ratings like taste, difficulty, price
 
   Post({
     required this.id,
@@ -40,6 +39,22 @@ class Post {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'imageUrl': imageUrl,
+      'ingredients': ingredients,
+      'steps': steps,
+      'likes': likes,
+      'comments': comments,
+      'favorites': favorites,
+      'ratings': ratings,
+    };
+  }
+
+
   Post.empty(
     {
       this.id = "0",
@@ -54,4 +69,6 @@ class Post {
       this.ratings = const {}
     }
   );
+
+
 }

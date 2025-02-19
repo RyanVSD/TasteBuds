@@ -2,7 +2,7 @@ import 'objects/post.dart';
 
 final List<Post> dummyPosts = [
   Post(
-    id: 'p1',
+    id: '0',
     title: 'Granny Sue BLT Sandwich',
     imageUrl:
         'https://www.foodrepublic.com/img/gallery/yes-banana-and-mayo-belong-on-a-sandwich/l-intro-1722889922.jpg',
@@ -24,12 +24,12 @@ final List<Post> dummyPosts = [
     ratings: {
       'taste': 4,
       'difficulty': 2,
-      'cheapness': 4,
+      'price': 4,
     },
   ),
   // Add more posts here if needed
   Post(
-    id: 'p2',
+    id: '1',
     title: 'Classic Margherita Pizza',
     imageUrl:
         'https://cdn.shopify.com/s/files/1/0274/9503/9079/files/20220211142754-margherita-9920_5a73220e-4a1a-4d33-b38f-26e98e3cd986.jpg?v=1723650067',
@@ -56,13 +56,13 @@ final List<Post> dummyPosts = [
     ratings: {
       'taste': 5,
       'difficulty': 3,
-      'cheapness': 4,
+      'price': 4,
     },
   ),
 
   // 🍩 Post 3: Homemade Chocolate Donuts
   Post(
-    id: 'p3',
+    id: '2',
     title: 'Homemade Chocolate Donuts',
     imageUrl:
         'https://kitchen335co.com/wp-content/uploads/2023/06/glazed-chocolate-donuts-thumbnail.jpg',
@@ -92,13 +92,13 @@ final List<Post> dummyPosts = [
     ratings: {
       'taste': 5,
       'difficulty': 3,
-      'cheapness': 4,
+      'price': 4,
     },
   ),
 
   // 🥗 Post 4: Fresh Avocado & Quinoa Salad
   Post(
-    id: 'p4',
+    id: '3',
     title: 'Fresh Avocado & Quinoa Salad',
     imageUrl:
         'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/california-quinoa-avocado-salad-820b6ba.jpg?quality=90&resize=440,400',
@@ -125,7 +125,7 @@ final List<Post> dummyPosts = [
     ratings: {
       'taste': 4,
       'difficulty': 2,
-      'cheapness': 4,
+      'price': 4,
     },
   ),
 ];
