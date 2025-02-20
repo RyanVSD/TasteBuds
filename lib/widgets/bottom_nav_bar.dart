@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
-// Adjust these imports to the correct paths in your project:
+import 'package:tastebuds/pages/ranking_page.dart';
+import 'package:tastebuds/pages/recc_page.dart';
+
 import '../pages/home_page.dart';
 import '../pages/profile_page.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
+
+  @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  int _currentPage = 0;
+
+  void changePage(int page) {
+    setState(() {_currentPage = page;});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,40 +32,39 @@ class BottomNavBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.home),
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
+              if (_currentPage != 0){
+                changePage(0);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),);
+              }
             },
           ),
-
-          // Stats / Analytics Button (Placeholder)
           IconButton(
             icon: const Icon(Icons.bar_chart),
             onPressed: () {
-              // TODO: Implement stats or analytics screen
+              if (_currentPage != 1){
+                changePage(1);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RankingPage()),);
+              }
             },
           ),
-
-          // Spacer for FloatingActionButton
           const SizedBox(width: 40),
-
-          // Menu Button (Placeholder)
           IconButton(
-            icon: const Icon(Icons.chat_bubble),
+            icon: const Icon(Icons.thumb_up),
             onPressed: () {
-              // TODO: Implement menu or settings
+              if (_currentPage != 2){
+                changePage(2);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReccPage()),);
+              }
             },
           ),
 
-          // Profile Button
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
+              if (_currentPage != 3){
+                changePage(3);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()),);
+              }
             },
           ),
         ],
