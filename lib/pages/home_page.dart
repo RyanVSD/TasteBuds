@@ -79,13 +79,22 @@ class PostGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      childAspectRatio: 0.78,
-      children: List.generate(posts.length, (index) {
-        Post post = posts[index];
-        return CardWidget(post: post);
-      }),
+    double itemWidth =
+        (MediaQuery.of(context).size.width / 2) - 12; // Adjust width
+    return SingleChildScrollView(
+      child: Center(
+          child: Wrap(
+        spacing: 8,
+        runSpacing: 4,
+        alignment: WrapAlignment.center,
+        children: List.generate(posts.length, (index) {
+          Post post = posts[index];
+          return SizedBox(
+            width: itemWidth, // Ensures 2 columns
+            child: CardWidget(post: post),
+          );
+        }),
+      )),
     );
   }
 }
@@ -103,11 +112,8 @@ class CardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.read<PostModel>().setPost(postId: post.id);
-        Navigator.push(context,
-          MaterialPageRoute(
-            builder: (context) => PostPage()
-          )
-        );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PostPage()));
       },
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -161,7 +167,8 @@ class CardWidget extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.favorite, size: 16, color: Colors.red),
+                          const Icon(Icons.favorite,
+                              size: 16, color: Colors.red),
                           const SizedBox(width: 4),
                           Text('${post.favorites} Favorites'),
                         ],
