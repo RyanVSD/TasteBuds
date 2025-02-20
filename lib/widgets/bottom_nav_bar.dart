@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tastebuds/pages/create_post.dart';
 // Adjust these imports to the correct paths in your project:
 import '../pages/home_page.dart';
 import '../pages/profile_page.dart';
@@ -69,7 +70,8 @@ class AddPostButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        // TODO: Implement add post functionality
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => CreatePost()));
       },
       backgroundColor: Colors.yellow[700],
       child: const Icon(Icons.add, color: Colors.black),
