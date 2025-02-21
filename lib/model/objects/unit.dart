@@ -106,7 +106,9 @@ class Unit {
 
   factory Unit.fromJson(Map<String, dynamic> json) {
     return Unit(
-      type: UnitType.values.firstWhere((e) => e.name == json['type']),
+      type: UnitType.values.firstWhere((e) => e.name == json['type'],
+          orElse: () =>
+              throw ArgumentError('Invalid unit type: $json[\'type\']')),
       value: (json['value'] as num).toDouble(),
     );
   }
