@@ -68,7 +68,7 @@ class Ingredient {
         break;
       }
     }
-    if (!isCookingFrac && dec != 0) {
+    if (!isCookingFrac) {
       format += nonDec > 0
           ? dec.toStringAsFixed(2).substring(1)
           : dec.toStringAsFixed(2);
