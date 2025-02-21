@@ -20,4 +20,8 @@ class Ingredient {
     strbuilder += name;
     return strbuilder;
   }
+
+  void convertTo(UnitType newUnit) {
+    unit.convertTo(newUnit);
+  }
 }
