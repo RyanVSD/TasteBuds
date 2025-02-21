@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:tastebuds/model/objects/ingredient.dart';
 
 /// A class to represent a Post in the app.
@@ -32,7 +34,7 @@ class Post {
         title: json['title'],
         author: json['author'],
         imageUrl: json['imageUrl'],
-        ingredients: (json['ingredients'] as List<dynamic>)
+        ingredients: (jsonDecode(json['ingredients']) as List<dynamic>)
             .map((item) => Ingredient.fromJson(item as Map<String, dynamic>))
             .toList(),
         steps: List<String>.from(json['steps']),
@@ -48,7 +50,7 @@ class Post {
       'title': title,
       'author': author,
       'imageUrl': imageUrl,
-      'ingredients': ingredients,
+      'ingredients': jsonEncode(ingredients),
       'steps': steps,
       'likes': likes,
       'comments': comments,

@@ -84,6 +84,13 @@ class Unit {
     _class = _getClass(_type);
   }
 
+  Unit.stringType({required String type, required double value})
+      : _type = UnitType.values.firstWhere((e) => e.name == type,
+            orElse: () => throw ArgumentError('Invalid unit type: $type')),
+        _value = value {
+    _class = _getClass(_type);
+  }
+
   // Converts to unit type within given class, adjusting value
   void convertTo(UnitType newUnit) {
     if (_value == 0) throw Exception("Value not defined");
@@ -102,6 +109,14 @@ class Unit {
       type: UnitType.values.firstWhere((e) => e.name == json['type']),
       value: (json['value'] as num).toDouble(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'value': _value,
+      'type': _type.name,
+      'class': _class.name,
+    };
   }
 
   double getValue() {
