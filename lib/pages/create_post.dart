@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tastebuds/widgets/bottom_nav_bar.dart';
 
 class CreatePost extends StatefulWidget {
+  const CreatePost({super.key});
+
   @override
-  _CreatePostState createState() => _CreatePostState();
+  State<CreatePost> createState() => _CreatePostState();
 }
 
 class _CreatePostState extends State<CreatePost> {
@@ -11,6 +13,6 @@ class _CreatePostState extends State<CreatePost> {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: BottomNavBar(),
-        body: Center(child: Text("Create Post Here")));
+        body: Center(child: Text("I love lebron")));
   }
 }
