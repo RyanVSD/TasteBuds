@@ -91,4 +91,16 @@ class Unit {
     mValue = valueInBase / conversionToBase[newUnit]!;
     mType = newUnit;
   }
+
+  double getValue() {
+    return mValue;
+  }
+
+  UnitType getType() {
+    return mType;
+  }
+
+  UnitClass getClass() {
+    return mClass;
+  }
 }
