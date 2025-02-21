@@ -62,10 +62,12 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: BottomNavBar(),
         floatingActionButton: AddPostButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: <Widget>[
-          PostGrid(posts: dummyPosts),
-          PostGrid(posts: List.from(dummyPosts)..shuffle()),
-        ][page]);
+        body: Center(
+          child: <Widget>[
+            PostGrid(posts: dummyPosts),
+            PostGrid(posts: List.from(dummyPosts)..shuffle()),
+          ][page],
+        ));
   }
 }
 
@@ -86,7 +88,7 @@ class PostGrid extends StatelessWidget {
           child: Wrap(
         spacing: 8,
         runSpacing: 4,
-        alignment: WrapAlignment.center,
+        alignment: WrapAlignment.start,
         children: List.generate(posts.length, (index) {
           Post post = posts[index];
           return SizedBox(

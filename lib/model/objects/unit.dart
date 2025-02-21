@@ -9,7 +9,7 @@ enum UnitType {
   quart,
   gallon,
   fluidOunce,
-  mililiter,
+  milliliter,
   liter,
   decalitre,
   gill,
@@ -21,7 +21,7 @@ enum UnitType {
 
 // Unit valuaes
 const Map<UnitType, double> conversionToBase = {
-  // Mililiter base for volume
+  // milliliter base for volume
   UnitType.teaspoon: 4.92892,
   UnitType.tablespoon: 14.7868,
   UnitType.cup: 240.0,
@@ -30,7 +30,7 @@ const Map<UnitType, double> conversionToBase = {
   UnitType.gallon: 3785.41,
   UnitType.fluidOunce: 29.5735,
   UnitType.liter: 1000.0,
-  UnitType.mililiter: 1.0,
+  UnitType.milliliter: 1.0,
   UnitType.decalitre: 10000.0,
   UnitType.gill: 118.294,
 

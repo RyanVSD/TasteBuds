@@ -21,20 +21,62 @@ class Ingredient {
       : _name = name,
         _unit = Unit.stringType(type: "none", value: value);
 
+  static String _formatValue(double value) {
+    String format = "";
+    int nonDec = value.truncate();
+    if (nonDec > 0) format += "$nonDec ";
+    double dec = value - nonDec;
+    switch (dec) {
+      case 0.125:
+        format += "1/8";
+        break;
+      case 0.25:
+        format += "1/4";
+        break;
+      case 0.375:
+        format += "3/8";
+        break;
+      case 0.5:
+        format += "1/2";
+        break;
+      case 0.625:
+        format += "5/8";
+        break;
+      case 0.75:
+        format += "3/4";
+        break;
+      case 0.875:
+        format += "7/8";
+        break;
+      default:
+        if (dec != 0) {
+          format += nonDec > 0
+              ? dec.toStringAsFixed(2).substring(1)
+              : dec.toStringAsFixed(2);
+        }
+    }
+    return format;
+  }
+
   @override
   String toString() {
     String strbuilder = "";
     double value = _unit.getValue();
-    String formatValue =
-        value % 1 == 0 ? value.toInt().toString() : value.toString();
+    UnitType type = _unit.getType();
+    String formatValue = Ingredient._formatValue(value);
+
     if (value == 0) {
       return _name;
     }
     strbuilder += formatValue;
     strbuilder += " ";
     if (_unit.getType() != UnitType.none) {
-      strbuilder += _unit.getType().name;
-      if (value != 1) strbuilder += "s";
+      if (type == UnitType.fluidOunce) {
+        strbuilder += "fluid ounce";
+      } else {
+        strbuilder += type.name;
+      }
+      if (value > 1) strbuilder += "s";
       strbuilder += " of ";
     }
     strbuilder += _name;
