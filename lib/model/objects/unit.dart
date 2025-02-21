@@ -97,6 +97,13 @@ class Unit {
     _type = newUnit;
   }
 
+  factory Unit.fromJson(Map<String, dynamic> json) {
+    return Unit(
+      type: UnitType.values.firstWhere((e) => e.name == json['type']),
+      value: (json['value'] as num).toDouble(),
+    );
+  }
+
   double getValue() {
     return _value;
   }

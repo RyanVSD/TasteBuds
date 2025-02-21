@@ -26,6 +26,10 @@ class Ingredient {
     return strbuilder;
   }
 
+  factory Ingredient.fromJson(Map<String, dynamic> json) {
+    return Ingredient(name: json['name'], unit: Unit.fromJson(json['unit']));
+  }
+
   String getUnitType() {
     return _unit.getType().name;
   }
