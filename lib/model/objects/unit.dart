@@ -56,10 +56,12 @@ enum UnitClass {
   Supports translation between units
 */
 class Unit {
-  UnitType mType;
-  double mValue;
-  late UnitClass mClass;
+  // Private variables
+  UnitType _type;
+  double _value;
+  late UnitClass _class;
 
+  // Helper functions
   UnitClass _getClass(UnitType t) {
     switch (t) {
       case UnitType.gram:
@@ -76,31 +78,34 @@ class Unit {
     }
   }
 
-  Unit({required this.mType, required this.mValue}) {
-    mClass = _getClass(mType);
+  Unit({required UnitType type, required double value})
+      : _type = type,
+        _value = value {
+    _class = _getClass(_type);
   }
 
+  // Converts to unit type within given class, adjusting value
   void convertTo(UnitType newUnit) {
-    if (mValue == 0) throw Exception("Value not defined");
-    if (mClass != _getClass(newUnit)) {
+    if (_value == 0) throw Exception("Value not defined");
+    if (_class != _getClass(newUnit)) {
       throw Exception(
-          "Cannot convert between: ${mClass.name} and ${_getClass(newUnit).name}");
+          "Cannot convert between: ${_class.name} and ${_getClass(newUnit).name}");
     }
-    if (newUnit == mType || newUnit == UnitType.none) return;
-    double valueInBase = mValue * conversionToBase[mType]!;
-    mValue = valueInBase / conversionToBase[newUnit]!;
-    mType = newUnit;
+    if (newUnit == _type || newUnit == UnitType.none) return;
+    double valueInBase = _value * conversionToBase[_type]!;
+    _value = valueInBase / conversionToBase[newUnit]!;
+    _type = newUnit;
   }
 
   double getValue() {
-    return mValue;
+    return _value;
   }
 
   UnitType getType() {
-    return mType;
+    return _type;
   }
 
   UnitClass getClass() {
-    return mClass;
+    return _class;
   }
 }
