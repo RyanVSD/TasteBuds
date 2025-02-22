@@ -1,4 +1,5 @@
 import 'package:tastebuds/model/objects/ingredient.dart';
+import 'package:tastebuds/model/objects/unit.dart';
 
 import 'objects/post.dart';
 
@@ -352,4 +353,45 @@ final List<Post> dummyPosts = [
       'price': 4,
     },
   ),
+  Post(
+      id: '9',
+      title: 'conversion test',
+      imageUrl:
+          'https://photos.thetrek.co/wp-content/uploads/2019/01/25205359/IMG_5933-250x250.jpg',
+      author: 'Elon Musk',
+      likes: 420,
+      favorites: 420,
+      ingredients: [
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti"),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.teaspoon),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.tablespoon),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.cup),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.pint),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.quart),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.gallon),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.fluidOunce),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.milliliter),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.liter),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.decalitre),
+        Ingredient(value: 5, unit: "milliliter", name: "spaghetti")
+          ..convertTo(UnitType.gill),
+      ],
+      steps: [
+        'This is a test for unit conversions'
+      ],
+      ratings: {
+        'taste': 1,
+        'difficulty': 1,
+        'price': 1,
+      })
 ];

@@ -18,6 +18,8 @@ class Ingredient {
     1 / 20,
     1 / 32
   ];
+
+  static const _decCount = 3;
   // Private member variables
   final String _name;
   final Unit _unit;
@@ -70,11 +72,28 @@ class Ingredient {
     }
     if (!isCookingFrac) {
       format += nonDec > 0
-          ? dec.toStringAsFixed(2).substring(1)
-          : dec.toStringAsFixed(2);
+          ? Ingredient.trimToNSignificantDecimals(dec, Ingredient._decCount)
+              .substring(1)
+          : Ingredient.trimToNSignificantDecimals(dec, Ingredient._decCount);
     }
 
     return format;
+  }
+
+  // Given a positive decimal float (0 <= decimal < 1), trim it to only N decimal nums
+  // (0.12345, 3) --> "0.123"
+  // (0.00012345, 3) --> "0.000123"
+  static String trimToNSignificantDecimals(double decimal, int n) {
+    String str = decimal.toString();
+    if (decimal > 1) throw ArgumentError("decimal must be < 1");
+    RegExp regex = RegExp(r'(0\.0{0,}[1-9]\d{0,2})(.*)');
+    Match? match = regex.firstMatch(str);
+    if (match != null) {
+      String ret = match.group(1)!;
+      return ret;
+    } else {
+      return "0";
+    }
   }
 
   // Prints the ingredient in the form of
