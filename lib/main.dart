@@ -5,7 +5,7 @@ import 'package:tastebuds/pages/ranking_page.dart';
 import 'package:tastebuds/pages/recc_page.dart';
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';
-import '/widgets/bottom_nav_bar.dart';
+import 'pages/widget/bottom_nav_bar.dart';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
