@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
-import 'package:tastebuds/pages/signin_page.dart';
 import 'package:tastebuds/widgets/custom_scaffold.dart';
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';

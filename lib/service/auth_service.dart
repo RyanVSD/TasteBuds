@@ -1,45 +1,6 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
 
 class AuthService {
-  /// Signs in a user with email and password
-  static Future<SignInResult?> signIn(String email, String password) async {
-    try {
-      final result =
-          await Amplify.Auth.signIn(username: email, password: password);
-      return result;
-    } on AuthException catch (e) {
-      print('Sign-in failed: ${e.message}');
-      return null;
-    }
-  }
-
-  static Future<SignUpResult?> signUp(String email, String password,
-      Map<AuthUserAttributeKey, String> attributes) async {
-    try {
-      final result = await Amplify.Auth.signUp(
-        username: email,
-        password: password,
-        options: SignUpOptions(userAttributes: attributes),
-      );
-      return result;
-    } on AuthException catch (e) {
-      print('Sign-up failed: ${e.message}');
-      return null;
-    }
-  }
-
-  /// Confirms a multi-factor authentication (MFA) challenge
-  static Future<SignInResult?> confirmMFA(String confirmationCode) async {
-    try {
-      final result =
-          await Amplify.Auth.confirmSignIn(confirmationValue: confirmationCode);
-      return result;
-    } on AuthException catch (e) {
-      print('MFA confirmation failed: ${e.message}');
-      return null;
-    }
-  }
-
   /// Fetches the currently signed-in user's attributes
   static Future<Map<AuthUserAttributeKey, String>?>
       fetchUserAttributes() async {
