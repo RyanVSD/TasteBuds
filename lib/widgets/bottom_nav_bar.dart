@@ -16,7 +16,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int _currentPage = -1;
 
   void changePage(int page) {
-    setState(() {_currentPage = page;});
+    setState(() {
+      _currentPage = page;
+    });
   }
 
   @override
@@ -24,7 +26,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
-      color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -32,18 +33,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
           IconButton(
             icon: const Icon(Icons.home),
             onPressed: () {
-              if (_currentPage != 0){
+              if (_currentPage != 0) {
                 changePage(0);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()),);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
               }
             },
           ),
           IconButton(
             icon: const Icon(Icons.bar_chart),
             onPressed: () {
-              if (_currentPage != 1){
+              if (_currentPage != 1) {
                 changePage(1);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RankingPage()),);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => RankingPage()),
+                );
               }
             },
           ),
@@ -51,9 +58,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           IconButton(
             icon: const Icon(Icons.thumb_up),
             onPressed: () {
-              if (_currentPage != 2){
+              if (_currentPage != 2) {
                 changePage(2);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReccPage()),);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReccPage()),
+                );
               }
             },
           ),
@@ -61,9 +71,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              if (_currentPage != 3){
+              if (_currentPage != 3) {
                 changePage(3);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()),);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
               }
             },
           ),
@@ -80,10 +93,10 @@ class AddPostButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      backgroundColor: Colors.yellow[700],
       onPressed: () {
         // TODO: Implement add post functionality
       },
-      backgroundColor: Colors.yellow[700],
       child: const Icon(Icons.add, color: Colors.black),
     );
   }

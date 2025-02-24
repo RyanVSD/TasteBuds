@@ -20,8 +20,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           backgroundColor: Colors.yellow[700],
+          automaticallyImplyLeading: false,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -152,7 +152,6 @@ class CardWidget extends StatelessWidget {
                     'By ${post.author}',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[700],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -161,16 +160,20 @@ class CardWidget extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.thumb_up,
-                              size: 16, color: Colors.blue),
+                          const Icon(
+                            Icons.thumb_up,
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
                           Text('${post.likes} Likes'),
                         ],
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.favorite,
-                              size: 16, color: Colors.red),
+                          const Icon(
+                            Icons.favorite,
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
                           Text('${post.favorites} Favorites'),
                         ],

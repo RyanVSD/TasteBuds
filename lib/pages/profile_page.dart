@@ -1,3 +1,4 @@
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../model/dummy_data.dart';
@@ -54,6 +55,18 @@ class _ProfilePageState extends State<ProfilePage>
             style: TextStyle(color: Colors.black),
           ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Signed out')));
+            },
+          ),
+          SignOutButton()
+        ],
       ),
 
       // 💚 Use NestedScrollView to combine both scrolling behaviors
