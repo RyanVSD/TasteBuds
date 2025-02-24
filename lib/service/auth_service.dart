@@ -13,17 +13,6 @@ class AuthService {
     }
   }
 
-  /// Signs out the current user
-  static Future<void> signOut({bool globalSignOut = false}) async {
-    try {
-      await Amplify.Auth.signOut(
-          options: SignOutOptions(globalSignOut: globalSignOut));
-      print('User signed out successfully');
-    } on AuthException catch (e) {
-      print('Sign-out failed: ${e.message}');
-    }
-  }
-
   /// Checks if a user is currently signed in
   static Future<bool> isUserSignedIn() async {
     try {

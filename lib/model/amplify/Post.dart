@@ -36,7 +36,6 @@ class Post extends amplify_core.Model {
   final double? _difficulty;
   final double? _price;
   final List<Ingredient>? _ingredients;
-  final Author? _author;
   final List<FavoritePost>? _favorited;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
@@ -158,10 +157,6 @@ class Post extends amplify_core.Model {
     }
   }
   
-  Author? get author {
-    return _author;
-  }
-  
   List<FavoritePost>? get favorited {
     return _favorited;
   }
@@ -174,9 +169,9 @@ class Post extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Post._internal({required this.id, required title, required imageUrl, required steps, required likes, required favorites, required difficulty, required price, required ingredients, author, favorited, createdAt, updatedAt}): _title = title, _imageUrl = imageUrl, _steps = steps, _likes = likes, _favorites = favorites, _difficulty = difficulty, _price = price, _ingredients = ingredients, _author = author, _favorited = favorited, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Post._internal({required this.id, required title, required imageUrl, required steps, required likes, required favorites, required difficulty, required price, required ingredients, favorited, createdAt, updatedAt}): _title = title, _imageUrl = imageUrl, _steps = steps, _likes = likes, _favorites = favorites, _difficulty = difficulty, _price = price, _ingredients = ingredients, _favorited = favorited, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Post({String? id, required String title, required String imageUrl, required List<String> steps, required int likes, required int favorites, required double difficulty, required double price, required List<Ingredient> ingredients, Author? author, List<FavoritePost>? favorited}) {
+  factory Post({String? id, required String title, required String imageUrl, required List<String> steps, required int likes, required int favorites, required double difficulty, required double price, required List<Ingredient> ingredients, List<FavoritePost>? favorited}) {
     return Post._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       title: title,
@@ -187,7 +182,6 @@ class Post extends amplify_core.Model {
       difficulty: difficulty,
       price: price,
       ingredients: ingredients != null ? List<Ingredient>.unmodifiable(ingredients) : ingredients,
-      author: author,
       favorited: favorited != null ? List<FavoritePost>.unmodifiable(favorited) : favorited);
   }
   
@@ -208,7 +202,6 @@ class Post extends amplify_core.Model {
       _difficulty == other._difficulty &&
       _price == other._price &&
       DeepCollectionEquality().equals(_ingredients, other._ingredients) &&
-      _author == other._author &&
       DeepCollectionEquality().equals(_favorited, other._favorited);
   }
   
@@ -229,7 +222,6 @@ class Post extends amplify_core.Model {
     buffer.write("difficulty=" + (_difficulty != null ? _difficulty!.toString() : "null") + ", ");
     buffer.write("price=" + (_price != null ? _price!.toString() : "null") + ", ");
     buffer.write("ingredients=" + (_ingredients != null ? _ingredients!.toString() : "null") + ", ");
-    buffer.write("author=" + (_author != null ? _author!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -237,7 +229,7 @@ class Post extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Post copyWith({String? title, String? imageUrl, List<String>? steps, int? likes, int? favorites, double? difficulty, double? price, List<Ingredient>? ingredients, Author? author, List<FavoritePost>? favorited}) {
+  Post copyWith({String? title, String? imageUrl, List<String>? steps, int? likes, int? favorites, double? difficulty, double? price, List<Ingredient>? ingredients, List<FavoritePost>? favorited}) {
     return Post._internal(
       id: id,
       title: title ?? this.title,
@@ -248,7 +240,6 @@ class Post extends amplify_core.Model {
       difficulty: difficulty ?? this.difficulty,
       price: price ?? this.price,
       ingredients: ingredients ?? this.ingredients,
-      author: author ?? this.author,
       favorited: favorited ?? this.favorited);
   }
   
@@ -261,7 +252,6 @@ class Post extends amplify_core.Model {
     ModelFieldValue<double>? difficulty,
     ModelFieldValue<double>? price,
     ModelFieldValue<List<Ingredient>?>? ingredients,
-    ModelFieldValue<Author?>? author,
     ModelFieldValue<List<FavoritePost>?>? favorited
   }) {
     return Post._internal(
@@ -274,7 +264,6 @@ class Post extends amplify_core.Model {
       difficulty: difficulty == null ? this.difficulty : difficulty.value,
       price: price == null ? this.price : price.value,
       ingredients: ingredients == null ? this.ingredients : ingredients.value,
-      author: author == null ? this.author : author.value,
       favorited: favorited == null ? this.favorited : favorited.value
     );
   }
@@ -294,11 +283,6 @@ class Post extends amplify_core.Model {
           .map((e) => Ingredient.fromJson(new Map<String, dynamic>.from(e['serializedData'] ?? e)))
           .toList()
         : null,
-      _author = json['author'] != null
-        ? json['author']['serializedData'] != null
-          ? Author.fromJson(new Map<String, dynamic>.from(json['author']['serializedData']))
-          : Author.fromJson(new Map<String, dynamic>.from(json['author']))
-        : null,
       _favorited = json['favorited']  is Map
         ? (json['favorited']['items'] is List
           ? (json['favorited']['items'] as List)
@@ -316,7 +300,7 @@ class Post extends amplify_core.Model {
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title, 'imageUrl': _imageUrl, 'steps': _steps, 'likes': _likes, 'favorites': _favorites, 'difficulty': _difficulty, 'price': _price, 'ingredients': _ingredients?.map((Ingredient? e) => e?.toJson()).toList(), 'author': _author?.toJson(), 'favorited': _favorited?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'title': _title, 'imageUrl': _imageUrl, 'steps': _steps, 'likes': _likes, 'favorites': _favorites, 'difficulty': _difficulty, 'price': _price, 'ingredients': _ingredients?.map((Ingredient? e) => e?.toJson()).toList(), 'favorited': _favorited?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -329,7 +313,6 @@ class Post extends amplify_core.Model {
     'difficulty': _difficulty,
     'price': _price,
     'ingredients': _ingredients,
-    'author': _author,
     'favorited': _favorited,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
@@ -345,9 +328,6 @@ class Post extends amplify_core.Model {
   static final DIFFICULTY = amplify_core.QueryField(fieldName: "difficulty");
   static final PRICE = amplify_core.QueryField(fieldName: "price");
   static final INGREDIENTS = amplify_core.QueryField(fieldName: "ingredients");
-  static final AUTHOR = amplify_core.QueryField(
-    fieldName: "author",
-    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Author'));
   static final FAVORITED = amplify_core.QueryField(
     fieldName: "favorited",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'FavoritePost'));
@@ -417,13 +397,6 @@ class Post extends amplify_core.Model {
       isRequired: true,
       isArray: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'Ingredient')
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: Post.AUTHOR,
-      isRequired: false,
-      targetNames: ['authorId'],
-      ofModelName: 'Author'
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(

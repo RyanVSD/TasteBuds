@@ -28,7 +28,7 @@ class FavoritePost extends amplify_core.Model {
   static const classType = const _FavoritePostModelType();
   final String id;
   final Post? _post;
-  final Author? _author;
+  final User? _user;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -49,8 +49,8 @@ class FavoritePost extends amplify_core.Model {
     return _post;
   }
   
-  Author? get author {
-    return _author;
+  User? get user {
+    return _user;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -61,13 +61,13 @@ class FavoritePost extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const FavoritePost._internal({required this.id, post, author, createdAt, updatedAt}): _post = post, _author = author, _createdAt = createdAt, _updatedAt = updatedAt;
+  const FavoritePost._internal({required this.id, post, user, createdAt, updatedAt}): _post = post, _user = user, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory FavoritePost({String? id, Post? post, Author? author}) {
+  factory FavoritePost({String? id, Post? post, User? user}) {
     return FavoritePost._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       post: post,
-      author: author);
+      user: user);
   }
   
   bool equals(Object other) {
@@ -80,7 +80,7 @@ class FavoritePost extends amplify_core.Model {
     return other is FavoritePost &&
       id == other.id &&
       _post == other._post &&
-      _author == other._author;
+      _user == other._user;
   }
   
   @override
@@ -93,7 +93,7 @@ class FavoritePost extends amplify_core.Model {
     buffer.write("FavoritePost {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("post=" + (_post != null ? _post!.toString() : "null") + ", ");
-    buffer.write("author=" + (_author != null ? _author!.toString() : "null") + ", ");
+    buffer.write("user=" + (_user != null ? _user!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -101,21 +101,21 @@ class FavoritePost extends amplify_core.Model {
     return buffer.toString();
   }
   
-  FavoritePost copyWith({Post? post, Author? author}) {
+  FavoritePost copyWith({Post? post, User? user}) {
     return FavoritePost._internal(
       id: id,
       post: post ?? this.post,
-      author: author ?? this.author);
+      user: user ?? this.user);
   }
   
   FavoritePost copyWithModelFieldValues({
     ModelFieldValue<Post?>? post,
-    ModelFieldValue<Author?>? author
+    ModelFieldValue<User?>? user
   }) {
     return FavoritePost._internal(
       id: id,
       post: post == null ? this.post : post.value,
-      author: author == null ? this.author : author.value
+      user: user == null ? this.user : user.value
     );
   }
   
@@ -126,22 +126,22 @@ class FavoritePost extends amplify_core.Model {
           ? Post.fromJson(new Map<String, dynamic>.from(json['post']['serializedData']))
           : Post.fromJson(new Map<String, dynamic>.from(json['post']))
         : null,
-      _author = json['author'] != null
-        ? json['author']['serializedData'] != null
-          ? Author.fromJson(new Map<String, dynamic>.from(json['author']['serializedData']))
-          : Author.fromJson(new Map<String, dynamic>.from(json['author']))
+      _user = json['user'] != null
+        ? json['user']['serializedData'] != null
+          ? User.fromJson(new Map<String, dynamic>.from(json['user']['serializedData']))
+          : User.fromJson(new Map<String, dynamic>.from(json['user']))
         : null,
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'post': _post?.toJson(), 'author': _author?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'post': _post?.toJson(), 'user': _user?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
     'post': _post,
-    'author': _author,
+    'user': _user,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -151,9 +151,9 @@ class FavoritePost extends amplify_core.Model {
   static final POST = amplify_core.QueryField(
     fieldName: "post",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
-  static final AUTHOR = amplify_core.QueryField(
-    fieldName: "author",
-    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Author'));
+  static final USER = amplify_core.QueryField(
+    fieldName: "user",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "FavoritePost";
     modelSchemaDefinition.pluralName = "FavoritePosts";
@@ -180,10 +180,10 @@ class FavoritePost extends amplify_core.Model {
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.AUTHOR,
+      key: FavoritePost.USER,
       isRequired: false,
-      targetNames: ['authorId'],
-      ofModelName: 'Author'
+      targetNames: ['userId'],
+      ofModelName: 'User'
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(

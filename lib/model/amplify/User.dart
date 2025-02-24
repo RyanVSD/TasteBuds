@@ -24,13 +24,11 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'package:collection/collection.dart';
 
 
-/** This is an auto generated class representing the Author type in your schema. */
-class Author extends amplify_core.Model {
-  static const classType = const _AuthorModelType();
+/** This is an auto generated class representing the User type in your schema. */
+class User extends amplify_core.Model {
+  static const classType = const _UserModelType();
   final String id;
-  final String? _username;
   final List<FavoritePost>? _favorites;
-  final List<Post>? _posts;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -41,31 +39,14 @@ class Author extends amplify_core.Model {
   @override
   String getId() => id;
   
-  AuthorModelIdentifier get modelIdentifier {
-      return AuthorModelIdentifier(
+  UserModelIdentifier get modelIdentifier {
+      return UserModelIdentifier(
         id: id
       );
   }
   
-  String get username {
-    try {
-      return _username!;
-    } catch(e) {
-      throw amplify_core.AmplifyCodeGenModelException(
-          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
-  }
-  
   List<FavoritePost>? get favorites {
     return _favorites;
-  }
-  
-  List<Post>? get posts {
-    return _posts;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -76,14 +57,12 @@ class Author extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Author._internal({required this.id, required username, favorites, posts, createdAt, updatedAt}): _username = username, _favorites = favorites, _posts = posts, _createdAt = createdAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, favorites, createdAt, updatedAt}): _favorites = favorites, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Author({String? id, required String username, List<FavoritePost>? favorites, List<Post>? posts}) {
-    return Author._internal(
+  factory User({String? id, List<FavoritePost>? favorites}) {
+    return User._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
-      username: username,
-      favorites: favorites != null ? List<FavoritePost>.unmodifiable(favorites) : favorites,
-      posts: posts != null ? List<Post>.unmodifiable(posts) : posts);
+      favorites: favorites != null ? List<FavoritePost>.unmodifiable(favorites) : favorites);
   }
   
   bool equals(Object other) {
@@ -93,11 +72,9 @@ class Author extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Author &&
+    return other is User &&
       id == other.id &&
-      _username == other._username &&
-      DeepCollectionEquality().equals(_favorites, other._favorites) &&
-      DeepCollectionEquality().equals(_posts, other._posts);
+      DeepCollectionEquality().equals(_favorites, other._favorites);
   }
   
   @override
@@ -107,9 +84,8 @@ class Author extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Author {");
+    buffer.write("User {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("username=" + "$_username" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -117,30 +93,23 @@ class Author extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Author copyWith({String? username, List<FavoritePost>? favorites, List<Post>? posts}) {
-    return Author._internal(
+  User copyWith({List<FavoritePost>? favorites}) {
+    return User._internal(
       id: id,
-      username: username ?? this.username,
-      favorites: favorites ?? this.favorites,
-      posts: posts ?? this.posts);
+      favorites: favorites ?? this.favorites);
   }
   
-  Author copyWithModelFieldValues({
-    ModelFieldValue<String>? username,
-    ModelFieldValue<List<FavoritePost>?>? favorites,
-    ModelFieldValue<List<Post>?>? posts
+  User copyWithModelFieldValues({
+    ModelFieldValue<List<FavoritePost>?>? favorites
   }) {
-    return Author._internal(
+    return User._internal(
       id: id,
-      username: username == null ? this.username : username.value,
-      favorites: favorites == null ? this.favorites : favorites.value,
-      posts: posts == null ? this.posts : posts.value
+      favorites: favorites == null ? this.favorites : favorites.value
     );
   }
   
-  Author.fromJson(Map<String, dynamic> json)  
+  User.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _username = json['username'],
       _favorites = json['favorites']  is Map
         ? (json['favorites']['items'] is List
           ? (json['favorites']['items'] as List)
@@ -154,47 +123,28 @@ class Author extends amplify_core.Model {
               .map((e) => FavoritePost.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
               .toList()
           : null),
-      _posts = json['posts']  is Map
-        ? (json['posts']['items'] is List
-          ? (json['posts']['items'] as List)
-              .where((e) => e != null)
-              .map((e) => Post.fromJson(new Map<String, dynamic>.from(e)))
-              .toList()
-          : null)
-        : (json['posts'] is List
-          ? (json['posts'] as List)
-              .where((e) => e?['serializedData'] != null)
-              .map((e) => Post.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
-              .toList()
-          : null),
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'username': _username, 'favorites': _favorites?.map((FavoritePost? e) => e?.toJson()).toList(), 'posts': _posts?.map((Post? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'favorites': _favorites?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
-    'username': _username,
     'favorites': _favorites,
-    'posts': _posts,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<AuthorModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<AuthorModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<UserModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<UserModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final USERNAME = amplify_core.QueryField(fieldName: "username");
   static final FAVORITES = amplify_core.QueryField(
     fieldName: "favorites",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'FavoritePost'));
-  static final POSTS = amplify_core.QueryField(
-    fieldName: "posts",
-    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Author";
-    modelSchemaDefinition.pluralName = "Authors";
+    modelSchemaDefinition.name = "User";
+    modelSchemaDefinition.pluralName = "Users";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -210,24 +160,11 @@ class Author extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Author.USERNAME,
-      isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
-    ));
-    
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
-      key: Author.FAVORITES,
+      key: User.FAVORITES,
       isRequired: false,
       ofModelName: 'FavoritePost',
-      associatedKey: FavoritePost.AUTHOR
-    ));
-    
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
-      key: Author.POSTS,
-      isRequired: false,
-      ofModelName: 'Post',
-      associatedKey: Post.AUTHOR
+      associatedKey: FavoritePost.USER
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
@@ -246,29 +183,29 @@ class Author extends amplify_core.Model {
   });
 }
 
-class _AuthorModelType extends amplify_core.ModelType<Author> {
-  const _AuthorModelType();
+class _UserModelType extends amplify_core.ModelType<User> {
+  const _UserModelType();
   
   @override
-  Author fromJson(Map<String, dynamic> jsonData) {
-    return Author.fromJson(jsonData);
+  User fromJson(Map<String, dynamic> jsonData) {
+    return User.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Author';
+    return 'User';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Author] in your schema.
+ * of [User] in your schema.
  */
-class AuthorModelIdentifier implements amplify_core.ModelIdentifier<Author> {
+class UserModelIdentifier implements amplify_core.ModelIdentifier<User> {
   final String id;
 
-  /** Create an instance of AuthorModelIdentifier using [id] the primary key. */
-  const AuthorModelIdentifier({
+  /** Create an instance of UserModelIdentifier using [id] the primary key. */
+  const UserModelIdentifier({
     required this.id});
   
   @override
@@ -286,7 +223,7 @@ class AuthorModelIdentifier implements amplify_core.ModelIdentifier<Author> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'AuthorModelIdentifier(id: $id)';
+  String toString() => 'UserModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -294,7 +231,7 @@ class AuthorModelIdentifier implements amplify_core.ModelIdentifier<Author> {
       return true;
     }
     
-    return other is AuthorModelIdentifier &&
+    return other is UserModelIdentifier &&
       id == other.id;
   }
   

@@ -34,12 +34,9 @@ const schema = a
 		}),
 
 		// Models
-		Author: a.model({
-			// Fields
-			username: a.string().required(),
+		User: a.model({
 			// Children
-			favorites: a.hasMany("FavoritePost", "authorId"),
-			posts: a.hasMany("Post", "authorId"),
+			favorites: a.hasMany("FavoritePost", "userId"),
 		}),
 
 		Post: a.model({
@@ -47,14 +44,13 @@ const schema = a
 			title: a.string().required(),
 			imageUrl: a.string().required(),
 			steps: a.string().array().required(),
+
 			likes: a.integer().required(),
 			favorites: a.integer().required(),
 			difficulty: a.float().required(),
+
 			price: a.float().required(),
 			ingredients: a.ref("Ingredient").array().required(),
-			// Author relationship
-			authorId: a.id().required(),
-			author: a.belongsTo("Author", "authorId"),
 			// Favorite relationship
 			favorited: a.hasMany("FavoritePost", "postId"),
 		}),
@@ -62,9 +58,9 @@ const schema = a
 		FavoritePost: a.model({
 			// Parents
 			postId: a.id().required(),
-			authorId: a.id().required(),
+			userId: a.id().required(),
 			post: a.belongsTo("Post", "postId"),
-			author: a.belongsTo("Author", "authorId"),
+			user: a.belongsTo("User", "userId"),
 		}),
 	})
 	// ALLOWS ANYONE TO ACCESS ALL DATA
@@ -79,22 +75,3 @@ export const data = defineData({
 		defaultAuthorizationMode: "userPool",
 	},
 });
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
