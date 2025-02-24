@@ -1,26 +1,52 @@
-import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any unauthenticated user can "create", "read", "update", 
-and "delete" any "Todo" records.
-=========================================================================*/
+// Define schema models
+// TODO: EVERYTHING IS OPEN RIGHT NOW, AFTER IMPLEMENTING USER AUTH UPDATE THE RULESETS
+
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.guest()]),
+	Author: a
+		.model({
+			username: a.string().required(),
+			favoritedPosts: a.hasMany("Post", "authorId"),
+			posts: a.hasMany("Post", "authorId"),
+		})
+		.authorization((allow) => [allow.guest()]),
+
+	Post: a
+		.model({
+			// Fields
+			title: a.string().required(),
+			imageUrl: a.string().required(),
+			steps: a.string().array().required(),
+			likes: a.integer().required(),
+			favorites: a.integer().required(),
+			difficulty: a.float().required(),
+			price: a.float().required(),
+
+			// Parents
+			authorId: a.id().required(),
+			author: a.belongsTo("Author", "authorId"),
+
+			// Children
+			ingredients: a.hasMany("Ingredient", "postId"),
+		})
+		.authorization((allow) => [allow.guest()]),
+	Ingredient: a
+		.model({
+			postId: a.id().required(),
+			post: a.belongsTo("Post", "postId"),
+		})
+		.authorization((allow) => [allow.guest()]),
+	Unit: a.model({}).authorization((allow) => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema,
-  authorizationModes: {
-    defaultAuthorizationMode: 'iam',
-  },
+	schema,
+	authorizationModes: {
+		defaultAuthorizationMode: "iam",
+	},
 });
 
 /*== STEP 2 ===============================================================

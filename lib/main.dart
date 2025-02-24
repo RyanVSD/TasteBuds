@@ -10,7 +10,7 @@ import 'amplify_outputs.dart';
 import 'model/ModelProvider.dart';
 
 Future<void> main() async {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     final api = AmplifyAPI(
         options: APIPluginOptions(modelProvider: ModelProvider.instance));
@@ -21,6 +21,7 @@ Future<void> main() async {
   } on Exception catch (e) {
     safePrint('Error configuring Amplify: $e');
   }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
