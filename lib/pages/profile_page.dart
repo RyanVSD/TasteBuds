@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../model/dummy_data.dart';
 import '../model/objects/post.dart';
 
@@ -158,12 +157,6 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ),
 
-      // 💚 Bottom Navigation Bar
-      bottomNavigationBar: BottomNavBar(),
-
-      // 💚 Floating Action Button
-      floatingActionButton: AddPostButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
