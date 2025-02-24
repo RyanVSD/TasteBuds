@@ -35,19 +35,15 @@ class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
   String version = "0874df9f4e02d3f613ecfb8432cf54f1";
   @override
-  List<amplify_core.ModelSchema> modelSchemas = [
-    Author.schema,
-    FavoritePost.schema,
-    Post.schema
-  ];
+  List<amplify_core.ModelSchema> modelSchemas = [Author.schema, FavoritePost.schema, Post.schema];
   @override
   List<amplify_core.ModelSchema> customTypeSchemas = [Ingredient.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;
-
+  
   amplify_core.ModelType getModelTypeByModelName(String modelName) {
-    switch (modelName) {
+    switch(modelName) {
       case "Author":
         return Author.classType;
       case "FavoritePost":
@@ -55,12 +51,11 @@ class ModelProvider implements amplify_core.ModelProviderInterface {
       case "Post":
         return Post.classType;
       default:
-        throw Exception(
-            "Failed to find model in model provider for model name: " +
-                modelName);
+        throw Exception("Failed to find model in model provider for model name: " + modelName);
     }
   }
 }
+
 
 class ModelFieldValue<T> {
   const ModelFieldValue.value(this.value);

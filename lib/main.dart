@@ -10,7 +10,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 
 import 'amplify_outputs.dart';
-import 'model/amplify_objects/ModelProvider.dart';
+import 'model/amplify/ModelProvider.dart';
 
 final appTheme = ThemeData(
     // Define the default brightness and colors.
