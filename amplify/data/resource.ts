@@ -3,17 +3,46 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 // Define schema models
 // TODO: EVERYTHING IS OPEN RIGHT NOW, AFTER IMPLEMENTING USER AUTH UPDATE THE RULESETS
 
-const schema = a.schema({
-	Author: a
-		.model({
-			username: a.string().required(),
-			favoritedPosts: a.hasMany("Post", "authorId"),
-			posts: a.hasMany("Post", "authorId"),
-		})
-		.authorization((allow) => [allow.guest()]),
+let Units = [
+	"none",
+	"teaspoon",
+	"tablespoon",
+	"cup",
+	"pint",
+	"quart",
+	"gallon",
+	"fluidOunce",
+	"milliliter",
+	"liter",
+	"decalitre",
+	"gill",
+	"gram",
+	"kilogram",
+	"ounce",
+	"pound",
+];
 
-	Post: a
-		.model({
+const schema = a
+	.schema({
+		// Custom types
+		Units: a.enum(Units),
+
+		Ingredient: a.customType({
+			name: a.string().required(),
+			unit: a.ref("Units").required(),
+			value: a.float().required(),
+		}),
+
+		// Models
+		Author: a.model({
+			// Fields
+			username: a.string().required(),
+			// Children
+			favorites: a.hasMany("FavoritePost", "authorId"),
+			posts: a.hasMany("Post", "authorId"),
+		}),
+
+		Post: a.model({
 			// Fields
 			title: a.string().required(),
 			imageUrl: a.string().required(),
@@ -22,23 +51,25 @@ const schema = a.schema({
 			favorites: a.integer().required(),
 			difficulty: a.float().required(),
 			price: a.float().required(),
-
-			// Parents
+			ingredients: a.ref("Ingredient").array().required(),
+			// Author relationship
 			authorId: a.id().required(),
 			author: a.belongsTo("Author", "authorId"),
+			// Favorite relationship
+			favorited: a.hasMany("FavoritePost", "postId"),
+		}),
 
-			// Children
-			ingredients: a.hasMany("Ingredient", "postId"),
-		})
-		.authorization((allow) => [allow.guest()]),
-	Ingredient: a
-		.model({
+		FavoritePost: a.model({
+			// Parents
 			postId: a.id().required(),
+			authorId: a.id().required(),
 			post: a.belongsTo("Post", "postId"),
-		})
-		.authorization((allow) => [allow.guest()]),
-	Unit: a.model({}).authorization((allow) => [allow.guest()]),
-});
+			author: a.belongsTo("Author", "authorId"),
+		}),
+	})
+	// ALLOWS ANYONE TO ACCESS ALL DATA
+	// REMOVE LATER
+	.authorization((allow) => [allow.guest()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
@@ -48,16 +79,6 @@ export const data = defineData({
 		defaultAuthorizationMode: "iam",
 	},
 });
-
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
 
 /*
 "use client"

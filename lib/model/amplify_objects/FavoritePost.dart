@@ -23,11 +23,12 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the Todo type in your schema. */
-class Todo extends amplify_core.Model {
-  static const classType = const _TodoModelType();
+/** This is an auto generated class representing the FavoritePost type in your schema. */
+class FavoritePost extends amplify_core.Model {
+  static const classType = const _FavoritePostModelType();
   final String id;
-  final String? _content;
+  final Post? _post;
+  final Author? _author;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -38,14 +39,18 @@ class Todo extends amplify_core.Model {
   @override
   String getId() => id;
   
-  TodoModelIdentifier get modelIdentifier {
-      return TodoModelIdentifier(
+  FavoritePostModelIdentifier get modelIdentifier {
+      return FavoritePostModelIdentifier(
         id: id
       );
   }
   
-  String? get content {
-    return _content;
+  Post? get post {
+    return _post;
+  }
+  
+  Author? get author {
+    return _author;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -56,12 +61,13 @@ class Todo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Todo._internal({required this.id, content, createdAt, updatedAt}): _content = content, _createdAt = createdAt, _updatedAt = updatedAt;
+  const FavoritePost._internal({required this.id, post, author, createdAt, updatedAt}): _post = post, _author = author, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Todo({String? id, String? content}) {
-    return Todo._internal(
+  factory FavoritePost({String? id, Post? post, Author? author}) {
+    return FavoritePost._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
-      content: content);
+      post: post,
+      author: author);
   }
   
   bool equals(Object other) {
@@ -71,9 +77,10 @@ class Todo extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Todo &&
+    return other is FavoritePost &&
       id == other.id &&
-      _content == other._content;
+      _post == other._post &&
+      _author == other._author;
   }
   
   @override
@@ -83,54 +90,73 @@ class Todo extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Todo {");
+    buffer.write("FavoritePost {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("content=" + "$_content" + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt.format() : "null"));
+    buffer.write("post=" + (_post != null ? _post!.toString() : "null") + ", ");
+    buffer.write("author=" + (_author != null ? _author!.toString() : "null") + ", ");
+    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Todo copyWith({String? content}) {
-    return Todo._internal(
+  FavoritePost copyWith({Post? post, Author? author}) {
+    return FavoritePost._internal(
       id: id,
-      content: content ?? this.content);
+      post: post ?? this.post,
+      author: author ?? this.author);
   }
   
-  Todo copyWithModelFieldValues({
-    ModelFieldValue<String?>? content
+  FavoritePost copyWithModelFieldValues({
+    ModelFieldValue<Post?>? post,
+    ModelFieldValue<Author?>? author
   }) {
-    return Todo._internal(
+    return FavoritePost._internal(
       id: id,
-      content: content == null ? this.content : content.value
+      post: post == null ? this.post : post.value,
+      author: author == null ? this.author : author.value
     );
   }
   
-  Todo.fromJson(Map<String, dynamic> json)  
+  FavoritePost.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _content = json['content'],
+      _post = json['post'] != null
+        ? json['post']['serializedData'] != null
+          ? Post.fromJson(new Map<String, dynamic>.from(json['post']['serializedData']))
+          : Post.fromJson(new Map<String, dynamic>.from(json['post']))
+        : null,
+      _author = json['author'] != null
+        ? json['author']['serializedData'] != null
+          ? Author.fromJson(new Map<String, dynamic>.from(json['author']['serializedData']))
+          : Author.fromJson(new Map<String, dynamic>.from(json['author']))
+        : null,
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'content': _content, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'post': _post?.toJson(), 'author': _author?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
-    'content': _content,
+    'post': _post,
+    'author': _author,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<TodoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TodoModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final CONTENT = amplify_core.QueryField(fieldName: "content");
+  static final POST = amplify_core.QueryField(
+    fieldName: "post",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
+  static final AUTHOR = amplify_core.QueryField(
+    fieldName: "author",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Author'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Todo";
-    modelSchemaDefinition.pluralName = "Todos";
+    modelSchemaDefinition.name = "FavoritePost";
+    modelSchemaDefinition.pluralName = "FavoritePosts";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -146,10 +172,18 @@ class Todo extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.CONTENT,
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
+      key: FavoritePost.POST,
       isRequired: false,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+      targetNames: ['postId'],
+      ofModelName: 'Post'
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
+      key: FavoritePost.AUTHOR,
+      isRequired: false,
+      targetNames: ['authorId'],
+      ofModelName: 'Author'
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
@@ -168,29 +202,29 @@ class Todo extends amplify_core.Model {
   });
 }
 
-class _TodoModelType extends amplify_core.ModelType<Todo> {
-  const _TodoModelType();
+class _FavoritePostModelType extends amplify_core.ModelType<FavoritePost> {
+  const _FavoritePostModelType();
   
   @override
-  Todo fromJson(Map<String, dynamic> jsonData) {
-    return Todo.fromJson(jsonData);
+  FavoritePost fromJson(Map<String, dynamic> jsonData) {
+    return FavoritePost.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Todo';
+    return 'FavoritePost';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Todo] in your schema.
+ * of [FavoritePost] in your schema.
  */
-class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
+class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<FavoritePost> {
   final String id;
 
-  /** Create an instance of TodoModelIdentifier using [id] the primary key. */
-  const TodoModelIdentifier({
+  /** Create an instance of FavoritePostModelIdentifier using [id] the primary key. */
+  const FavoritePostModelIdentifier({
     required this.id});
   
   @override
@@ -208,7 +242,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'TodoModelIdentifier(id: $id)';
+  String toString() => 'FavoritePostModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -216,7 +250,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
       return true;
     }
     
-    return other is TodoModelIdentifier &&
+    return other is FavoritePostModelIdentifier &&
       id == other.id;
   }
   
