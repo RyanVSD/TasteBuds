@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage>
               ).showSnackBar(const SnackBar(content: Text('Signed out')));
             },
           ),
-          SignOutButton()
+          SignOutButton(),
         ],
       ),
 
