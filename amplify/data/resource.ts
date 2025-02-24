@@ -69,15 +69,14 @@ const schema = a
 	})
 	// ALLOWS ANYONE TO ACCESS ALL DATA
 	// REMOVE LATER
-	.authorization((allow) => [allow.publicApiKey()]);
+	.authorization((allow) => [allow.guest()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
 	schema,
 	authorizationModes: {
-		defaultAuthorizationMode: "apiKey",
-		apiKeyAuthorizationMode: { expiresInDays: 30 },
+		defaultAuthorizationMode: "iam",
 	},
 });
 
