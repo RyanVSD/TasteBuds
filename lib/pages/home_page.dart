@@ -4,7 +4,7 @@ import 'package:tastebuds/model/post_model.dart';
 import './post_page.dart';
 import 'package:tastebuds/model/dummy_data.dart';
 import 'package:tastebuds/model/objects/post.dart';
-import '/widgets/bottom_nav_bar.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,9 +59,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavBar(),
-        floatingActionButton: AddPostButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: <Widget>[
           PostGrid(posts: dummyPosts),
           PostGrid(posts: List.from(dummyPosts)..shuffle()),

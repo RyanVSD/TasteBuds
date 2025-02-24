@@ -158,12 +158,6 @@ class _ProfilePageState extends State<ProfilePage>
         ),
       ),
 
-      // 💚 Bottom Navigation Bar
-      bottomNavigationBar: BottomNavBar(),
-
-      // 💚 Floating Action Button
-      floatingActionButton: AddPostButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 

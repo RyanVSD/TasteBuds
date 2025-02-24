@@ -12,10 +12,6 @@ class ReccPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       
-        bottomNavigationBar: BottomNavBar(),
-        floatingActionButton: AddPostButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Center(
           child: Text("Reccomendations"),
         )
