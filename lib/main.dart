@@ -6,6 +6,7 @@ import 'package:tastebuds/pages/recc_page.dart';
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'pages/widget/bottom_nav_bar.dart';
+import 'theme.dart';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -60,9 +61,12 @@ class _MyAppState extends State<MyApp> {
         page = HomePage();
     }
 
+    MaterialTheme theme = MaterialTheme();
+
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => PostModel())],
       child: MaterialApp(
+        theme: theme.light(),
         home: Scaffold(
           body: page,
           bottomNavigationBar: BottomNavBar(changePage),
