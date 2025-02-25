@@ -1,8 +1,8 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
+import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/service/database_service.dart';
-import '../widgets/bottom_nav_bar.dart';
-import '../model/dummy_data.dart';
+import '../pages/widget/bottom_nav_bar.dart';
 import '../model/objects/post.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -171,13 +171,6 @@ class _ProfilePageState extends State<ProfilePage>
           ],
         ),
       ),
-
-      // 💚 Bottom Navigation Bar
-      bottomNavigationBar: BottomNavBar(),
-
-      // 💚 Floating Action Button
-      floatingActionButton: AddPostButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -202,90 +195,108 @@ class _ProfilePageState extends State<ProfilePage>
 
   // 💚 _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(10),
-      itemCount: dummyPosts.length,
-      itemBuilder: (ctx, index) {
-        final Post post = dummyPosts[index];
+    Future<List<PostItem?>> posts = PostModel.getPostList(10);
+    return FutureBuilder<List<PostItem?>>(
+        future: posts,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show loading indicator while waiting for data
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // Show error message if something went wrong
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // Handle case where no data is available
+            return const Center(child: Text('No posts available.'));
+          } else {
+            List<PostItem?> posts = snapshot.data!;
 
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Post Image
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(10)),
-                child: Image.network(
-                  post.imageUrl,
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              // Post Details
-              Padding(
+            return ListView.builder(
                 padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    Text(
-                      post.title,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                itemCount: posts.length,
+                itemBuilder: (ctx, index) {
+                  final PostItem post = posts[index]!;
+
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-
-                    const SizedBox(height: 4),
-
-                    // Author Name
-                    Text(
-                      'By ${post.author}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    // Likes & Favorites Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.thumb_up,
-                                size: 16, color: Colors.blue),
-                            const SizedBox(width: 4),
-                            Text('${post.likes} Likes'),
-                          ],
+                        // Post Image
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(10)),
+                          child: Image.network(
+                            post.imageUrl,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        Row(
-                          children: [
-                            const Icon(Icons.favorite,
-                                size: 16, color: Colors.red),
-                            const SizedBox(width: 4),
-                            Text('${post.favorites} Favorites'),
-                          ],
+
+                        // Post Details
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Title
+                              Text(
+                                post.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              // Author Name
+                              Text(
+                                'By ${post.authorId}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+
+                              const SizedBox(height: 8),
+
+                              // Likes & Favorites Row
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.thumb_up,
+                                          size: 16, color: Colors.blue),
+                                      const SizedBox(width: 4),
+                                      Text('${post.likes} Likes'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.favorite,
+                                          size: 16, color: Colors.red),
+                                      const SizedBox(width: 4),
+                                      Text('${post.favorites} Favorites'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                  );
+                });
+          }
+        });
   }
 }
 

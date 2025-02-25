@@ -10,7 +10,7 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Post post = context.watch<PostModel>().post ?? Post.empty();
+    PostItem post = context.watch<PostModel>().post ?? PostItem.empty();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

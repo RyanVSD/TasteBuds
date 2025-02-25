@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:tastebuds/model/objects/ingredient.dart';
 
 /// A class to represent a Post in the app.
-class Post {
+class PostItem {
   final String id; // Unique identifier for the post
   final String authorId; // Name of the person who shared the recipe
 
@@ -22,7 +22,7 @@ class Post {
 
   final List<Ingredient> ingredients; // Ingredients for the recipe
 
-  Post({
+  PostItem({
     required this.id,
     required this.authorId,
     required this.title,
@@ -37,8 +37,8 @@ class Post {
     required this.ingredients,
   });
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
+  factory PostItem.fromJson(Map<String, dynamic> json) {
+    return PostItem(
         id: json['id'],
         authorId: json['authorId'],
         title: json['title'],
@@ -72,7 +72,7 @@ class Post {
     };
   }
 
-  Post.empty({
+  PostItem.empty({
     this.id = "0",
     this.authorId = "0",
     this.title = "untitled",

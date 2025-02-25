@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
+import 'package:tastebuds/pages/profile_page.dart';
+import 'package:tastebuds/pages/ranking_page.dart';
+import 'package:tastebuds/pages/recc_page.dart';
 import 'package:tastebuds/widgets/custom_scaffold.dart';
+
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';
+import 'pages/widget/bottom_nav_bar.dart';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -42,11 +47,37 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int _currentPageIndex = 0;
+
+  void changePage(int pageIndex) {
+    setState(() {
+      _currentPageIndex = pageIndex;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Widget page = Placeholder();
+    switch (_currentPageIndex) {
+      case 0:
+        page = HomePage();
+      case 1:
+        page = RankingPage();
+      case 2:
+        page = ReccPage();
+      case 3:
+        page = ProfilePage();
+      default:
+        page = HomePage();
+    }
     return Authenticator(
         authenticatorBuilder: (BuildContext context, AuthenticatorState state) {
           switch (state.currentStep) {
@@ -138,7 +169,13 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
             theme: appTheme,
             builder: Authenticator.builder(),
-            home: HomePage(),
+            home: Scaffold(
+              body: page,
+              bottomNavigationBar: BottomNavBar(changePage),
+              floatingActionButton: AddPostButton(),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+            ),
           ),
         ));
   }

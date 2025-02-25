@@ -1,5 +1,4 @@
 import 'package:tastebuds/model/objects/ingredient.dart';
-import 'package:tastebuds/model/objects/unit.dart';
 
 import 'objects/post.dart';
 

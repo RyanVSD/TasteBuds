@@ -24,6 +24,8 @@ let Units = [
 
 const schema = a
 	.schema({
+		// Queries
+
 		// Custom types
 		Units: a.enum(Units),
 
