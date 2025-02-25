@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/model/dummy_data.dart';
 import 'package:tastebuds/model/objects/post.dart';
 import './widget/post_card.dart';
 import 'package:tastebuds/model/post_model.dart';

@@ -2,7 +2,6 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/service/database_service.dart';
-import '../pages/widget/bottom_nav_bar.dart';
 import '../model/objects/post.dart';
 
 class ProfilePage extends StatefulWidget {

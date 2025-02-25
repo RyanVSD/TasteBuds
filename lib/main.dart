@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
+import 'package:tastebuds/pages/create_post.dart';
 import 'package:tastebuds/pages/profile_page.dart';
 import 'package:tastebuds/pages/ranking_page.dart';
 import 'package:tastebuds/pages/recc_page.dart';
-import 'package:tastebuds/widgets/custom_scaffold.dart';
+import 'package:tastebuds/pages/widget/custom_scaffold.dart';
 
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';
@@ -75,6 +76,8 @@ class _MyAppState extends State<MyApp> {
         page = ReccPage();
       case 3:
         page = ProfilePage();
+      case 4:
+        page = CreatePostPage();
       default:
         page = HomePage();
     }
@@ -172,7 +175,7 @@ class _MyAppState extends State<MyApp> {
             home: Scaffold(
               body: page,
               bottomNavigationBar: BottomNavBar(changePage),
-              floatingActionButton: AddPostButton(),
+              floatingActionButton: AddPostButton(changePage),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
             ),

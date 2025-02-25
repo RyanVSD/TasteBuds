@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 enum UnitType {
   none,
   teaspoon,
@@ -50,7 +48,7 @@ enum UnitClass {
   mass,
 }
 
-class Ingredient {
+class IngredientItem {
   // IF ADDING TO COOKING FRACTIONS KEEP ASCENDING ORDER
   static const List<double> cookingFractions = [
     1 / 2,
@@ -91,7 +89,7 @@ class Ingredient {
   }
 
   // Constructor for when you use enum
-  Ingredient.withUnitType(
+  IngredientItem.withUnitType(
       {required String name, required UnitType unit, required value})
       : _name = name,
         _unit = unit,
@@ -100,7 +98,7 @@ class Ingredient {
   }
 
   // Constructor for giving unit
-  Ingredient(
+  IngredientItem(
       {required String name, required String unit, required double value})
       : _name = name,
         _unit = UnitType.values.firstWhere((e) => e.name == unit,
@@ -110,7 +108,7 @@ class Ingredient {
   }
 
   // Constructor for when there is no unit
-  Ingredient.noUnit({required String name, required double value})
+  IngredientItem.noUnit({required String name, required double value})
       : _name = name,
         _unit = UnitType.none,
         _value = value {
@@ -149,9 +147,11 @@ class Ingredient {
     }
     if (!isCookingFrac) {
       format += nonDec > 0
-          ? Ingredient.trimToNSignificantDecimals(dec, Ingredient._decCount)
+          ? IngredientItem.trimToNSignificantDecimals(
+                  dec, IngredientItem._decCount)
               .substring(1)
-          : Ingredient.trimToNSignificantDecimals(dec, Ingredient._decCount);
+          : IngredientItem.trimToNSignificantDecimals(
+              dec, IngredientItem._decCount);
     }
 
     return format;
@@ -181,7 +181,7 @@ class Ingredient {
   @override
   String toString() {
     String strbuilder = "";
-    String formatValue = Ingredient._formatValue(_value);
+    String formatValue = IngredientItem._formatValue(_value);
 
     if (_value == 0) {
       return _name;
@@ -201,8 +201,8 @@ class Ingredient {
     return strbuilder;
   }
 
-  factory Ingredient.fromJson(Map<String, dynamic> json) {
-    return Ingredient(
+  factory IngredientItem.fromJson(Map<String, dynamic> json) {
+    return IngredientItem(
         name: json['name'], unit: json['unit'], value: json['value']);
   }
 
