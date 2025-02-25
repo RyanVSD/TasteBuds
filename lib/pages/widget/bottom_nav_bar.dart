@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:tastebuds/pages/create_post.dart';
+
 class BottomNavBar extends StatelessWidget {
   final ValueSetter<int> changePage;
   const BottomNavBar(this.changePage, {super.key});
@@ -55,7 +57,8 @@ class AddPostButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        changePage(4);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CreatePost()));
       },
       backgroundColor: Colors.yellow[700],
       child: const Icon(Icons.add, color: Colors.black),

@@ -11,14 +11,17 @@ class PostPage extends StatelessWidget
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.yellow[700],
+      ),
       body: 
         ListView(
           children: [
             // test button
-            ElevatedButton(onPressed: () {
-               Navigator.pop(context);
-              // context.read<PostModel>().setPost(postId: "1");
-            }, child: Text("Back")),
+            // ElevatedButton(onPressed: () {
+            //    Navigator.pop(context);
+            //   // context.read<PostModel>().setPost(postId: "1");
+            // }, child: Text("Back")),
             // Image.imageUrl(File("./static_asset/img1.jpg")),
             Image.network(context.watch<PostModel>().post?.imageUrl??"https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="),
             Row(

@@ -1,259 +1,192 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/model/objects/ingredient_item.dart';
-import 'package:tastebuds/model/objects/post_item.dart';
 
-class CreatePostPage extends StatefulWidget {
-  const CreatePostPage({super.key});
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+class CreatePost extends StatefulWidget {
+  const CreatePost({super.key});
 
   @override
-  State<CreatePostPage> createState() => _CreatePostPageState();
+  State<CreatePost> createState() => _CreatePostState();
 }
 
-class _CreatePostPageState extends State<CreatePostPage> {
-  final _formKey = GlobalKey<FormState>();
+class _CreatePostState extends State<CreatePost> {
+  File? _image;
+  final ImagePicker _picker = ImagePicker();
+  List<String> ingredients = [''];
+  List<String> steps = [''];
+  int difficultyRating = 0;
+  int priceRating = 0;
 
-  // Form field controllers
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _imageUrlController = TextEditingController();
-  final _stepsController = TextEditingController();
-  final _priceController = TextEditingController();
-
-  // Ingredient controllers
-  final _ingredientNameController = TextEditingController();
-  final _ingredientValueController = TextEditingController();
-  String? _selectedUnitType = 'none'; // Default unit type
-
-  // Dropdown for difficulty level
-  int _difficulty = 1;
-
-  // List for ingredients (assuming you have an Ingredient model)
-  List<IngredientItem> _ingredients = [];
-
-  // Function to handle form submission
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Handle post creation here
-      final newPost = PostItem(
-        id: DateTime.now().toString(), // Generate a unique ID for the post
-        authorId: 'User123', // Example, replace with actual user ID
-        title: _titleController.text,
-        description: _descriptionController.text,
-        imageUrl: _imageUrlController.text,
-        steps: _stepsController.text.split('\n'), // Split the steps into a list
-        uploadTime: DateTime.now(),
-        likes: 0,
-        favorites: 0,
-        difficulty: _difficulty,
-        price: double.tryParse(_priceController.text) ?? 0.0,
-        ingredients: _ingredients,
-      );
-
-      // Submit the new post to your backend or database
-      print("Post Created: $newPost");
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
     }
   }
 
-  // Function to add ingredient
   void _addIngredient() {
-    final name = _ingredientNameController.text;
-    final value = double.tryParse(_ingredientValueController.text);
-    if (name.isNotEmpty && value != null && _selectedUnitType != null) {
-      setState(() {
-        _ingredients.add(IngredientItem(
-          name: name,
-          value: value,
-          unit: _selectedUnitType!,
-        ));
-        _ingredientNameController.clear();
-        _ingredientValueController.clear();
-        _selectedUnitType = 'none'; // Reset unit type
-      });
-    }
+    setState(() {
+      ingredients.add('');
+    });
+  }
+
+  void _removeIngredient(int index) {
+    setState(() {
+      ingredients.removeAt(index);
+    });
+  }
+
+  void _addStep() {
+    setState(() {
+      steps.add('');
+    });
+  }
+
+  void _removeStep(int index) {
+    setState(() {
+      steps.removeAt(index);
+    });
+  }
+
+  Widget _buildStarRating(int rating, Function(int) onRatingSelected) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (index) {
+        return IconButton(
+          icon: Icon(
+            size: 40,
+            index < rating ? Icons.star : Icons.star_border,
+            color: Colors.amber,
+          ),
+          onPressed: () => onRatingSelected(index + 1),
+        );
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create Post')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              // Title Field
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
-                  }
-                  return null;
-                },
-              ),
-
-              // Description Field
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
-                maxLines: 4,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
-                  }
-                  return null;
-                },
-              ),
-
-              // Image URL Field
-              TextFormField(
-                controller: _imageUrlController,
-                decoration: InputDecoration(labelText: 'Image URL'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an image URL';
-                  }
-                  return null;
-                },
-              ),
-
-              // Steps Field
-              TextFormField(
-                controller: _stepsController,
-                decoration: InputDecoration(labelText: 'Steps'),
-                maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the steps';
-                  }
-                  return null;
-                },
-              ),
-
-              // Difficulty Dropdown
-              DropdownButtonFormField<int>(
-                value: _difficulty,
-                decoration: InputDecoration(labelText: 'Difficulty'),
-                onChanged: (int? newValue) {
-                  setState(() {
-                    _difficulty = newValue ?? 1;
-                  });
-                },
-                items: [1, 2, 3, 4, 5]
-                    .map((difficulty) => DropdownMenuItem<int>(
-                          value: difficulty,
-                          child: Text('Difficulty $difficulty'),
-                        ))
-                    .toList(),
-              ),
-
-              // Price Field
-              TextFormField(
-                controller: _priceController,
-                decoration: InputDecoration(labelText: 'Price'),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a price';
-                  }
-                  return null;
-                },
-              ),
-
-              // Ingredient Fields
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _ingredientNameController,
-                      decoration: InputDecoration(labelText: 'Ingredient Name'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an ingredient name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _ingredientValueController,
-                      decoration:
-                          InputDecoration(labelText: 'Ingredient Value'),
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an ingredient value';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  DropdownButton<String>(
-                    value: _selectedUnitType,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedUnitType = newValue;
-                      });
-                    },
-                    items: [
-                      'none',
-                      'teaspoon',
-                      'tablespoon',
-                      'cup',
-                      'pint',
-                      'quart',
-                      'gallon',
-                      'fluidOunce',
-                      'mililiter',
-                      'liter',
-                      'decalitre',
-                      'gill',
-                      'gram',
-                      'kilogram',
-                      'ounce',
-                      'pound'
-                    ]
-                        .map((unit) => DropdownMenuItem<String>(
-                              value: unit,
-                              child: Text(unit),
-                            ))
-                        .toList(),
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: _addIngredient,
-                child: Text('Add Ingredient'),
-              ),
-              if (_ingredients.isNotEmpty)
-                Wrap(
-                  spacing: 8.0,
-                  children: _ingredients
-                      .map((ingredient) => Chip(
-                            label: Text(
-                                '${ingredient.getValue()} ${ingredient.getUnitType()} ${ingredient.getName()}'),
-                          ))
-                      .toList(),
-                ),
-
-              // Submit Button
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('Create Post'),
-                ),
-              ),
-            ],
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFFBC02D),
+          title: Text(
+            "Create post",
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
         ),
-      ),
-    );
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Title'),
+                ),
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    height: 300,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _image == null
+                        ? const Center(child: Text('Select an image'))
+                        : Image.file(_image!, fit: BoxFit.cover),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text('Ingredients',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: ingredients.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Ingredient ${index + 1}'),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle,
+                              color: Colors.red),
+                          onPressed: () => _removeIngredient(index),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add_circle, color: Colors.green),
+                  onPressed: _addIngredient,
+                ),
+                const SizedBox(height: 10),
+                const Text('Steps',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: steps.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration:
+                                InputDecoration(labelText: 'Step ${index + 1}'),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle,
+                              color: Colors.red),
+                          onPressed: () => _removeStep(index),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add_circle, color: Colors.green),
+                  onPressed: _addStep,
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  children: [
+                    const Text('Difficulty:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    _buildStarRating(difficultyRating,
+                        (rating) => setState(() => difficultyRating = rating)),
+                    const SizedBox(height: 10),
+                    const Text('Price:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    _buildStarRating(priceRating,
+                        (rating) => setState(() => priceRating = rating)),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    child: const Text('Post'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }

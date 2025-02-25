@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
-import 'package:tastebuds/pages/create_post.dart';
 import 'package:tastebuds/pages/profile_page.dart';
 import 'package:tastebuds/pages/ranking_page.dart';
 import 'package:tastebuds/pages/recc_page.dart';
@@ -9,6 +8,7 @@ import 'package:tastebuds/pages/widget/custom_scaffold.dart';
 import './pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'pages/widget/bottom_nav_bar.dart';
+import 'theme.dart';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -76,11 +76,11 @@ class _MyAppState extends State<MyApp> {
         page = ReccPage();
       case 3:
         page = ProfilePage();
-      case 4:
-        page = CreatePostPage();
       default:
         page = HomePage();
     }
+    MaterialTheme theme = MaterialTheme();
+
     return Authenticator(
         authenticatorBuilder: (BuildContext context, AuthenticatorState state) {
           switch (state.currentStep) {
@@ -170,7 +170,7 @@ class _MyAppState extends State<MyApp> {
         child: MultiProvider(
           providers: [ChangeNotifierProvider(create: (context) => PostModel())],
           child: MaterialApp(
-            theme: appTheme,
+            theme: theme.light(),
             builder: Authenticator.builder(),
             home: Scaffold(
               body: page,
