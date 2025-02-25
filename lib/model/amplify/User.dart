@@ -28,6 +28,7 @@ import 'package:collection/collection.dart';
 class User extends amplify_core.Model {
   static const classType = const _UserModelType();
   final String id;
+  final String? _username;
   final List<FavoritePost>? _favorites;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
@@ -45,6 +46,19 @@ class User extends amplify_core.Model {
       );
   }
   
+  String get username {
+    try {
+      return _username!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
   List<FavoritePost>? get favorites {
     return _favorites;
   }
@@ -57,11 +71,12 @@ class User extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const User._internal({required this.id, favorites, createdAt, updatedAt}): _favorites = favorites, _createdAt = createdAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, required username, favorites, createdAt, updatedAt}): _username = username, _favorites = favorites, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory User({String? id, List<FavoritePost>? favorites}) {
+  factory User({String? id, required String username, List<FavoritePost>? favorites}) {
     return User._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
+      username: username,
       favorites: favorites != null ? List<FavoritePost>.unmodifiable(favorites) : favorites);
   }
   
@@ -74,6 +89,7 @@ class User extends amplify_core.Model {
     if (identical(other, this)) return true;
     return other is User &&
       id == other.id &&
+      _username == other._username &&
       DeepCollectionEquality().equals(_favorites, other._favorites);
   }
   
@@ -86,6 +102,7 @@ class User extends amplify_core.Model {
     
     buffer.write("User {");
     buffer.write("id=" + "$id" + ", ");
+    buffer.write("username=" + "$_username" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -93,23 +110,27 @@ class User extends amplify_core.Model {
     return buffer.toString();
   }
   
-  User copyWith({List<FavoritePost>? favorites}) {
+  User copyWith({String? username, List<FavoritePost>? favorites}) {
     return User._internal(
       id: id,
+      username: username ?? this.username,
       favorites: favorites ?? this.favorites);
   }
   
   User copyWithModelFieldValues({
+    ModelFieldValue<String>? username,
     ModelFieldValue<List<FavoritePost>?>? favorites
   }) {
     return User._internal(
       id: id,
+      username: username == null ? this.username : username.value,
       favorites: favorites == null ? this.favorites : favorites.value
     );
   }
   
   User.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
+      _username = json['username'],
       _favorites = json['favorites']  is Map
         ? (json['favorites']['items'] is List
           ? (json['favorites']['items'] as List)
@@ -127,11 +148,12 @@ class User extends amplify_core.Model {
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'favorites': _favorites?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'username': _username, 'favorites': _favorites?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
+    'username': _username,
     'favorites': _favorites,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
@@ -139,6 +161,7 @@ class User extends amplify_core.Model {
 
   static final amplify_core.QueryModelIdentifier<UserModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<UserModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
+  static final USERNAME = amplify_core.QueryField(fieldName: "username");
   static final FAVORITES = amplify_core.QueryField(
     fieldName: "favorites",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'FavoritePost'));
@@ -158,7 +181,17 @@ class User extends amplify_core.Model {
         ])
     ];
     
+    modelSchemaDefinition.indexes = [
+      amplify_core.ModelIndex(fields: const ["id"], name: null)
+    ];
+    
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.USERNAME,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
       key: User.FAVORITES,

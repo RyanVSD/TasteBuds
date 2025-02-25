@@ -1,5 +1,6 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
+import 'package:tastebuds/service/database_service.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../model/dummy_data.dart';
 import '../model/objects/post.dart';
@@ -60,9 +61,9 @@ class _ProfilePageState extends State<ProfilePage>
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Signed out')));
+              Database.getUserAttributes();
+              Database.getUserId();
+              Database.getUsername();
             },
           ),
           SignOutButton(),

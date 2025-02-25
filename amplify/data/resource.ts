@@ -1,5 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
+import { postConfirmation } from "../auth/post-confirmation/resource";
 // Define schema models
 // TODO: EVERYTHING IS OPEN RIGHT NOW, AFTER IMPLEMENTING USER AUTH UPDATE THE RULESETS
 
@@ -35,37 +35,89 @@ const schema = a
 
 		// Models
 		User: a.model({
-			// Children
+			// Fields
+			id: a.id(),
+			username: a.string().required(),
+			preferredUsername: a.string().required(),
+
+			// Graph edges
+			likes: a.hasMany("LikePost", "userId"),
 			favorites: a.hasMany("FavoritePost", "userId"),
+			following: a.hasMany("Follow", "followerId"),
+			followers: a.hasMany("Follow", "followeeId"),
+			posts: a.hasMany("Post", "authorId"),
 		}),
 
 		Post: a.model({
 			// Fields
+			id: a.id(),
+			authorId: a.id(),
+
 			title: a.string().required(),
+			description: a.string().required(),
 			imageUrl: a.string().required(),
 			steps: a.string().array().required(),
+
+			uploadTime: a.datetime(),
 
 			likes: a.integer().required(),
 			favorites: a.integer().required(),
 			difficulty: a.float().required(),
 
 			price: a.float().required(),
+
 			ingredients: a.ref("Ingredient").array().required(),
-			// Favorite relationship
-			favorited: a.hasMany("FavoritePost", "postId"),
+
+			// Graph edges
+			author: a.belongsTo("User", "authorId"),
+			favoritedBy: a.hasMany("FavoritePost", "postId"),
+			likedBy: a.hasMany("LikePost", "postId"),
+			tags: a.hasMany("PostTag", "postId"),
+		}),
+
+		Tag: a.model({
+			// fields
+			value: a.string(),
+
+			// graph edges
+			posts: a.hasMany("PostTag", "tagId"),
+		}),
+
+		// Graph edges
+		PostTag: a.model({
+			postId: a.id().required(),
+			tagId: a.id().required(),
+			post: a.belongsTo("Post", "postId"),
+			tag: a.belongsTo("Tag", "tagId"),
 		}),
 
 		FavoritePost: a.model({
-			// Parents
 			postId: a.id().required(),
 			userId: a.id().required(),
 			post: a.belongsTo("Post", "postId"),
 			user: a.belongsTo("User", "userId"),
 		}),
+
+		LikePost: a.model({
+			postId: a.id().required(),
+			userId: a.id().required(),
+			post: a.belongsTo("Post", "postId"),
+			user: a.belongsTo("User", "userId"),
+		}),
+
+		Follow: a.model({
+			followerId: a.id().required(),
+			followeeId: a.id().required(),
+			follower: a.belongsTo("User", "followerId"),
+			followee: a.belongsTo("User", "followeeId"),
+		}),
 	})
 	// ALLOWS ANYONE TO ACCESS ALL DATA
 	// REMOVE LATER
-	.authorization((allow) => [allow.guest()]);
+	.authorization((allow) => [
+		allow.guest(),
+		allow.resource(postConfirmation),
+	]);
 
 export type Schema = ClientSchema<typeof schema>;
 

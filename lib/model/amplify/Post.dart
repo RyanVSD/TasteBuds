@@ -36,7 +36,7 @@ class Post extends amplify_core.Model {
   final double? _difficulty;
   final double? _price;
   final List<Ingredient>? _ingredients;
-  final List<FavoritePost>? _favorited;
+  final List<FavoritePost>? _favoritedBy;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -157,8 +157,8 @@ class Post extends amplify_core.Model {
     }
   }
   
-  List<FavoritePost>? get favorited {
-    return _favorited;
+  List<FavoritePost>? get favoritedBy {
+    return _favoritedBy;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -169,9 +169,9 @@ class Post extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Post._internal({required this.id, required title, required imageUrl, required steps, required likes, required favorites, required difficulty, required price, required ingredients, favorited, createdAt, updatedAt}): _title = title, _imageUrl = imageUrl, _steps = steps, _likes = likes, _favorites = favorites, _difficulty = difficulty, _price = price, _ingredients = ingredients, _favorited = favorited, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Post._internal({required this.id, required title, required imageUrl, required steps, required likes, required favorites, required difficulty, required price, required ingredients, favoritedBy, createdAt, updatedAt}): _title = title, _imageUrl = imageUrl, _steps = steps, _likes = likes, _favorites = favorites, _difficulty = difficulty, _price = price, _ingredients = ingredients, _favoritedBy = favoritedBy, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Post({String? id, required String title, required String imageUrl, required List<String> steps, required int likes, required int favorites, required double difficulty, required double price, required List<Ingredient> ingredients, List<FavoritePost>? favorited}) {
+  factory Post({String? id, required String title, required String imageUrl, required List<String> steps, required int likes, required int favorites, required double difficulty, required double price, required List<Ingredient> ingredients, List<FavoritePost>? favoritedBy}) {
     return Post._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       title: title,
@@ -182,7 +182,7 @@ class Post extends amplify_core.Model {
       difficulty: difficulty,
       price: price,
       ingredients: ingredients != null ? List<Ingredient>.unmodifiable(ingredients) : ingredients,
-      favorited: favorited != null ? List<FavoritePost>.unmodifiable(favorited) : favorited);
+      favoritedBy: favoritedBy != null ? List<FavoritePost>.unmodifiable(favoritedBy) : favoritedBy);
   }
   
   bool equals(Object other) {
@@ -202,7 +202,7 @@ class Post extends amplify_core.Model {
       _difficulty == other._difficulty &&
       _price == other._price &&
       DeepCollectionEquality().equals(_ingredients, other._ingredients) &&
-      DeepCollectionEquality().equals(_favorited, other._favorited);
+      DeepCollectionEquality().equals(_favoritedBy, other._favoritedBy);
   }
   
   @override
@@ -229,7 +229,7 @@ class Post extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Post copyWith({String? title, String? imageUrl, List<String>? steps, int? likes, int? favorites, double? difficulty, double? price, List<Ingredient>? ingredients, List<FavoritePost>? favorited}) {
+  Post copyWith({String? title, String? imageUrl, List<String>? steps, int? likes, int? favorites, double? difficulty, double? price, List<Ingredient>? ingredients, List<FavoritePost>? favoritedBy}) {
     return Post._internal(
       id: id,
       title: title ?? this.title,
@@ -240,7 +240,7 @@ class Post extends amplify_core.Model {
       difficulty: difficulty ?? this.difficulty,
       price: price ?? this.price,
       ingredients: ingredients ?? this.ingredients,
-      favorited: favorited ?? this.favorited);
+      favoritedBy: favoritedBy ?? this.favoritedBy);
   }
   
   Post copyWithModelFieldValues({
@@ -252,7 +252,7 @@ class Post extends amplify_core.Model {
     ModelFieldValue<double>? difficulty,
     ModelFieldValue<double>? price,
     ModelFieldValue<List<Ingredient>?>? ingredients,
-    ModelFieldValue<List<FavoritePost>?>? favorited
+    ModelFieldValue<List<FavoritePost>?>? favoritedBy
   }) {
     return Post._internal(
       id: id,
@@ -264,7 +264,7 @@ class Post extends amplify_core.Model {
       difficulty: difficulty == null ? this.difficulty : difficulty.value,
       price: price == null ? this.price : price.value,
       ingredients: ingredients == null ? this.ingredients : ingredients.value,
-      favorited: favorited == null ? this.favorited : favorited.value
+      favoritedBy: favoritedBy == null ? this.favoritedBy : favoritedBy.value
     );
   }
   
@@ -283,15 +283,15 @@ class Post extends amplify_core.Model {
           .map((e) => Ingredient.fromJson(new Map<String, dynamic>.from(e['serializedData'] ?? e)))
           .toList()
         : null,
-      _favorited = json['favorited']  is Map
-        ? (json['favorited']['items'] is List
-          ? (json['favorited']['items'] as List)
+      _favoritedBy = json['favoritedBy']  is Map
+        ? (json['favoritedBy']['items'] is List
+          ? (json['favoritedBy']['items'] as List)
               .where((e) => e != null)
               .map((e) => FavoritePost.fromJson(new Map<String, dynamic>.from(e)))
               .toList()
           : null)
-        : (json['favorited'] is List
-          ? (json['favorited'] as List)
+        : (json['favoritedBy'] is List
+          ? (json['favoritedBy'] as List)
               .where((e) => e?['serializedData'] != null)
               .map((e) => FavoritePost.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
               .toList()
@@ -300,7 +300,7 @@ class Post extends amplify_core.Model {
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'title': _title, 'imageUrl': _imageUrl, 'steps': _steps, 'likes': _likes, 'favorites': _favorites, 'difficulty': _difficulty, 'price': _price, 'ingredients': _ingredients?.map((Ingredient? e) => e?.toJson()).toList(), 'favorited': _favorited?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'title': _title, 'imageUrl': _imageUrl, 'steps': _steps, 'likes': _likes, 'favorites': _favorites, 'difficulty': _difficulty, 'price': _price, 'ingredients': _ingredients?.map((Ingredient? e) => e?.toJson()).toList(), 'favoritedBy': _favoritedBy?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -313,7 +313,7 @@ class Post extends amplify_core.Model {
     'difficulty': _difficulty,
     'price': _price,
     'ingredients': _ingredients,
-    'favorited': _favorited,
+    'favoritedBy': _favoritedBy,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -328,8 +328,8 @@ class Post extends amplify_core.Model {
   static final DIFFICULTY = amplify_core.QueryField(fieldName: "difficulty");
   static final PRICE = amplify_core.QueryField(fieldName: "price");
   static final INGREDIENTS = amplify_core.QueryField(fieldName: "ingredients");
-  static final FAVORITED = amplify_core.QueryField(
-    fieldName: "favorited",
+  static final FAVORITEDBY = amplify_core.QueryField(
+    fieldName: "favoritedBy",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'FavoritePost'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Post";
@@ -345,6 +345,10 @@ class Post extends amplify_core.Model {
           amplify_core.ModelOperation.DELETE,
           amplify_core.ModelOperation.READ
         ])
+    ];
+    
+    modelSchemaDefinition.indexes = [
+      amplify_core.ModelIndex(fields: const ["id"], name: null)
     ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
@@ -400,7 +404,7 @@ class Post extends amplify_core.Model {
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
-      key: Post.FAVORITED,
+      key: Post.FAVORITEDBY,
       isRequired: false,
       ofModelName: 'FavoritePost',
       associatedKey: FavoritePost.POST

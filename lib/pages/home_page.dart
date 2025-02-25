@@ -64,15 +64,15 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Center(
           child: <Widget>[
-            PostGrid(posts: dummyPosts),
-            PostGrid(posts: List.from(dummyPosts)..shuffle()),
+            PostGrid(posts: PostModel.getPostList(10)),
+            PostGrid(posts: PostModel.getPostList(10)),
           ][page],
         ));
   }
 }
 
 class PostGrid extends StatelessWidget {
-  final List<Post> posts;
+  final List<Post?> posts;
 
   const PostGrid({
     super.key,
@@ -90,7 +90,7 @@ class PostGrid extends StatelessWidget {
         runSpacing: 4,
         alignment: WrapAlignment.start,
         children: List.generate(posts.length, (index) {
-          Post post = posts[index];
+          Post? post = posts[index];
           return SizedBox(
             width: itemWidth, // Ensures 2 columns
             child: CardWidget(post: post),
@@ -107,7 +107,7 @@ class CardWidget extends StatelessWidget {
     required this.post,
   });
 
-  final Post post;
+  final Post? post;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +129,7 @@ class CardWidget extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(post.imageUrl),
+                  image: NetworkImage(post?.imageUrl ?? ""),
                   fit: BoxFit.cover,
                   alignment: Alignment.center,
                 ),
@@ -141,7 +141,7 @@ class CardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    post.title,
+                    post?.title ?? "",
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -149,7 +149,7 @@ class CardWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'By ${post.author}',
+                    'By ${post?.authorId ?? ""}',
                     style: TextStyle(
                       fontSize: 14,
                     ),
@@ -165,7 +165,7 @@ class CardWidget extends StatelessWidget {
                             size: 16,
                           ),
                           const SizedBox(width: 4),
-                          Text('${post.likes} Likes'),
+                          Text('${post?.likes ?? 0} Likes'),
                         ],
                       ),
                       Row(
@@ -175,7 +175,7 @@ class CardWidget extends StatelessWidget {
                             size: 16,
                           ),
                           const SizedBox(width: 4),
-                          Text('${post.favorites} Favorites'),
+                          Text('${post?.favorites ?? 0} Favorites'),
                         ],
                       ),
                     ],

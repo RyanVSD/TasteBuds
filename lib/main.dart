@@ -73,7 +73,29 @@ class MyApp extends StatelessWidget {
               return CustomScaffold(
                 state: state,
                 // A prebuilt Sign Up form from amplify_authenticator
-                body: SignUpForm(),
+                body: SignUpForm.custom(
+                  fields: [
+                    SignUpFormField.username(),
+                    SignUpFormField.custom(
+                      required: true,
+                      validator: ((value) {
+                        if (value == null || value.isEmpty) {
+                          return 'You must provide a profile name';
+                        }
+                        if (value.length > 32 || value.length < 4) {
+                          return 'Profile name must be between 32 and 4 characters';
+                        }
+                        return null;
+                      }),
+                      title: "Profile name",
+                      attributeKey: CognitoUserAttributeKey.preferredUsername,
+                    ),
+                    SignUpFormField.email(required: true),
+                    SignUpFormField.password(),
+                    SignUpFormField.passwordConfirmation(),
+                    SignUpFormField.birthdate(required: true),
+                  ],
+                ),
                 // A custom footer with a button to take the user to sign in
                 footer: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

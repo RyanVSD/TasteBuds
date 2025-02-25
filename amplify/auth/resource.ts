@@ -1,5 +1,6 @@
 import { defineAuth } from "@aws-amplify/backend";
-
+import { postConfirmation } from "./post-confirmation/resource";
+import { preSignUp } from "./pre-sign-up/resources";
 /**
  * Define and configure your auth resource
  * @see https://docs.amplify.aws/gen2/build-a-backend/auth
@@ -9,19 +10,10 @@ export const auth = defineAuth({
 		email: true,
 	},
 
-	multifactor: {
-		mode: "OPTIONAL",
-		sms: true,
-	},
-
 	userAttributes: {
-		fullname: {
-			mutable: true,
-			required: true,
-		},
 		preferredUsername: {
 			mutable: true,
-			required: false,
+			required: true,
 		},
 		profilePicture: {
 			mutable: true,
@@ -29,11 +21,11 @@ export const auth = defineAuth({
 		},
 		birthdate: {
 			mutable: true,
-			required: true,
+			required: false,
 		},
-		phoneNumber: {
-			mutable: true,
-			required: true,
-		},
+	},
+	triggers: {
+		preSignUp,
+		postConfirmation,
 	},
 });

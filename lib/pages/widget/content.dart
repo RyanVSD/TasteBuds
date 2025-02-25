@@ -23,13 +23,6 @@ class Content extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        Text(
-          post.author,
-          style: TextStyle(
-            fontSize: 24,
-            color: Colors.black,
-          ),
-        ),
         Center(
           child: Column(
             children: [
@@ -51,21 +44,9 @@ class Content extends StatelessWidget {
         Row(
           children: [
             Text("Difficulty: "),
-            ...List.generate(post.ratings["difficulty"] ?? 0, (e) => Text("★"))
+            ...List.generate(post.difficulty ?? 0, (e) => Text("★"))
           ],
         ),
-        Row(
-          children: [
-            Text("Taste: "),
-            ...List.generate(post.ratings["taste"] ?? 0, (e) => Text("★"))
-          ],
-        ),
-        Row(
-          children: [
-            Text("Price: "),
-            ...List.generate(post.ratings["price"] ?? 0, (e) => Text("★"))
-          ],
-        )
       ],
     );
   }
