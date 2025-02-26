@@ -1,5 +1,5 @@
 import 'package:tastebuds/model/amplify/ModelProvider.dart';
-import 'package:tastebuds/model/objects/post.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import 'dart:convert';
 
 import 'package:tastebuds/service/database_service.dart';

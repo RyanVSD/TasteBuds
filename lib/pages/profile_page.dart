@@ -2,7 +2,7 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/service/database_service.dart';
-import '../model/objects/post.dart';
+import '../model/objects/post_item.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

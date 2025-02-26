@@ -80,5 +80,11 @@ class Database {
     }
   }
 
+  static Future<int> followerCount() async {
+    try {} on ApiException catch (e) {
+      print("fetch failed $e");
+    }
+  }
+
   //static Future<User> getUserProfile() async {}
 }

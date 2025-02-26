@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tastebuds/model/objects/post.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/model/post_model.dart';
 
 class Content extends StatelessWidget {

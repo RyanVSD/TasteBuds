@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
-import 'package:tastebuds/model/objects/post.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:provider/provider.dart';
 import '../post_page.dart';
 

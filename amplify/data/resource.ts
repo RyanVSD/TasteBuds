@@ -42,6 +42,10 @@ const schema = a
 			username: a.string().required(),
 			preferredUsername: a.string().required(),
 
+			// Cached values
+			followerCount: a.integer(),
+			followingCount: a.integer(),
+
 			// Graph edges
 			likes: a.hasMany("LikePost", "userId"),
 			favorites: a.hasMany("FavoritePost", "userId"),
@@ -117,7 +121,7 @@ const schema = a
 	// ALLOWS ANYONE TO ACCESS ALL DATA
 	// REMOVE LATER
 	.authorization((allow) => [
-		allow.guest(),
+		allow.authenticated(),
 		allow.resource(postConfirmation),
 	]);
 
