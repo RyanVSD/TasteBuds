@@ -17,8 +17,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.yellow[700],
+          backgroundColor: Theme.of(context).brightness == Brightness.dark ?Theme.of(context).colorScheme.surface :Theme.of(context).colorScheme.secondary,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -31,9 +32,9 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     "Discover",
                     style: TextStyle(
-                      color: Colors.black,
+                      fontSize:18,
                       fontWeight:
-                          (page == 0) ? FontWeight.bold : FontWeight.normal,
+                          (page == 0) ? FontWeight.w700 : FontWeight.normal,
                       decoration: TextDecoration.underline,
                     ),
                   )),
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     "Following",
                     style: TextStyle(
-                      color: Colors.black,
+                      fontSize: 18,
                       fontWeight:
                           (page == 1) ? FontWeight.bold : FontWeight.normal,
                       decoration: TextDecoration.underline,

@@ -6,9 +6,8 @@ class BottomNavBar extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
       return BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        color: Colors.white,
+
+        color: Theme.of(context).colorScheme.tertiary,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -48,7 +47,7 @@ class AddPostButton extends StatelessWidget {
       onPressed: () {
         // Navigator.push(context, MaterialPageRoute(builder: (context) => AddPost())
       },
-      backgroundColor: Colors.yellow[700],
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       child: const Icon(Icons.add, color: Colors.black),
     );
   }

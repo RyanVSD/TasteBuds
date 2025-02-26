@@ -13,6 +13,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'amplify_outputs.dart';
 import 'model/ModelProvider.dart';
 import 'theme.dart';
+import 'util.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -61,12 +62,14 @@ class _MyAppState extends State<MyApp> {
         page = HomePage();
     }
 
-    MaterialTheme theme = MaterialTheme();
+    final brightnessMode = View.of(context).platformDispatcher.platformBrightness;
+    TextTheme textTheme = createTextTheme(context, "Inter", "Inter");
+    MaterialTheme theme = MaterialTheme(textTheme);
 
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => PostModel())],
       child: MaterialApp(
-        theme: theme.light(),
+        theme: brightnessMode == Brightness.light ? theme.light() : theme.dark(),
         home: Scaffold(
           body: page,
           bottomNavigationBar: BottomNavBar(changePage),

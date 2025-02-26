@@ -9,12 +9,13 @@ class ReccPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.yellow[700],
+        scrolledUnderElevation: 0,
+        backgroundColor:Theme.of(context).brightness == Brightness.dark ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.secondary,
         title: Text(
               "Recommendation",
               style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
       ),

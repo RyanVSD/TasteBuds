@@ -31,14 +31,12 @@ class _ContentState extends State<Content> {
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
           ),
         ),
         Text(
           post.author,
           style: TextStyle(
             fontSize: 20,
-            color: Colors.black,
           ),
         ),
         Row(
@@ -56,7 +54,7 @@ class _ContentState extends State<Content> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 5), 
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 245, 245, 245), 
+                color: Theme.of(context).colorScheme.tertiaryContainer, 
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
@@ -66,18 +64,18 @@ class _ContentState extends State<Content> {
                   IconButton(
                     icon: Icon(
                       isLiked ? Icons.thumb_up : Icons.thumb_up_off_alt,
-                      color: isLiked ? Colors.yellow[700] : Colors.black,
+                      color: isLiked ? Theme.of(context).colorScheme.primaryFixedDim : Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
                       setState(() {
                         isLiked = !isLiked;
                       });
                     },
-                  ),// Add spacing between the buttons
+                  ),
                   IconButton(
                     icon: Icon(
                       isFavorited ? Icons.star : Icons.star_border,
-                      color: isFavorited ? Colors.yellow[700] : Colors.black,
+                      color: isFavorited ? Theme.of(context).colorScheme.primaryFixedDim : Theme.of(context).colorScheme.onSurface ,
                     ),
                     onPressed: () {
                       setState(() {
@@ -108,7 +106,7 @@ class _ContentState extends State<Content> {
               padding: const EdgeInsets.only(bottom: 4.0),
               child: Text(
                 "- $ing",
-                style: TextStyle(fontSize: 16, color: Colors.black87),
+                style: TextStyle(fontSize: 16),
               ),
             )),
             SizedBox(height: 16),

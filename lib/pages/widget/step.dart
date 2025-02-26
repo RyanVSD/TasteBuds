@@ -25,7 +25,7 @@ class _StepCardState extends State<StepCard> {
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 245, 245, 245),
+            color: Theme.of(context).colorScheme.tertiaryContainer,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -33,6 +33,9 @@ class _StepCardState extends State<StepCard> {
               Checkbox(
                   value: isChecked,
                   onChanged: (bool? value) {
+                    setState(() {
+                      isChecked = !isChecked;
+                    });
                   },),
               Flexible(
                 child: Text(

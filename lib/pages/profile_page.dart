@@ -11,8 +11,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  double _appBarOpacity = 0.0; // Initially invisible
+  late TabController _tabController;// Initially invisible
 
   late ScrollController _scrollController;
 
@@ -21,7 +20,6 @@ class _ProfilePageState extends State<ProfilePage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
   }
 
   @override
@@ -30,45 +28,31 @@ class _ProfilePageState extends State<ProfilePage>
     super.dispose();
   }
 
-  void _scrollListener() {
-    double newOpacity = (_scrollController.offset / 100).clamp(0.0, 1.0);
-    setState(() {
-      _appBarOpacity = newOpacity;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 💚 top bar that has the profile title, appear when scrolled
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.yellow[700],
-        elevation: 0,
-        title: AnimatedOpacity(
-          opacity: _appBarOpacity, // Changes based on scroll position
-          duration: const Duration(milliseconds: 200),
-          child: const Text(
-            'Profile',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
 
-      // 💚 Use NestedScrollView to combine both scrolling behaviors
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          // 💚 Profile Header (This will scroll out of view)
           SliverToBoxAdapter(
             child: Container(
-              height: 250,
-              color: Colors.yellow[700],
-              padding: const EdgeInsets.all(16),
+              height: 280,
+              // color: Theme.of(context).colorScheme.secondary,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: Theme.of(context).brightness == Brightness.dark ? 
+                   [Theme.of(context).colorScheme.surface,Theme.of(context).colorScheme.surface ] : [Theme.of(context).colorScheme.secondary, Theme.of(context).colorScheme.surface],
+                  begin: Alignment.topCenter, // Start position
+                  end: Alignment(0,0.9), // End position
+                ),
+              ),
+
+              padding: const EdgeInsets.fromLTRB(16,30,16,10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 💚 Avatar + Name + Icon Row
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -80,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
                       ),
                       const SizedBox(width: 16),
 
-                      // 💚 Name & ID
+                      //  Name & ID
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,24 +74,22 @@ class _ProfilePageState extends State<ProfilePage>
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black87,
                               ),
                             ),
                             Text(
                               'TasteBuds ID: 93786',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey[800],
+                                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
                               ),
                             ),
                           ],
                         ),
                       ),
 
-                      // 💚 Plus Icon
+                      // Plus Icon
                       const Icon(
                         Icons.add_circle,
-                        color: Colors.black,
                         size: 30,
                       ),
                     ],
@@ -115,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage>
 
                   const SizedBox(height: 16),
 
-                  // 💚 Stats Row: Posts, Following, Followers
+                  //  Stats Row: Posts, Following, Followers
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -129,15 +111,15 @@ class _ProfilePageState extends State<ProfilePage>
             ),
           ),
 
-          // 💚 Tab Bar (This will scroll out of view)
+          //  Tab Bar (This will scroll out of view)
           SliverPersistentHeader(
             pinned: true, // Keeps it at the top when scrolling
             delegate: _SliverAppBarDelegate(
               TabBar(
                 controller: _tabController,
-                labelColor: Colors.black,
+                labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor: Colors.grey,
-                indicatorColor: Colors.yellow[700],
+                indicatorColor: Theme.of(context).colorScheme.secondary,
                 tabs: const [
                   Tab(text: 'Posts'),
                   Tab(text: 'Favorites'),
@@ -147,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage>
           ),
         ],
 
-        // 💚 The main body (scrolls with the whole page)
+        // The main body (scrolls with the whole page)
         body: TabBarView(
           controller: _tabController,
           children: [
@@ -160,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  // 💚 Helper method to display post statistics
+  // Helper method to display post statistics
   Widget _buildStatsItem(String value, String label) {
     return Column(
       children: [
@@ -179,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  // 💚 _buildPostsList() method (scrolls inside TabBarView)
+  // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
     return ListView.builder(
       padding: const EdgeInsets.all(10),
@@ -268,7 +250,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
-// 💚 Helper class to keep the Tab Bar pinned at the top
+//  Helper class to keep the Tab Bar pinned at the top
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
   _SliverAppBarDelegate(this.tabBar);
@@ -282,7 +264,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,12 +278,12 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              color: Colors.grey[200], // Light grey background
+              color: Theme.of(context).colorScheme.tertiaryContainer,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               children: [
-                const Icon(Icons.search, color: Colors.black),
+                const Icon(Icons.search),
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
@@ -310,7 +292,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                       border: InputBorder.none, // Removes default underline
                     ),
                     onChanged: (value) {
-                      // TODO: Implement search functionality
+                      // Search
                     },
                   ),
                 ),
