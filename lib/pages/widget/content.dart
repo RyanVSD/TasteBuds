@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tastebuds/model/objects/post.dart';
 import 'package:tastebuds/model/post_model.dart';
+import './step.dart';
 
-class Content extends StatelessWidget {
+class Content extends StatefulWidget {
   const Content({
     super.key,
   });
+
+  @override
+  State<Content> createState() => _ContentState();
+}
+
+class _ContentState extends State<Content> {
+
+  bool isLiked = false;
+  bool isFavorited = false;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +25,7 @@ class Content extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10,),
         Text(
           post.title,
           style: TextStyle(
@@ -26,46 +37,101 @@ class Content extends StatelessWidget {
         Text(
           post.author,
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             color: Colors.black,
           ),
         ),
-        Center(
-          child: Column(
-            children: [
-              Text("Ingredients",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              ...post.ingredients.map((ing) => Text(ing.toString())),
-            ],
-          ),
-        ),
-        Center(
-          child: Column(
-            children: [
-              Text("Steps",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              ...post.steps.map((ing) => Text(ing))
-            ],
-          ),
-        ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Difficulty: "),
-            ...List.generate(post.ratings["difficulty"] ?? 0, (e) => Text("★"))
+            Row(
+              children: [
+                Text("Difficulty: ",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ...List.generate(post.ratings["difficulty"] ?? 0, (e) {
+                  return Icon(Icons.star, color: Color(0xFFFBC02E));
+                }),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 5), 
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 245, 245, 245), 
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      isLiked ? Icons.thumb_up : Icons.thumb_up_off_alt,
+                      color: isLiked ? Colors.yellow[700] : Colors.black,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isLiked = !isLiked;
+                      });
+                    },
+                  ),// Add spacing between the buttons
+                  IconButton(
+                    icon: Icon(
+                      isFavorited ? Icons.star : Icons.star_border,
+                      color: isFavorited ? Colors.yellow[700] : Colors.black,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isFavorited = !isFavorited;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        Row(
+
+        SizedBox(height: 8),
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Taste: "),
-            ...List.generate(post.ratings["taste"] ?? 0, (e) => Text("★"))
+            Text(
+              "Ingredients",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24, // Golden color
+              ),
+            ),
+            SizedBox(height: 8),
+            ...post.ingredients.map((ing) => Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Text(
+                "- $ing",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+            )),
+            SizedBox(height: 16),
           ],
         ),
-        Row(
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Price: "),
-            ...List.generate(post.ratings["price"] ?? 0, (e) => Text("★"))
+            Text( "Steps",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+            SizedBox(height: 8),
+            ...post.steps.map((step) => Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: StepCard(step:step),
+            )),
+            SizedBox(height: 16),
           ],
-        )
+        ),
       ],
     );
   }
