@@ -76,19 +76,25 @@ class PostGrid extends StatelessWidget {
     double itemWidth =
         (MediaQuery.of(context).size.width / 2) - 12; // Adjust width
     return SingleChildScrollView(
-      child: Center(
-          child: Wrap(
-        spacing: 8,
-        runSpacing: 4,
-        alignment: WrapAlignment.start,
-        children: List.generate(posts.length, (index) {
-          Post post = posts[index];
-          return SizedBox(
-            width: itemWidth, // Ensures 2 columns
-            child: CardWidget(post: post),
-          );
-        }),
-      )),
+      child: Column(
+        children: [
+          SizedBox(height:10),
+          Center(
+              child: Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            alignment: WrapAlignment.start,
+            children: List.generate(posts.length, (index) {
+              Post post = posts[index];
+              return SizedBox(
+                width: itemWidth, // Ensures 2 columns
+                child: CardWidget(post: post),
+              );
+            }),
+          )),
+          SizedBox(height:35),
+        ],
+      ),
     );
   }
 }
