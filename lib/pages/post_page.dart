@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
-import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/pages/widget/content.dart';
 import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:tastebuds/service/post_service.dart';
@@ -40,12 +38,6 @@ class _PostPageState extends State<PostPage> {
       ),
       body: ListView(
         children: [
-          // test button
-          // ElevatedButton(onPressed: () {
-          //    Navigator.pop(context);
-          //   // context.read<PostModel>().setPost(postId: "1");
-          // }, child: Text("Back")),
-          // Image.imageUrl(File("./static_asset/img1.jpg")),
           Image.network(imUrl),
           Row(
             children: [

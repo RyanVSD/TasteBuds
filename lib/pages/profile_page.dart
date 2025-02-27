@@ -4,9 +4,8 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/post_model.dart';
-import 'package:tastebuds/service/auth_service.dart';
-import 'package:tastebuds/service/database_service.dart';
 import '../model/objects/post_item.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -196,7 +195,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   // 💚 _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts = PostModel.getPostList(10);
+    Future<List<PostItem?>> posts = context.watch<PostModel>().getPostList(0);
+
     return FutureBuilder<List<PostItem?>>(
         future: posts,
         builder: (context, snapshot) {

@@ -7,7 +7,8 @@ import 'dart:io';
 
 import 'package:tastebuds/model/objects/ingredient_item.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
-import 'package:tastebuds/service/database_service.dart';
+import 'package:provider/provider.dart';
+import 'package:tastebuds/model/post_model.dart';
 
 class CreatePostFormData {
   String title;
@@ -136,40 +137,6 @@ class _CreatePostState extends State<CreatePost> {
     return null;
   }
 
-  Future<bool> sendPost() async {
-    final bool isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid) {
-      print("not valid");
-      return false;
-    }
-    if (_image == null) {
-      final snackBar = SnackBar(content: Text("Image required"));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      return false;
-    }
-    final String? checkLists = validateLists();
-    if (checkLists != null) {
-      final snackBar = SnackBar(content: Text(checkLists));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      return false;
-    }
-    CreatePostFormData data = CreatePostFormData(
-      title: titleController.text,
-      description: descriptionController.text,
-      file: _image!,
-      steps: stepControllers.map((c) => c.text).toList(),
-      ingredients: ingredients,
-      priceEstimation: priceEstimation,
-      difficulty: difficultyRating,
-    );
-    PostItem createdPost = await PostItem.fromCreateForm(data);
-    Post? response = await Database.createPost(createdPost);
-    if (response == null) {
-      return false;
-    }
-    print(response);
-    return true;
-  }
 
   Widget _buildPriceEstimator() {
     Text priceInfoWidget;
@@ -226,6 +193,41 @@ class _CreatePostState extends State<CreatePost> {
       }),
     );
   }
+
+  bool validatePost()  {
+    final bool isValid = formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      print("not valid");
+      return false;
+    }
+    if (_image == null) {
+      final snackBar = SnackBar(content: Text("Image required"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return false;
+    }
+    final String? checkLists = validateLists();
+    if (checkLists != null) {
+      final snackBar = SnackBar(content: Text(checkLists));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return false;
+    }
+    CreatePostFormData data = CreatePostFormData(
+      title: titleController.text,
+      description: descriptionController.text,
+      file: _image!,
+      steps: stepControllers.map((c) => c.text).toList(),
+      ingredients: ingredients,
+      priceEstimation: priceEstimation,
+      difficulty: difficultyRating,
+    );
+    try {
+      context.read<PostModel>().sendPost(data);
+    }on StateError catch (e) {
+      return false;
+    }
+    return true;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -413,11 +415,7 @@ class _CreatePostState extends State<CreatePost> {
           Center(
             child: OutlinedButton(
               onPressed: () {
-                sendPost().then((value) {
-                  if (context.mounted && value) {
-                    Navigator.pop(context);
-                  }
-                });
+                if (validatePost()) {Navigator.pop(context);};
               },
               child: const Text('Post'),
             ),

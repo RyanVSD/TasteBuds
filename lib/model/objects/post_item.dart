@@ -71,7 +71,7 @@ class PostItem {
         price: json['price'],
         ingredients: (List<Map<String, dynamic>>.from(json['ingredients']))
             .map(
-                (item) => IngredientItem.fromJson(item as Map<String, dynamic>))
+                (item) => IngredientItem.fromJson(item))
             .toList());
   }
 

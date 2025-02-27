@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import './widget/post_card.dart';
 import 'package:tastebuds/model/post_model.dart';
@@ -58,8 +59,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Center(
           child: <Widget>[
-            PostGrid(posts: PostModel.getPostList(10)),
-            PostGrid(posts: PostModel.getPostList(10)),
+            PostGrid(posts: context.watch<PostModel>().getPostList(10)),
+            PostGrid(posts: context.watch<PostModel>().getPostList(10)),
           ][page],
         ));
   }
