@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/pages/widget/content.dart';
-import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:tastebuds/service/post_service.dart';
 
 class PostPage extends StatefulWidget
@@ -77,7 +76,7 @@ class _PostPageState extends State<PostPage> {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   padding: EdgeInsets.all(20),
-                  child: Content(),
+                  child: Content(post: widget.post!,),
                 ),
               );
             },

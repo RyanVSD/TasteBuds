@@ -231,7 +231,8 @@ class _CreatePostState extends State<CreatePost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFBC02D),
+        backgroundColor:Theme.of(context).brightness == Brightness.dark ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.secondary,
+        scrolledUnderElevation: 0,
         title: Text(
           "Create post",
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

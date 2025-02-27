@@ -1,6 +1,7 @@
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
+import 'package:tastebuds/model/user_model.dart';
 import 'package:tastebuds/pages/profile_page.dart';
 import 'package:tastebuds/pages/ranking_page.dart';
 import 'package:tastebuds/pages/recc_page.dart';
@@ -162,7 +163,10 @@ class _MyAppState extends State<MyApp> {
           }
         },
         child: MultiProvider(
-          providers: [ChangeNotifierProvider(create: (context) => PostModel())],
+          providers: [
+            ChangeNotifierProvider(create: (context) => PostModel()),
+            ChangeNotifierProvider(create: (context) => UserModel())
+          ],
           child: MaterialApp(
             theme: brightnessMode == Brightness.light ? theme.light() : theme.dark(),
             builder: Authenticator.builder(),

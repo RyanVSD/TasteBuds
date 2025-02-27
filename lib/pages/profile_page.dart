@@ -54,7 +54,10 @@ class _ProfilePageState extends State<ProfilePage>
               padding: const EdgeInsets.fromLTRB(16,30,16,10),
               child: Stack(
                 children: [
-                  SignOutButton(),
+                  Positioned(
+                    right: 0,
+                    child: SignOutButton()
+                    ),
                   Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

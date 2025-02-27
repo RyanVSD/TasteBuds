@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
-import 'package:tastebuds/model/post_model.dart';
 import './step.dart';
 
 class Content extends StatefulWidget {
   const Content({
     super.key,
+    required this.post
   });
+
+  final PostItem post;
 
   @override
   State<Content> createState() => _ContentState();
@@ -20,7 +21,7 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
-    PostItem post = context.watch<PostModel>().post ?? PostItem.empty();
+    PostItem post = widget.post;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

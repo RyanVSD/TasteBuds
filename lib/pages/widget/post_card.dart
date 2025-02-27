@@ -37,8 +37,7 @@ class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        await context.read<PostModel>().setPost(postId: widget.post?.id ?? "0");
+      onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(

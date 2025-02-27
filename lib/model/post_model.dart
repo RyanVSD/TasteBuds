@@ -8,12 +8,6 @@ import 'package:tastebuds/model/objects/post_item.dart';
 class PostModel extends ChangeNotifier {
   PostItem? post;
   PostModel();
-
-  Future<void> setPost({required String postId}) async {
-    post = await getPost(postId);
-    notifyListeners();
-  }
-
     
   Future<PostItem?> getPost(String postId) async {
     Post? response = await service.getPost(postId);

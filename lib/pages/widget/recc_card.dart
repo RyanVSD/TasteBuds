@@ -68,7 +68,6 @@ class ReccCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.read<PostModel>().setPost(postId: post.id!);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => PostPage(post: post,)));
       },
