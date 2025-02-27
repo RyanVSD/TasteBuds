@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tastebuds/model/post_model.dart';
 import './widget/recc_card.dart';
-import 'package:tastebuds/model/dummy_data.dart';
+// import 'package:tastebuds/model/dummy_data.dart';
 
 class ReccPage extends StatelessWidget {
   const ReccPage({super.key});
@@ -22,11 +24,11 @@ class ReccPage extends StatelessWidget {
       body: ListView(
         children: [
           SizedBox(height: 4),
-          ReccRow(title: "For you", posts: dummyPosts),
-          ReccRow(title: "Nearest", posts: dummyPosts),
-          ReccRow(title: "Training diet", posts: dummyPosts),
-          ReccRow(title: "Chinese", posts: dummyPosts),
-          ReccRow(title: "Japanese", posts: dummyPosts),
+          // ReccRow(title: "For you", posts: context.watch<PostModel>().getPostList(5)),
+          // ReccRow(title: "Nearest", posts: dummyPosts),
+          // ReccRow(title: "Training diet", posts: dummyPosts),
+          // ReccRow(title: "Chinese", posts: dummyPosts),
+          // ReccRow(title: "Japanese", posts: dummyPosts),
         ],
       )
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/model/dummy_data.dart';
-import 'package:tastebuds/model/objects/post.dart';
+import 'package:provider/provider.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import './widget/post_card.dart';
+import 'package:tastebuds/model/post_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -57,15 +58,17 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: <Widget>[
-          PostGrid(posts: dummyPosts),
-          PostGrid(posts: List.from(dummyPosts)..shuffle()),
-        ][page]);
+        body: Center(
+          child: <Widget>[
+            PostGrid(posts: context.watch<PostModel>().getPostList(10)),
+            PostGrid(posts: context.watch<PostModel>().getPostList(10)),
+          ][page],
+        ));
   }
 }
 
 class PostGrid extends StatelessWidget {
-  final List<Post> posts;
+  final Future<List<PostItem?>> posts;
 
   const PostGrid({
     super.key,
@@ -77,26 +80,39 @@ class PostGrid extends StatelessWidget {
     double itemWidth =
         (MediaQuery.of(context).size.width / 2) - 12; // Adjust width
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height:10),
-          Center(
-              child: Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            alignment: WrapAlignment.start,
-            children: List.generate(posts.length, (index) {
-              Post post = posts[index];
-              return SizedBox(
-                width: itemWidth, // Ensures 2 columns
-                child: CardWidget(post: post),
-              );
-            }),
-          )),
-          SizedBox(height:35),
-        ],
-      ),
-    );
+        child: FutureBuilder<List<PostItem?>>(
+            future: posts,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text('No posts available');
+              } else {
+                List<PostItem?> postItems = snapshot.data!;
+
+                return Column(
+                  children: [
+                    SizedBox(height:10),
+                    Center(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        alignment: WrapAlignment.start,
+                        children: List.generate(postItems.length, (index) {
+                          PostItem? post = postItems[index];
+                          return SizedBox(
+                            width: itemWidth, // Ensures 2 columns
+                            child: CardWidget(post: post),
+                          );
+                        }),
+                      ),
+                    ),
+                    SizedBox(height:35),
+                  ],
+                );
+              }
+            }));
   }
 }
-

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tastebuds/model/post_model.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/pages/widget/content.dart';
+import 'package:tastebuds/pages/widget/post_card.dart';
+import 'package:tastebuds/service/post_service.dart';
 
 class PostPage extends StatefulWidget
 {
-  const PostPage({super.key});
+  const PostPage({super.key, required this.post});
+
+  final PostItem? post;
 
   @override
   State<PostPage> createState() => _PostPageState();
@@ -13,12 +16,25 @@ class PostPage extends StatefulWidget
 
 class _PostPageState extends State<PostPage> {
   bool isFollowed = false;
-  String postImg = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
+  String imUrl = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
   String profileImg = 'https://www.shutterstock.com/image-photo/hiking-switzerland-interlaken-jungfrau-region-600nw-2272449171.jpg';
+
+  Future<void> updImUrl() async {
+    PostItem? p = widget.post;
+    if (p != null) {
+      String newPath = await getS3Url(p.imageUrl);
+      setState(() => imUrl = newPath);
+    } else {}
+  }
+
+  @override
+  initState() {
+    super.initState();
+    updImUrl();
+  }
 
   @override
    Widget build(BuildContext context) {
-    final post = context.watch<PostModel>().post;
 
     return Scaffold(
       body: Stack(
@@ -33,8 +49,7 @@ class _PostPageState extends State<PostPage> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(
-                    post?.imageUrl ??
-                    postImg,
+                    imUrl
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -125,4 +140,3 @@ class _PostPageState extends State<PostPage> {
     );
   }
 }
-

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:tastebuds/pages/create_post.dart';
+
 class BottomNavBar extends StatelessWidget {
   final ValueSetter<int> changePage;
   const BottomNavBar(this.changePage, {super.key});
@@ -26,26 +29,29 @@ class BottomNavBar extends StatelessWidget {
               onPressed: () {changePage(2);},
             ),
 
-            IconButton(
-              icon: const Icon(Icons.person),
-              onPressed: () {changePage(3);},
-            ),
-          ],
-        ),
-      );
-    }
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              changePage(3);
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
-
 
 // Floating Action Button (for Add Post)
 class AddPostButton extends StatelessWidget {
-  const AddPostButton({super.key});
+  final ValueSetter<int> changePage;
+  const AddPostButton(this.changePage, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => AddPost())
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => CreatePost()));
       },
       backgroundColor: Theme.of(context).colorScheme.secondary,
       child: const Icon(Icons.add, color: Colors.black),

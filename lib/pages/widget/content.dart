@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tastebuds/model/objects/post.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/model/post_model.dart';
 import './step.dart';
 
@@ -20,7 +20,7 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
-    Post post = context.watch<PostModel>().post ?? Post.empty();
+    PostItem post = context.watch<PostModel>().post ?? PostItem.empty();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,7 @@ class _ContentState extends State<Content> {
           ),
         ),
         Text(
-          post.author,
+          post.authorId ?? "",
           style: TextStyle(
             fontSize: 20,
           ),
@@ -46,7 +46,7 @@ class _ContentState extends State<Content> {
               children: [
                 Text("Difficulty: ",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ...List.generate(post.ratings["difficulty"] ?? 0, (e) {
+                ...List.generate(post.difficulty.toInt(), (e) {
                   return Icon(Icons.star, color: Color(0xFFFBC02E));
                 }),
               ],

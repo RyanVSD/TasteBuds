@@ -41,6 +41,8 @@ dependencies:
     amplify_auth_cognito: ^2.0.0
     amplify_authenticator: ^2.0.0
     google_fonts: ^6.1.0
+    amplify_storage_s3: ^2.0.0
+    image_picker: ^1.0.4
 
 dev_dependencies:
     flutter_test:

@@ -23,11 +23,12 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the Todo type in your schema. */
-class Todo extends amplify_core.Model {
-  static const classType = const _TodoModelType();
+/** This is an auto generated class representing the PostTag type in your schema. */
+class PostTag extends amplify_core.Model {
+  static const classType = const _PostTagModelType();
   final String id;
-  final String? _content;
+  final Post? _post;
+  final Tag? _tag;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -38,14 +39,18 @@ class Todo extends amplify_core.Model {
   @override
   String getId() => id;
   
-  TodoModelIdentifier get modelIdentifier {
-      return TodoModelIdentifier(
+  PostTagModelIdentifier get modelIdentifier {
+      return PostTagModelIdentifier(
         id: id
       );
   }
   
-  String? get content {
-    return _content;
+  Post? get post {
+    return _post;
+  }
+  
+  Tag? get tag {
+    return _tag;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -56,12 +61,13 @@ class Todo extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Todo._internal({required this.id, content, createdAt, updatedAt}): _content = content, _createdAt = createdAt, _updatedAt = updatedAt;
+  const PostTag._internal({required this.id, post, tag, createdAt, updatedAt}): _post = post, _tag = tag, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Todo({String? id, String? content}) {
-    return Todo._internal(
+  factory PostTag({String? id, Post? post, Tag? tag}) {
+    return PostTag._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
-      content: content);
+      post: post,
+      tag: tag);
   }
   
   bool equals(Object other) {
@@ -71,9 +77,10 @@ class Todo extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Todo &&
+    return other is PostTag &&
       id == other.id &&
-      _content == other._content;
+      _post == other._post &&
+      _tag == other._tag;
   }
   
   @override
@@ -83,59 +90,77 @@ class Todo extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Todo {");
+    buffer.write("PostTag {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("content=" + "$_content" + ", ");
-    buffer.write("createdAt=" + (_createdAt != null ? _createdAt.format() : "null") + ", ");
-    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt.format() : "null"));
+    buffer.write("post=" + (_post != null ? _post!.toString() : "null") + ", ");
+    buffer.write("tag=" + (_tag != null ? _tag!.toString() : "null") + ", ");
+    buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
+    buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Todo copyWith({String? content}) {
-    return Todo._internal(
+  PostTag copyWith({Post? post, Tag? tag}) {
+    return PostTag._internal(
       id: id,
-      content: content ?? this.content);
+      post: post ?? this.post,
+      tag: tag ?? this.tag);
   }
   
-  Todo copyWithModelFieldValues({
-    ModelFieldValue<String?>? content
+  PostTag copyWithModelFieldValues({
+    ModelFieldValue<Post?>? post,
+    ModelFieldValue<Tag?>? tag
   }) {
-    return Todo._internal(
+    return PostTag._internal(
       id: id,
-      content: content == null ? this.content : content.value
+      post: post == null ? this.post : post.value,
+      tag: tag == null ? this.tag : tag.value
     );
   }
   
-  Todo.fromJson(Map<String, dynamic> json)  
+  PostTag.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _content = json['content'],
+      _post = json['post'] != null
+        ? json['post']['serializedData'] != null
+          ? Post.fromJson(new Map<String, dynamic>.from(json['post']['serializedData']))
+          : Post.fromJson(new Map<String, dynamic>.from(json['post']))
+        : null,
+      _tag = json['tag'] != null
+        ? json['tag']['serializedData'] != null
+          ? Tag.fromJson(new Map<String, dynamic>.from(json['tag']['serializedData']))
+          : Tag.fromJson(new Map<String, dynamic>.from(json['tag']))
+        : null,
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'content': _content, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'post': _post?.toJson(), 'tag': _tag?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
-    'content': _content,
+    'post': _post,
+    'tag': _tag,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<TodoModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TodoModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<PostTagModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<PostTagModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final CONTENT = amplify_core.QueryField(fieldName: "content");
+  static final POST = amplify_core.QueryField(
+    fieldName: "post",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
+  static final TAG = amplify_core.QueryField(
+    fieldName: "tag",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Tag'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Todo";
-    modelSchemaDefinition.pluralName = "Todos";
+    modelSchemaDefinition.name = "PostTag";
+    modelSchemaDefinition.pluralName = "PostTags";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
-        authStrategy: amplify_core.AuthStrategy.PUBLIC,
-        provider: amplify_core.AuthRuleProvider.IAM,
+        authStrategy: amplify_core.AuthStrategy.PRIVATE,
         operations: const [
           amplify_core.ModelOperation.CREATE,
           amplify_core.ModelOperation.UPDATE,
@@ -146,10 +171,18 @@ class Todo extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
-      key: Todo.CONTENT,
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
+      key: PostTag.POST,
       isRequired: false,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+      targetNames: ['postId'],
+      ofModelName: 'Post'
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
+      key: PostTag.TAG,
+      isRequired: false,
+      targetNames: ['tagId'],
+      ofModelName: 'Tag'
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
@@ -168,29 +201,29 @@ class Todo extends amplify_core.Model {
   });
 }
 
-class _TodoModelType extends amplify_core.ModelType<Todo> {
-  const _TodoModelType();
+class _PostTagModelType extends amplify_core.ModelType<PostTag> {
+  const _PostTagModelType();
   
   @override
-  Todo fromJson(Map<String, dynamic> jsonData) {
-    return Todo.fromJson(jsonData);
+  PostTag fromJson(Map<String, dynamic> jsonData) {
+    return PostTag.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Todo';
+    return 'PostTag';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Todo] in your schema.
+ * of [PostTag] in your schema.
  */
-class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
+class PostTagModelIdentifier implements amplify_core.ModelIdentifier<PostTag> {
   final String id;
 
-  /** Create an instance of TodoModelIdentifier using [id] the primary key. */
-  const TodoModelIdentifier({
+  /** Create an instance of PostTagModelIdentifier using [id] the primary key. */
+  const PostTagModelIdentifier({
     required this.id});
   
   @override
@@ -208,7 +241,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'TodoModelIdentifier(id: $id)';
+  String toString() => 'PostTagModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -216,7 +249,7 @@ class TodoModelIdentifier implements amplify_core.ModelIdentifier<Todo> {
       return true;
     }
     
-    return other is TodoModelIdentifier &&
+    return other is PostTagModelIdentifier &&
       id == other.id;
   }
   

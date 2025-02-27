@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
-import 'package:tastebuds/model/objects/post.dart';
+import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:provider/provider.dart';
 import '../post_page.dart';
 
 class ReccRow extends StatelessWidget {
-  final List<Post> posts;
+  final List<PostItem> posts;
   final String title;
 
   const ReccRow({super.key, required this.title, required this.posts});
@@ -36,7 +36,7 @@ class ReccRow extends StatelessWidget {
               children: [
                 SizedBox(width: 8,),
                   ...List.generate(5, (index) {
-                  Post post = posts[index];
+                  PostItem post = posts[index];
                   return SizedBox(
                     width: cardWidth, // Ensures 2 columns
                     child: Padding(
@@ -62,15 +62,15 @@ class ReccCard extends StatelessWidget {
     required this.post,
   });
 
-  final Post post;
+  final PostItem post;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.read<PostModel>().setPost(postId: post.id);
+        context.read<PostModel>().setPost(postId: post.id!);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PostPage()));
+            context, MaterialPageRoute(builder: (context) => PostPage(post: post,)));
       },
       child: Card(
         clipBehavior: Clip.antiAlias,

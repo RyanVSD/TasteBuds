@@ -1,8 +1,54 @@
-import 'dart:convert';
+enum UnitType {
+  none,
+  teaspoon,
+  tablespoon,
+  cup,
+  pint,
+  quart,
+  gallon,
+  fluidOunce,
+  milliliter,
+  liter,
+  decalitre,
+  gill,
+  gram,
+  kilogram,
+  ounce,
+  pound,
+}
 
-import 'package:tastebuds/model/objects/unit.dart';
+// Unit valuaes
+const Map<UnitType, double> conversionToBase = {
+  // milliliter base for volume
+  UnitType.teaspoon: 4.92892,
+  UnitType.tablespoon: 14.7868,
+  UnitType.cup: 240.0,
+  UnitType.pint: 473.176,
+  UnitType.quart: 946.353,
+  UnitType.gallon: 3785.41,
+  UnitType.fluidOunce: 29.5735,
+  UnitType.liter: 1000.0,
+  UnitType.milliliter: 1.0,
+  UnitType.decalitre: 10000.0,
+  UnitType.gill: 118.294,
 
-class Ingredient {
+  // Gram base for weight
+  UnitType.gram: 1.0,
+  UnitType.kilogram: 1000.0,
+  UnitType.ounce: 28.3495,
+  UnitType.pound: 453.592,
+
+  // None is its own base
+  UnitType.none: 1.0,
+};
+
+enum UnitClass {
+  none,
+  volume,
+  mass,
+}
+
+class IngredientItem {
   // IF ADDING TO COOKING FRACTIONS KEEP ASCENDING ORDER
   static const List<double> cookingFractions = [
     1 / 2,
@@ -22,23 +68,52 @@ class Ingredient {
   static const _decCount = 3;
   // Private member variables
   final String _name;
-  final Unit _unit;
+  UnitType _unit;
+  double _value;
+  late UnitClass _class;
 
-  // Constructor for when you have unit class already
-  Ingredient.withUnitClass({required String name, required Unit unit})
+  UnitClass _getClass(UnitType t) {
+    switch (t) {
+      case UnitType.gram:
+      case UnitType.kilogram:
+      case UnitType.ounce:
+      case UnitType.pound:
+        return UnitClass.mass;
+
+      case UnitType.none:
+        return UnitClass.none;
+
+      default:
+        return UnitClass.volume;
+    }
+  }
+
+  // Constructor for when you use enum
+  IngredientItem.withUnitType(
+      {required String name, required UnitType unit, required value})
       : _name = name,
-        _unit = unit;
+        _unit = unit,
+        _value = value {
+    _class = _getClass(_unit);
+  }
 
   // Constructor for giving unit
-  Ingredient(
+  IngredientItem(
       {required String name, required String unit, required double value})
       : _name = name,
-        _unit = Unit.stringType(type: unit, value: value);
+        _unit = UnitType.values.firstWhere((e) => e.name == unit,
+            orElse: () => throw ArgumentError('Invalid unit type: $unit')),
+        _value = value {
+    _class = _getClass(_unit);
+  }
 
   // Constructor for when there is no unit
-  Ingredient.noUnit({required String name, required double value})
+  IngredientItem.noUnit({required String name, required double value})
       : _name = name,
-        _unit = Unit.stringType(type: "none", value: value);
+        _unit = UnitType.none,
+        _value = value {
+    _class = _getClass(_unit);
+  }
 
   // Gets the format of value for ingredient
   // If cooking fraction (1/8, 3/4, 1/2, etc) print in mixed form
@@ -72,9 +147,11 @@ class Ingredient {
     }
     if (!isCookingFrac) {
       format += nonDec > 0
-          ? Ingredient.trimToNSignificantDecimals(dec, Ingredient._decCount)
+          ? IngredientItem.trimToNSignificantDecimals(
+                  dec, IngredientItem._decCount)
               .substring(1)
-          : Ingredient.trimToNSignificantDecimals(dec, Ingredient._decCount);
+          : IngredientItem.trimToNSignificantDecimals(
+              dec, IngredientItem._decCount);
     }
 
     return format;
@@ -104,42 +181,53 @@ class Ingredient {
   @override
   String toString() {
     String strbuilder = "";
-    double value = _unit.getValue();
-    UnitType type = _unit.getType();
-    String formatValue = Ingredient._formatValue(value);
+    String formatValue = IngredientItem._formatValue(_value);
 
-    if (value == 0) {
+    if (_value == 0) {
       return _name;
     }
     strbuilder += formatValue;
     strbuilder += " ";
-    if (_unit.getType() != UnitType.none) {
-      if (type == UnitType.fluidOunce) {
+    if (_unit != UnitType.none) {
+      if (_unit == UnitType.fluidOunce) {
         strbuilder += "fluid ounce";
       } else {
-        strbuilder += type.name;
+        strbuilder += _unit.name;
       }
-      if (value > 1) strbuilder += "s";
+      if (_value > 1) strbuilder += "s";
       strbuilder += " of ";
     }
     strbuilder += _name;
     return strbuilder;
   }
 
-  factory Ingredient.fromJson(Map<String, dynamic> json) {
-    return Ingredient.withUnitClass(
-        name: json['name'], unit: Unit.fromJson(jsonDecode(json['unit'])));
+  factory IngredientItem.fromJson(Map<String, dynamic> json) {
+    return IngredientItem(
+        name: json['name'], unit: json['unit'], value: json['value']);
+  }
+
+  void convertTo(UnitType newUnit) {
+    if (_value == 0) throw Exception("Value not defined");
+    if (_class != _getClass(newUnit)) {
+      throw Exception(
+          "Cannot convert between: ${_class.name} and ${_getClass(newUnit).name}");
+    }
+    if (newUnit == _unit || newUnit == UnitType.none) return;
+    double valueInBase = _value * conversionToBase[_unit]!;
+    _value = valueInBase / conversionToBase[newUnit]!;
+    _unit = newUnit;
   }
 
   Map<String, dynamic> toJson() {
     return {
       'name': _name,
-      'unit': jsonEncode(_unit),
+      'unit': _unit.name,
+      'value': _value,
     };
   }
 
   String getUnitType() {
-    return _unit.getType().name;
+    return _unit.name;
   }
 
   String getName() {
@@ -147,14 +235,10 @@ class Ingredient {
   }
 
   double getValue() {
-    return _unit.getValue();
+    return _value;
   }
 
   String getUnitClass() {
-    return _unit.getClass().name;
-  }
-
-  void convertTo(UnitType newUnit) {
-    _unit.convertTo(newUnit);
+    return _class.name;
   }
 }
