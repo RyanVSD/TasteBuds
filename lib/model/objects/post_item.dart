@@ -1,30 +1,31 @@
 import 'dart:convert';
 
 import 'package:tastebuds/model/objects/ingredient_item.dart';
+import 'package:tastebuds/pages/create_post.dart';
+import 'package:tastebuds/service/auth_service.dart';
 
 /// A class to represent a Post in the app.
 class PostItem {
-  final String id; // Unique identifier for the post
-  final String authorId; // Name of the person who shared the recipe
+  late final String? id; // Unique identifier for the post
+  late final String? authorId; // Name of the person who shared the recipe
 
   final String title; // Title of the recipe
   final String description;
-  final String imageUrl; // URL for the post's image
+  String imageUrl; // URL for the post's image
   final List<String> steps; // Steps to prepare the recipe
-
   DateTime uploadTime;
 
   final int likes; // Number of likes
   final int favorites; // Number of shares
-  final int difficulty;
+  final double difficulty;
 
   final double price;
 
   final List<IngredientItem> ingredients; // Ingredients for the recipe
 
   PostItem({
-    required this.id,
-    required this.authorId,
+    this.id,
+    this.authorId,
     required this.title,
     required this.description,
     required this.steps,
@@ -37,7 +38,25 @@ class PostItem {
     required this.ingredients,
   });
 
+  static Future<PostItem> fromCreateForm(CreatePostFormData data) async {
+    final authorId = await AuthService.getUserId();
+    return PostItem(
+      difficulty: data.difficulty.toDouble(),
+      price: data.priceEstimation,
+      title: data.title,
+      imageUrl: data.file.path,
+      description: data.description,
+      ingredients: data.ingredients,
+      steps: data.steps,
+      uploadTime: DateTime.now(),
+      likes: 0,
+      favorites: 0,
+      authorId: authorId,
+    );
+  }
+
   factory PostItem.fromJson(Map<String, dynamic> json) {
+    print(json['ingredients']);
     return PostItem(
         id: json['id'],
         authorId: json['authorId'],
@@ -50,7 +69,7 @@ class PostItem {
         favorites: json['favorites'],
         difficulty: json['difficulty'],
         price: json['price'],
-        ingredients: (jsonDecode(json['ingredients']) as List<dynamic>)
+        ingredients: (List<Map<String, dynamic>>.from(json['ingredients']))
             .map(
                 (item) => IngredientItem.fromJson(item as Map<String, dynamic>))
             .toList());

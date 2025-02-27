@@ -1,3 +1,4 @@
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/pages/profile_page.dart';
@@ -38,7 +39,8 @@ Future<void> main() async {
     final api = AmplifyAPI(
         options: APIPluginOptions(modelProvider: ModelProvider.instance));
     final cognito = AmplifyAuthCognito();
-    await Amplify.addPlugins([api, cognito]);
+    final storage = AmplifyStorageS3();
+    await Amplify.addPlugins([api, cognito, storage]);
     await Amplify.configure(amplifyConfig);
 
     safePrint('Successfully configured Amplify');

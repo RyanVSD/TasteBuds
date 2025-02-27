@@ -1,4 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:tastebuds/model/amplify/ModelProvider.dart';
 
 class AuthService {
   /// Fetches the currently signed-in user's attributes
@@ -10,6 +11,16 @@ class AuthService {
     } on AuthException catch (e) {
       print('Failed to fetch user attributes: ${e.message}');
       return null;
+    }
+  }
+
+  static Future<String> getUserId() async {
+    try {
+      final user = await Amplify.Auth.getCurrentUser();
+      return user.userId;
+    } catch (e) {
+      print('Error fetching user id: $e');
+      return "";
     }
   }
 

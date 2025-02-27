@@ -1,6 +1,10 @@
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/post_model.dart';
+import 'package:tastebuds/service/auth_service.dart';
 import 'package:tastebuds/service/database_service.dart';
 import '../model/objects/post_item.dart';
 
@@ -60,9 +64,7 @@ class _ProfilePageState extends State<ProfilePage>
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () {
-              Database.getUserAttributes();
-              Database.getUserId();
-              Database.getUsername();
+              print("click");
             },
           ),
           SignOutButton(),

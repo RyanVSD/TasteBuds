@@ -44,7 +44,7 @@ class Content extends StatelessWidget {
         Row(
           children: [
             Text("Difficulty: "),
-            ...List.generate(post.difficulty, (e) => Text("★"))
+            ...List.generate(post.difficulty.toInt(), (e) => Text("★"))
           ],
         ),
       ],

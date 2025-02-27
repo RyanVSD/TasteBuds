@@ -22,6 +22,9 @@ let Units = [
 	"pound",
 ];
 
+// Functions
+
+// Schema
 const schema = a
 	.schema({
 		// Queries
@@ -43,8 +46,9 @@ const schema = a
 			preferredUsername: a.string().required(),
 
 			// Cached values
-			followerCount: a.integer(),
-			followingCount: a.integer(),
+			followerCount: a.integer().required(),
+			followingCount: a.integer().required(),
+			completedRecipeCount: a.integer().required(),
 
 			// Graph edges
 			likes: a.hasMany("LikePost", "userId"),
@@ -52,6 +56,7 @@ const schema = a
 			following: a.hasMany("Follow", "followerId"),
 			followers: a.hasMany("Follow", "followeeId"),
 			posts: a.hasMany("Post", "authorId"),
+			completed: a.hasMany("CompletedRecipe", "userId"),
 		}),
 
 		Post: a.model({
@@ -79,6 +84,7 @@ const schema = a
 			favoritedBy: a.hasMany("FavoritePost", "postId"),
 			likedBy: a.hasMany("LikePost", "postId"),
 			tags: a.hasMany("PostTag", "postId"),
+			completed: a.hasMany("CompletedRecipe", "recipeId"),
 		}),
 
 		Tag: a.model({
@@ -116,6 +122,16 @@ const schema = a
 			followeeId: a.id().required(),
 			follower: a.belongsTo("User", "followerId"),
 			followee: a.belongsTo("User", "followeeId"),
+		}),
+
+		CompletedRecipe: a.model({
+			userId: a.id().required(),
+			recipeId: a.id().required(),
+			completedAt: a.datetime(),
+			difficultyRating: a.integer().required(),
+			tasteRating: a.integer().required(),
+			user: a.belongsTo("User", "userId"),
+			recipe: a.belongsTo("Post", "recipeId"),
 		}),
 	})
 	// ALLOWS ANYONE TO ACCESS ALL DATA

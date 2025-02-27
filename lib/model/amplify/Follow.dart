@@ -23,12 +23,12 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the FavoritePost type in your schema. */
-class FavoritePost extends amplify_core.Model {
-  static const classType = const _FavoritePostModelType();
+/** This is an auto generated class representing the Follow type in your schema. */
+class Follow extends amplify_core.Model {
+  static const classType = const _FollowModelType();
   final String id;
-  final Post? _post;
-  final User? _user;
+  final User? _follower;
+  final User? _followee;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -39,18 +39,18 @@ class FavoritePost extends amplify_core.Model {
   @override
   String getId() => id;
   
-  FavoritePostModelIdentifier get modelIdentifier {
-      return FavoritePostModelIdentifier(
+  FollowModelIdentifier get modelIdentifier {
+      return FollowModelIdentifier(
         id: id
       );
   }
   
-  Post? get post {
-    return _post;
+  User? get follower {
+    return _follower;
   }
   
-  User? get user {
-    return _user;
+  User? get followee {
+    return _followee;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -61,13 +61,13 @@ class FavoritePost extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const FavoritePost._internal({required this.id, post, user, createdAt, updatedAt}): _post = post, _user = user, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Follow._internal({required this.id, follower, followee, createdAt, updatedAt}): _follower = follower, _followee = followee, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory FavoritePost({String? id, Post? post, User? user}) {
-    return FavoritePost._internal(
+  factory Follow({String? id, User? follower, User? followee}) {
+    return Follow._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
-      post: post,
-      user: user);
+      follower: follower,
+      followee: followee);
   }
   
   bool equals(Object other) {
@@ -77,10 +77,10 @@ class FavoritePost extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is FavoritePost &&
+    return other is Follow &&
       id == other.id &&
-      _post == other._post &&
-      _user == other._user;
+      _follower == other._follower &&
+      _followee == other._followee;
   }
   
   @override
@@ -90,10 +90,10 @@ class FavoritePost extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("FavoritePost {");
+    buffer.write("Follow {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("post=" + (_post != null ? _post!.toString() : "null") + ", ");
-    buffer.write("user=" + (_user != null ? _user!.toString() : "null") + ", ");
+    buffer.write("follower=" + (_follower != null ? _follower!.toString() : "null") + ", ");
+    buffer.write("followee=" + (_followee != null ? _followee!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -101,62 +101,62 @@ class FavoritePost extends amplify_core.Model {
     return buffer.toString();
   }
   
-  FavoritePost copyWith({Post? post, User? user}) {
-    return FavoritePost._internal(
+  Follow copyWith({User? follower, User? followee}) {
+    return Follow._internal(
       id: id,
-      post: post ?? this.post,
-      user: user ?? this.user);
+      follower: follower ?? this.follower,
+      followee: followee ?? this.followee);
   }
   
-  FavoritePost copyWithModelFieldValues({
-    ModelFieldValue<Post?>? post,
-    ModelFieldValue<User?>? user
+  Follow copyWithModelFieldValues({
+    ModelFieldValue<User?>? follower,
+    ModelFieldValue<User?>? followee
   }) {
-    return FavoritePost._internal(
+    return Follow._internal(
       id: id,
-      post: post == null ? this.post : post.value,
-      user: user == null ? this.user : user.value
+      follower: follower == null ? this.follower : follower.value,
+      followee: followee == null ? this.followee : followee.value
     );
   }
   
-  FavoritePost.fromJson(Map<String, dynamic> json)  
+  Follow.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _post = json['post'] != null
-        ? json['post']['serializedData'] != null
-          ? Post.fromJson(new Map<String, dynamic>.from(json['post']['serializedData']))
-          : Post.fromJson(new Map<String, dynamic>.from(json['post']))
+      _follower = json['follower'] != null
+        ? json['follower']['serializedData'] != null
+          ? User.fromJson(new Map<String, dynamic>.from(json['follower']['serializedData']))
+          : User.fromJson(new Map<String, dynamic>.from(json['follower']))
         : null,
-      _user = json['user'] != null
-        ? json['user']['serializedData'] != null
-          ? User.fromJson(new Map<String, dynamic>.from(json['user']['serializedData']))
-          : User.fromJson(new Map<String, dynamic>.from(json['user']))
+      _followee = json['followee'] != null
+        ? json['followee']['serializedData'] != null
+          ? User.fromJson(new Map<String, dynamic>.from(json['followee']['serializedData']))
+          : User.fromJson(new Map<String, dynamic>.from(json['followee']))
         : null,
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'post': _post?.toJson(), 'user': _user?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'follower': _follower?.toJson(), 'followee': _followee?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
-    'post': _post,
-    'user': _user,
+    'follower': _follower,
+    'followee': _followee,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<FollowModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<FollowModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final POST = amplify_core.QueryField(
-    fieldName: "post",
-    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
-  static final USER = amplify_core.QueryField(
-    fieldName: "user",
+  static final FOLLOWER = amplify_core.QueryField(
+    fieldName: "follower",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
+  static final FOLLOWEE = amplify_core.QueryField(
+    fieldName: "followee",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "FavoritePost";
-    modelSchemaDefinition.pluralName = "FavoritePosts";
+    modelSchemaDefinition.name = "Follow";
+    modelSchemaDefinition.pluralName = "Follows";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -172,16 +172,16 @@ class FavoritePost extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.POST,
+      key: Follow.FOLLOWER,
       isRequired: false,
-      targetNames: ['postId'],
-      ofModelName: 'Post'
+      targetNames: ['followerId'],
+      ofModelName: 'User'
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.USER,
+      key: Follow.FOLLOWEE,
       isRequired: false,
-      targetNames: ['userId'],
+      targetNames: ['followeeId'],
       ofModelName: 'User'
     ));
     
@@ -201,29 +201,29 @@ class FavoritePost extends amplify_core.Model {
   });
 }
 
-class _FavoritePostModelType extends amplify_core.ModelType<FavoritePost> {
-  const _FavoritePostModelType();
+class _FollowModelType extends amplify_core.ModelType<Follow> {
+  const _FollowModelType();
   
   @override
-  FavoritePost fromJson(Map<String, dynamic> jsonData) {
-    return FavoritePost.fromJson(jsonData);
+  Follow fromJson(Map<String, dynamic> jsonData) {
+    return Follow.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'FavoritePost';
+    return 'Follow';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [FavoritePost] in your schema.
+ * of [Follow] in your schema.
  */
-class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<FavoritePost> {
+class FollowModelIdentifier implements amplify_core.ModelIdentifier<Follow> {
   final String id;
 
-  /** Create an instance of FavoritePostModelIdentifier using [id] the primary key. */
-  const FavoritePostModelIdentifier({
+  /** Create an instance of FollowModelIdentifier using [id] the primary key. */
+  const FollowModelIdentifier({
     required this.id});
   
   @override
@@ -241,7 +241,7 @@ class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<Favori
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'FavoritePostModelIdentifier(id: $id)';
+  String toString() => 'FollowModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -249,7 +249,7 @@ class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<Favori
       return true;
     }
     
-    return other is FavoritePostModelIdentifier &&
+    return other is FollowModelIdentifier &&
       id == other.id;
   }
   

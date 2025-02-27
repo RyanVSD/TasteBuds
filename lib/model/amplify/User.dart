@@ -29,7 +29,16 @@ class User extends amplify_core.Model {
   static const classType = const _UserModelType();
   final String id;
   final String? _username;
+  final String? _preferredUsername;
+  final int? _followerCount;
+  final int? _followingCount;
+  final int? _completedRecipeCount;
+  final List<LikePost>? _likes;
   final List<FavoritePost>? _favorites;
+  final List<Follow>? _following;
+  final List<Follow>? _followers;
+  final List<Post>? _posts;
+  final List<CompletedRecipe>? _completed;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -59,8 +68,80 @@ class User extends amplify_core.Model {
     }
   }
   
+  String get preferredUsername {
+    try {
+      return _preferredUsername!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  int get followerCount {
+    try {
+      return _followerCount!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  int get followingCount {
+    try {
+      return _followingCount!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  int get completedRecipeCount {
+    try {
+      return _completedRecipeCount!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
+  }
+  
+  List<LikePost>? get likes {
+    return _likes;
+  }
+  
   List<FavoritePost>? get favorites {
     return _favorites;
+  }
+  
+  List<Follow>? get following {
+    return _following;
+  }
+  
+  List<Follow>? get followers {
+    return _followers;
+  }
+  
+  List<Post>? get posts {
+    return _posts;
+  }
+  
+  List<CompletedRecipe>? get completed {
+    return _completed;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -71,13 +152,22 @@ class User extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const User._internal({required this.id, required username, favorites, createdAt, updatedAt}): _username = username, _favorites = favorites, _createdAt = createdAt, _updatedAt = updatedAt;
+  const User._internal({required this.id, required username, required preferredUsername, required followerCount, required followingCount, required completedRecipeCount, likes, favorites, following, followers, posts, completed, createdAt, updatedAt}): _username = username, _preferredUsername = preferredUsername, _followerCount = followerCount, _followingCount = followingCount, _completedRecipeCount = completedRecipeCount, _likes = likes, _favorites = favorites, _following = following, _followers = followers, _posts = posts, _completed = completed, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory User({String? id, required String username, List<FavoritePost>? favorites}) {
+  factory User({String? id, required String username, required String preferredUsername, required int followerCount, required int followingCount, required int completedRecipeCount, List<LikePost>? likes, List<FavoritePost>? favorites, List<Follow>? following, List<Follow>? followers, List<Post>? posts, List<CompletedRecipe>? completed}) {
     return User._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       username: username,
-      favorites: favorites != null ? List<FavoritePost>.unmodifiable(favorites) : favorites);
+      preferredUsername: preferredUsername,
+      followerCount: followerCount,
+      followingCount: followingCount,
+      completedRecipeCount: completedRecipeCount,
+      likes: likes != null ? List<LikePost>.unmodifiable(likes) : likes,
+      favorites: favorites != null ? List<FavoritePost>.unmodifiable(favorites) : favorites,
+      following: following != null ? List<Follow>.unmodifiable(following) : following,
+      followers: followers != null ? List<Follow>.unmodifiable(followers) : followers,
+      posts: posts != null ? List<Post>.unmodifiable(posts) : posts,
+      completed: completed != null ? List<CompletedRecipe>.unmodifiable(completed) : completed);
   }
   
   bool equals(Object other) {
@@ -90,7 +180,16 @@ class User extends amplify_core.Model {
     return other is User &&
       id == other.id &&
       _username == other._username &&
-      DeepCollectionEquality().equals(_favorites, other._favorites);
+      _preferredUsername == other._preferredUsername &&
+      _followerCount == other._followerCount &&
+      _followingCount == other._followingCount &&
+      _completedRecipeCount == other._completedRecipeCount &&
+      DeepCollectionEquality().equals(_likes, other._likes) &&
+      DeepCollectionEquality().equals(_favorites, other._favorites) &&
+      DeepCollectionEquality().equals(_following, other._following) &&
+      DeepCollectionEquality().equals(_followers, other._followers) &&
+      DeepCollectionEquality().equals(_posts, other._posts) &&
+      DeepCollectionEquality().equals(_completed, other._completed);
   }
   
   @override
@@ -103,6 +202,10 @@ class User extends amplify_core.Model {
     buffer.write("User {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("username=" + "$_username" + ", ");
+    buffer.write("preferredUsername=" + "$_preferredUsername" + ", ");
+    buffer.write("followerCount=" + (_followerCount != null ? _followerCount!.toString() : "null") + ", ");
+    buffer.write("followingCount=" + (_followingCount != null ? _followingCount!.toString() : "null") + ", ");
+    buffer.write("completedRecipeCount=" + (_completedRecipeCount != null ? _completedRecipeCount!.toString() : "null") + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -110,27 +213,71 @@ class User extends amplify_core.Model {
     return buffer.toString();
   }
   
-  User copyWith({String? username, List<FavoritePost>? favorites}) {
+  User copyWith({String? username, String? preferredUsername, int? followerCount, int? followingCount, int? completedRecipeCount, List<LikePost>? likes, List<FavoritePost>? favorites, List<Follow>? following, List<Follow>? followers, List<Post>? posts, List<CompletedRecipe>? completed}) {
     return User._internal(
       id: id,
       username: username ?? this.username,
-      favorites: favorites ?? this.favorites);
+      preferredUsername: preferredUsername ?? this.preferredUsername,
+      followerCount: followerCount ?? this.followerCount,
+      followingCount: followingCount ?? this.followingCount,
+      completedRecipeCount: completedRecipeCount ?? this.completedRecipeCount,
+      likes: likes ?? this.likes,
+      favorites: favorites ?? this.favorites,
+      following: following ?? this.following,
+      followers: followers ?? this.followers,
+      posts: posts ?? this.posts,
+      completed: completed ?? this.completed);
   }
   
   User copyWithModelFieldValues({
     ModelFieldValue<String>? username,
-    ModelFieldValue<List<FavoritePost>?>? favorites
+    ModelFieldValue<String>? preferredUsername,
+    ModelFieldValue<int>? followerCount,
+    ModelFieldValue<int>? followingCount,
+    ModelFieldValue<int>? completedRecipeCount,
+    ModelFieldValue<List<LikePost>?>? likes,
+    ModelFieldValue<List<FavoritePost>?>? favorites,
+    ModelFieldValue<List<Follow>?>? following,
+    ModelFieldValue<List<Follow>?>? followers,
+    ModelFieldValue<List<Post>?>? posts,
+    ModelFieldValue<List<CompletedRecipe>?>? completed
   }) {
     return User._internal(
       id: id,
       username: username == null ? this.username : username.value,
-      favorites: favorites == null ? this.favorites : favorites.value
+      preferredUsername: preferredUsername == null ? this.preferredUsername : preferredUsername.value,
+      followerCount: followerCount == null ? this.followerCount : followerCount.value,
+      followingCount: followingCount == null ? this.followingCount : followingCount.value,
+      completedRecipeCount: completedRecipeCount == null ? this.completedRecipeCount : completedRecipeCount.value,
+      likes: likes == null ? this.likes : likes.value,
+      favorites: favorites == null ? this.favorites : favorites.value,
+      following: following == null ? this.following : following.value,
+      followers: followers == null ? this.followers : followers.value,
+      posts: posts == null ? this.posts : posts.value,
+      completed: completed == null ? this.completed : completed.value
     );
   }
   
   User.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _username = json['username'],
+      _preferredUsername = json['preferredUsername'],
+      _followerCount = (json['followerCount'] as num?)?.toInt(),
+      _followingCount = (json['followingCount'] as num?)?.toInt(),
+      _completedRecipeCount = (json['completedRecipeCount'] as num?)?.toInt(),
+      _likes = json['likes']  is Map
+        ? (json['likes']['items'] is List
+          ? (json['likes']['items'] as List)
+              .where((e) => e != null)
+              .map((e) => LikePost.fromJson(new Map<String, dynamic>.from(e)))
+              .toList()
+          : null)
+        : (json['likes'] is List
+          ? (json['likes'] as List)
+              .where((e) => e?['serializedData'] != null)
+              .map((e) => LikePost.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
+              .toList()
+          : null),
       _favorites = json['favorites']  is Map
         ? (json['favorites']['items'] is List
           ? (json['favorites']['items'] as List)
@@ -144,17 +291,78 @@ class User extends amplify_core.Model {
               .map((e) => FavoritePost.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
               .toList()
           : null),
+      _following = json['following']  is Map
+        ? (json['following']['items'] is List
+          ? (json['following']['items'] as List)
+              .where((e) => e != null)
+              .map((e) => Follow.fromJson(new Map<String, dynamic>.from(e)))
+              .toList()
+          : null)
+        : (json['following'] is List
+          ? (json['following'] as List)
+              .where((e) => e?['serializedData'] != null)
+              .map((e) => Follow.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
+              .toList()
+          : null),
+      _followers = json['followers']  is Map
+        ? (json['followers']['items'] is List
+          ? (json['followers']['items'] as List)
+              .where((e) => e != null)
+              .map((e) => Follow.fromJson(new Map<String, dynamic>.from(e)))
+              .toList()
+          : null)
+        : (json['followers'] is List
+          ? (json['followers'] as List)
+              .where((e) => e?['serializedData'] != null)
+              .map((e) => Follow.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
+              .toList()
+          : null),
+      _posts = json['posts']  is Map
+        ? (json['posts']['items'] is List
+          ? (json['posts']['items'] as List)
+              .where((e) => e != null)
+              .map((e) => Post.fromJson(new Map<String, dynamic>.from(e)))
+              .toList()
+          : null)
+        : (json['posts'] is List
+          ? (json['posts'] as List)
+              .where((e) => e?['serializedData'] != null)
+              .map((e) => Post.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
+              .toList()
+          : null),
+      _completed = json['completed']  is Map
+        ? (json['completed']['items'] is List
+          ? (json['completed']['items'] as List)
+              .where((e) => e != null)
+              .map((e) => CompletedRecipe.fromJson(new Map<String, dynamic>.from(e)))
+              .toList()
+          : null)
+        : (json['completed'] is List
+          ? (json['completed'] as List)
+              .where((e) => e?['serializedData'] != null)
+              .map((e) => CompletedRecipe.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
+              .toList()
+          : null),
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'username': _username, 'favorites': _favorites?.map((FavoritePost? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'username': _username, 'preferredUsername': _preferredUsername, 'followerCount': _followerCount, 'followingCount': _followingCount, 'completedRecipeCount': _completedRecipeCount, 'likes': _likes?.map((LikePost? e) => e?.toJson()).toList(), 'favorites': _favorites?.map((FavoritePost? e) => e?.toJson()).toList(), 'following': _following?.map((Follow? e) => e?.toJson()).toList(), 'followers': _followers?.map((Follow? e) => e?.toJson()).toList(), 'posts': _posts?.map((Post? e) => e?.toJson()).toList(), 'completed': _completed?.map((CompletedRecipe? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
     'username': _username,
+    'preferredUsername': _preferredUsername,
+    'followerCount': _followerCount,
+    'followingCount': _followingCount,
+    'completedRecipeCount': _completedRecipeCount,
+    'likes': _likes,
     'favorites': _favorites,
+    'following': _following,
+    'followers': _followers,
+    'posts': _posts,
+    'completed': _completed,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
@@ -162,17 +370,35 @@ class User extends amplify_core.Model {
   static final amplify_core.QueryModelIdentifier<UserModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<UserModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final USERNAME = amplify_core.QueryField(fieldName: "username");
+  static final PREFERREDUSERNAME = amplify_core.QueryField(fieldName: "preferredUsername");
+  static final FOLLOWERCOUNT = amplify_core.QueryField(fieldName: "followerCount");
+  static final FOLLOWINGCOUNT = amplify_core.QueryField(fieldName: "followingCount");
+  static final COMPLETEDRECIPECOUNT = amplify_core.QueryField(fieldName: "completedRecipeCount");
+  static final LIKES = amplify_core.QueryField(
+    fieldName: "likes",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'LikePost'));
   static final FAVORITES = amplify_core.QueryField(
     fieldName: "favorites",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'FavoritePost'));
+  static final FOLLOWING = amplify_core.QueryField(
+    fieldName: "following",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Follow'));
+  static final FOLLOWERS = amplify_core.QueryField(
+    fieldName: "followers",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Follow'));
+  static final POSTS = amplify_core.QueryField(
+    fieldName: "posts",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
+  static final COMPLETED = amplify_core.QueryField(
+    fieldName: "completed",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'CompletedRecipe'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "User";
     modelSchemaDefinition.pluralName = "Users";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
-        authStrategy: amplify_core.AuthStrategy.PUBLIC,
-        provider: amplify_core.AuthRuleProvider.IAM,
+        authStrategy: amplify_core.AuthStrategy.PRIVATE,
         operations: const [
           amplify_core.ModelOperation.CREATE,
           amplify_core.ModelOperation.UPDATE,
@@ -193,11 +419,70 @@ class User extends amplify_core.Model {
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.PREFERREDUSERNAME,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.FOLLOWERCOUNT,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.FOLLOWINGCOUNT,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: User.COMPLETEDRECIPECOUNT,
+      isRequired: true,
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
+      key: User.LIKES,
+      isRequired: false,
+      ofModelName: 'LikePost',
+      associatedKey: LikePost.USER
+    ));
+    
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
       key: User.FAVORITES,
       isRequired: false,
       ofModelName: 'FavoritePost',
       associatedKey: FavoritePost.USER
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
+      key: User.FOLLOWING,
+      isRequired: false,
+      ofModelName: 'Follow',
+      associatedKey: Follow.FOLLOWER
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
+      key: User.FOLLOWERS,
+      isRequired: false,
+      ofModelName: 'Follow',
+      associatedKey: Follow.FOLLOWEE
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
+      key: User.POSTS,
+      isRequired: false,
+      ofModelName: 'Post',
+      associatedKey: Post.AUTHOR
+    ));
+    
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
+      key: User.COMPLETED,
+      isRequired: false,
+      ofModelName: 'CompletedRecipe',
+      associatedKey: CompletedRecipe.USER
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(

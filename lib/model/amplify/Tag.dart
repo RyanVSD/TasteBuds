@@ -21,14 +21,15 @@
 
 import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
+import 'package:collection/collection.dart';
 
 
-/** This is an auto generated class representing the FavoritePost type in your schema. */
-class FavoritePost extends amplify_core.Model {
-  static const classType = const _FavoritePostModelType();
+/** This is an auto generated class representing the Tag type in your schema. */
+class Tag extends amplify_core.Model {
+  static const classType = const _TagModelType();
   final String id;
-  final Post? _post;
-  final User? _user;
+  final String? _value;
+  final List<PostTag>? _posts;
   final amplify_core.TemporalDateTime? _createdAt;
   final amplify_core.TemporalDateTime? _updatedAt;
 
@@ -39,18 +40,18 @@ class FavoritePost extends amplify_core.Model {
   @override
   String getId() => id;
   
-  FavoritePostModelIdentifier get modelIdentifier {
-      return FavoritePostModelIdentifier(
+  TagModelIdentifier get modelIdentifier {
+      return TagModelIdentifier(
         id: id
       );
   }
   
-  Post? get post {
-    return _post;
+  String? get value {
+    return _value;
   }
   
-  User? get user {
-    return _user;
+  List<PostTag>? get posts {
+    return _posts;
   }
   
   amplify_core.TemporalDateTime? get createdAt {
@@ -61,13 +62,13 @@ class FavoritePost extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const FavoritePost._internal({required this.id, post, user, createdAt, updatedAt}): _post = post, _user = user, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Tag._internal({required this.id, value, posts, createdAt, updatedAt}): _value = value, _posts = posts, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory FavoritePost({String? id, Post? post, User? user}) {
-    return FavoritePost._internal(
+  factory Tag({String? id, String? value, List<PostTag>? posts}) {
+    return Tag._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
-      post: post,
-      user: user);
+      value: value,
+      posts: posts != null ? List<PostTag>.unmodifiable(posts) : posts);
   }
   
   bool equals(Object other) {
@@ -77,10 +78,10 @@ class FavoritePost extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is FavoritePost &&
+    return other is Tag &&
       id == other.id &&
-      _post == other._post &&
-      _user == other._user;
+      _value == other._value &&
+      DeepCollectionEquality().equals(_posts, other._posts);
   }
   
   @override
@@ -90,10 +91,9 @@ class FavoritePost extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("FavoritePost {");
+    buffer.write("Tag {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("post=" + (_post != null ? _post!.toString() : "null") + ", ");
-    buffer.write("user=" + (_user != null ? _user!.toString() : "null") + ", ");
+    buffer.write("value=" + "$_value" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -101,62 +101,64 @@ class FavoritePost extends amplify_core.Model {
     return buffer.toString();
   }
   
-  FavoritePost copyWith({Post? post, User? user}) {
-    return FavoritePost._internal(
+  Tag copyWith({String? value, List<PostTag>? posts}) {
+    return Tag._internal(
       id: id,
-      post: post ?? this.post,
-      user: user ?? this.user);
+      value: value ?? this.value,
+      posts: posts ?? this.posts);
   }
   
-  FavoritePost copyWithModelFieldValues({
-    ModelFieldValue<Post?>? post,
-    ModelFieldValue<User?>? user
+  Tag copyWithModelFieldValues({
+    ModelFieldValue<String?>? value,
+    ModelFieldValue<List<PostTag>?>? posts
   }) {
-    return FavoritePost._internal(
+    return Tag._internal(
       id: id,
-      post: post == null ? this.post : post.value,
-      user: user == null ? this.user : user.value
+      value: value == null ? this.value : value.value,
+      posts: posts == null ? this.posts : posts.value
     );
   }
   
-  FavoritePost.fromJson(Map<String, dynamic> json)  
+  Tag.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _post = json['post'] != null
-        ? json['post']['serializedData'] != null
-          ? Post.fromJson(new Map<String, dynamic>.from(json['post']['serializedData']))
-          : Post.fromJson(new Map<String, dynamic>.from(json['post']))
-        : null,
-      _user = json['user'] != null
-        ? json['user']['serializedData'] != null
-          ? User.fromJson(new Map<String, dynamic>.from(json['user']['serializedData']))
-          : User.fromJson(new Map<String, dynamic>.from(json['user']))
-        : null,
+      _value = json['value'],
+      _posts = json['posts']  is Map
+        ? (json['posts']['items'] is List
+          ? (json['posts']['items'] as List)
+              .where((e) => e != null)
+              .map((e) => PostTag.fromJson(new Map<String, dynamic>.from(e)))
+              .toList()
+          : null)
+        : (json['posts'] is List
+          ? (json['posts'] as List)
+              .where((e) => e?['serializedData'] != null)
+              .map((e) => PostTag.fromJson(new Map<String, dynamic>.from(e?['serializedData'])))
+              .toList()
+          : null),
       _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'post': _post?.toJson(), 'user': _user?.toJson(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'value': _value, 'posts': _posts?.map((PostTag? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
     'id': id,
-    'post': _post,
-    'user': _user,
+    'value': _value,
+    'posts': _posts,
     'createdAt': _createdAt,
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<TagModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TagModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
-  static final POST = amplify_core.QueryField(
-    fieldName: "post",
-    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'Post'));
-  static final USER = amplify_core.QueryField(
-    fieldName: "user",
-    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
+  static final VALUE = amplify_core.QueryField(fieldName: "value");
+  static final POSTS = amplify_core.QueryField(
+    fieldName: "posts",
+    fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'PostTag'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "FavoritePost";
-    modelSchemaDefinition.pluralName = "FavoritePosts";
+    modelSchemaDefinition.name = "Tag";
+    modelSchemaDefinition.pluralName = "Tags";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -171,18 +173,17 @@ class FavoritePost extends amplify_core.Model {
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.POST,
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
+      key: Tag.VALUE,
       isRequired: false,
-      targetNames: ['postId'],
-      ofModelName: 'Post'
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.USER,
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.hasMany(
+      key: Tag.POSTS,
       isRequired: false,
-      targetNames: ['userId'],
-      ofModelName: 'User'
+      ofModelName: 'PostTag',
+      associatedKey: PostTag.TAG
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.nonQueryField(
@@ -201,29 +202,29 @@ class FavoritePost extends amplify_core.Model {
   });
 }
 
-class _FavoritePostModelType extends amplify_core.ModelType<FavoritePost> {
-  const _FavoritePostModelType();
+class _TagModelType extends amplify_core.ModelType<Tag> {
+  const _TagModelType();
   
   @override
-  FavoritePost fromJson(Map<String, dynamic> jsonData) {
-    return FavoritePost.fromJson(jsonData);
+  Tag fromJson(Map<String, dynamic> jsonData) {
+    return Tag.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'FavoritePost';
+    return 'Tag';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [FavoritePost] in your schema.
+ * of [Tag] in your schema.
  */
-class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<FavoritePost> {
+class TagModelIdentifier implements amplify_core.ModelIdentifier<Tag> {
   final String id;
 
-  /** Create an instance of FavoritePostModelIdentifier using [id] the primary key. */
-  const FavoritePostModelIdentifier({
+  /** Create an instance of TagModelIdentifier using [id] the primary key. */
+  const TagModelIdentifier({
     required this.id});
   
   @override
@@ -241,7 +242,7 @@ class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<Favori
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'FavoritePostModelIdentifier(id: $id)';
+  String toString() => 'TagModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -249,7 +250,7 @@ class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<Favori
       return true;
     }
     
-    return other is FavoritePostModelIdentifier &&
+    return other is TagModelIdentifier &&
       id == other.id;
   }
   

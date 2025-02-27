@@ -14,11 +14,17 @@ Amplify.configure(resourceConfig, libraryOptions);
 const client = generateClient<Schema>();
 
 export const handler: PostConfirmationTriggerHandler = async (event) => {
+	console.log("CREAITNG USER CUSTOMLOG: ");
+	console.log(event);
+	console.log(event.request);
+	console.log(event.userName);
 	await client.models.User.create({
-		id: event.userPoolId,
+		id: event.request.userAttributes.sub,
 		username: event.userName,
-		preferredUsername: event.request.userAttributes.preferredUsername,
+		preferredUsername: event.request.userAttributes.preferred_username,
+		completedRecipeCount: 0,
+		followerCount: 0,
+		followingCount: 0,
 	});
-
 	return event;
 };

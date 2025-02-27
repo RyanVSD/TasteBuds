@@ -23,9 +23,9 @@ import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
-/** This is an auto generated class representing the FavoritePost type in your schema. */
-class FavoritePost extends amplify_core.Model {
-  static const classType = const _FavoritePostModelType();
+/** This is an auto generated class representing the LikePost type in your schema. */
+class LikePost extends amplify_core.Model {
+  static const classType = const _LikePostModelType();
   final String id;
   final Post? _post;
   final User? _user;
@@ -39,8 +39,8 @@ class FavoritePost extends amplify_core.Model {
   @override
   String getId() => id;
   
-  FavoritePostModelIdentifier get modelIdentifier {
-      return FavoritePostModelIdentifier(
+  LikePostModelIdentifier get modelIdentifier {
+      return LikePostModelIdentifier(
         id: id
       );
   }
@@ -61,10 +61,10 @@ class FavoritePost extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const FavoritePost._internal({required this.id, post, user, createdAt, updatedAt}): _post = post, _user = user, _createdAt = createdAt, _updatedAt = updatedAt;
+  const LikePost._internal({required this.id, post, user, createdAt, updatedAt}): _post = post, _user = user, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory FavoritePost({String? id, Post? post, User? user}) {
-    return FavoritePost._internal(
+  factory LikePost({String? id, Post? post, User? user}) {
+    return LikePost._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       post: post,
       user: user);
@@ -77,7 +77,7 @@ class FavoritePost extends amplify_core.Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is FavoritePost &&
+    return other is LikePost &&
       id == other.id &&
       _post == other._post &&
       _user == other._user;
@@ -90,7 +90,7 @@ class FavoritePost extends amplify_core.Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("FavoritePost {");
+    buffer.write("LikePost {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("post=" + (_post != null ? _post!.toString() : "null") + ", ");
     buffer.write("user=" + (_user != null ? _user!.toString() : "null") + ", ");
@@ -101,25 +101,25 @@ class FavoritePost extends amplify_core.Model {
     return buffer.toString();
   }
   
-  FavoritePost copyWith({Post? post, User? user}) {
-    return FavoritePost._internal(
+  LikePost copyWith({Post? post, User? user}) {
+    return LikePost._internal(
       id: id,
       post: post ?? this.post,
       user: user ?? this.user);
   }
   
-  FavoritePost copyWithModelFieldValues({
+  LikePost copyWithModelFieldValues({
     ModelFieldValue<Post?>? post,
     ModelFieldValue<User?>? user
   }) {
-    return FavoritePost._internal(
+    return LikePost._internal(
       id: id,
       post: post == null ? this.post : post.value,
       user: user == null ? this.user : user.value
     );
   }
   
-  FavoritePost.fromJson(Map<String, dynamic> json)  
+  LikePost.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _post = json['post'] != null
         ? json['post']['serializedData'] != null
@@ -146,7 +146,7 @@ class FavoritePost extends amplify_core.Model {
     'updatedAt': _updatedAt
   };
 
-  static final amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<FavoritePostModelIdentifier>();
+  static final amplify_core.QueryModelIdentifier<LikePostModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<LikePostModelIdentifier>();
   static final ID = amplify_core.QueryField(fieldName: "id");
   static final POST = amplify_core.QueryField(
     fieldName: "post",
@@ -155,8 +155,8 @@ class FavoritePost extends amplify_core.Model {
     fieldName: "user",
     fieldType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.model, ofModelName: 'User'));
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "FavoritePost";
-    modelSchemaDefinition.pluralName = "FavoritePosts";
+    modelSchemaDefinition.name = "LikePost";
+    modelSchemaDefinition.pluralName = "LikePosts";
     
     modelSchemaDefinition.authRules = [
       amplify_core.AuthRule(
@@ -172,14 +172,14 @@ class FavoritePost extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.POST,
+      key: LikePost.POST,
       isRequired: false,
       targetNames: ['postId'],
       ofModelName: 'Post'
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(
-      key: FavoritePost.USER,
+      key: LikePost.USER,
       isRequired: false,
       targetNames: ['userId'],
       ofModelName: 'User'
@@ -201,29 +201,29 @@ class FavoritePost extends amplify_core.Model {
   });
 }
 
-class _FavoritePostModelType extends amplify_core.ModelType<FavoritePost> {
-  const _FavoritePostModelType();
+class _LikePostModelType extends amplify_core.ModelType<LikePost> {
+  const _LikePostModelType();
   
   @override
-  FavoritePost fromJson(Map<String, dynamic> jsonData) {
-    return FavoritePost.fromJson(jsonData);
+  LikePost fromJson(Map<String, dynamic> jsonData) {
+    return LikePost.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'FavoritePost';
+    return 'LikePost';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [FavoritePost] in your schema.
+ * of [LikePost] in your schema.
  */
-class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<FavoritePost> {
+class LikePostModelIdentifier implements amplify_core.ModelIdentifier<LikePost> {
   final String id;
 
-  /** Create an instance of FavoritePostModelIdentifier using [id] the primary key. */
-  const FavoritePostModelIdentifier({
+  /** Create an instance of LikePostModelIdentifier using [id] the primary key. */
+  const LikePostModelIdentifier({
     required this.id});
   
   @override
@@ -241,7 +241,7 @@ class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<Favori
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'FavoritePostModelIdentifier(id: $id)';
+  String toString() => 'LikePostModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -249,7 +249,7 @@ class FavoritePostModelIdentifier implements amplify_core.ModelIdentifier<Favori
       return true;
     }
     
-    return other is FavoritePostModelIdentifier &&
+    return other is LikePostModelIdentifier &&
       id == other.id;
   }
   
