@@ -26,6 +26,13 @@ class PostModel extends ChangeNotifier {
     return posts;
   }
 
+  Future<List<PostItem?>> getOwnPostList(int listSize) async {
+    List<Post?> apiResponse = await service.getOwnPost(listSize);
+    List<PostItem?> posts = postsToPostItems(apiResponse);
+    return posts;
+  }
+
+
   void createPost(PostItem? postItem) {
       if (postItem != null) {
         service.createPost(postItem);

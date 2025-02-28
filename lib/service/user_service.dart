@@ -1,5 +1,6 @@
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter/material.dart';
 import '../model/amplify/ModelProvider.dart';
 
 
@@ -63,7 +64,6 @@ Future<List<User?>> everyUser() async {
       final response = await Amplify.API.query(request: request).response;
       final userInfo = response.data;
       if (userInfo == null) {
-        safePrint("Error getting follower count");
         return null;
       }
       return userInfo;
@@ -73,5 +73,16 @@ Future<List<User?>> everyUser() async {
     }
   }
 
-  //static Future<User> getUserProfile() async {}
+Future<User?> getUser(String userId) async {
+    try {
+      final predicate = User.USERNAME.eq(userId);
+      final request = ModelQueries.list(User.classType, where: predicate);
+      final response = await Amplify.API.query(request: request).response;
+      final userInfo =  response.data?.items.first;
+      return userInfo;
+    } on ApiException catch (e) {
+      safePrint("fetch failed $e");
+      return null;
+    }
+}
 

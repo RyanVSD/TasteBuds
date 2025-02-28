@@ -3,6 +3,7 @@ import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:amplify_api/amplify_api.dart';
+import './user_service.dart';
 
 
 
@@ -18,7 +19,23 @@ Future<List<Post?>> getPosts(int limit) async {
       safePrint("Error fetching posts: $e");
       return const [];
     }
-  }
+}
+
+Future<List<Post?>> getOwnPost(int limit) async {
+    try {
+      User? currentUser = await getCurrentUser();
+      if (currentUser == null) throw StateError("Null User");
+
+      final predicate = Post.AUTHOR.eq(currentUser);
+      final firstRequest = ModelQueries.list<Post>(Post.classType, limit: limit, where: predicate);
+      final firstResult = await Amplify.API.query(request: firstRequest).response;
+      final firstPageData = firstResult.data;
+      return firstPageData?.items ?? <Post?>[];
+    } on ApiException catch (e) {
+      safePrint("Error fetching posts: $e");
+      return const [];
+    }
+}
 
 Future<String> getS3Url(String imPath) async {
   try {

@@ -3,32 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/model/user_model.dart';
-import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:tastebuds/pages/widget/post_grid.dart';
 import '../model/objects/post_item.dart';
 import 'package:provider/provider.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
-
+class OtherProfilePage extends StatefulWidget {
+  const OtherProfilePage({super.key, required this.userId});
+  final String userId;
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<OtherProfilePage> createState() => _OtherProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-    with SingleTickerProviderStateMixin {
+class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;// Initially invisible
 
   late ScrollController _scrollController;
+  User? u;
 
+  void setUser() async {
+    User? usr = await context.read<UserModel>().getUser(widget.userId);
+    setState(() {
+      u = usr;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
-    context.read<UserModel>().userLogin();
+    setUser();
+    
   }
 
   @override
@@ -59,63 +65,78 @@ class _ProfilePageState extends State<ProfilePage>
               ),
 
               padding: const EdgeInsets.fromLTRB(16,30,16,10),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: 0,
-                    child:  SignOutButton()
-                    ),
-                  Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const CircleAvatar(
-                          radius: 40,
-                          backgroundImage: AssetImage('assets/blank_profile.png'),
-                        ),
-                        const SizedBox(width: 16),
-                
-                        //  Name & ID
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                context.watch<UserModel>().user?.preferredUsername ?? "User123",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'TasteBuds ID: ${context.watch<UserModel>().user?.username ?? "-1"}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
-                                ),
-                              ),
-                            ],
+              child: 
+                  Stack(
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () => Navigator.pop(context),
                           ),
-                        ),
+                        
+                      ),
 
-                      ],
-                    ),
-                
-                    const SizedBox(height: 16),
-                
-                    //  Stats Row: Posts, Following, Followers
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                      Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildStatsItem(context.watch<UserModel>().user?.followingCount.toString() ?? '0' , 'Following'),
-                        _buildStatsItem(context.watch<UserModel>().user?.followerCount.toString() ?? '0' , 'Followers'),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const CircleAvatar(
+                              radius: 40,
+                              backgroundImage: AssetImage('assets/blank_profile.png'),
+                            ),
+                            const SizedBox(width: 16),
+                                      
+                            //  Name & ID
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    u?.preferredUsername ?? "User123",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'TasteBuds ID: ${u?.username ?? "-1"}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                                      
+                            // Plus Icon
+                            const Icon(
+                              Icons.add_circle,
+                              size: 30,
+                            ),
+                          ],
+                        ),
+                                      
+                        const SizedBox(height: 16),
+                                      
+                        //  Stats Row: Posts, Following, Followers
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildStatsItem(u?.followingCount.toString() ?? '0' , 'Following'),
+                            _buildStatsItem(u?.followerCount.toString() ?? '0' , 'Followers'),
+                          ],
+                        ),
                       ],
-                    ),
-                  ],
-                ),]
-              ),
+                                      ),
+                    ],
+                  ),
+              
             ),
           ),
 

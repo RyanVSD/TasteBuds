@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
+import 'package:tastebuds/pages/other_profile_page.dart';
 import 'package:tastebuds/pages/widget/content.dart';
 import 'package:tastebuds/service/post_service.dart';
 
@@ -16,7 +17,7 @@ class PostPage extends StatefulWidget
 class _PostPageState extends State<PostPage> {
   bool isFollowed = false;
   String imUrl = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
-  String profileImg = 'https://www.shutterstock.com/image-photo/hiking-switzerland-interlaken-jungfrau-region-600nw-2272449171.jpg';
+  String profileImg = 'assets/blank_profile.png';
 
   Future<void> updImUrl() async {
     PostItem? p = widget.post;
@@ -109,10 +110,18 @@ class _PostPageState extends State<PostPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   // Profile pic
-                   CircleAvatar(
-                    radius: 18,
-                    backgroundImage: NetworkImage(profileImg,),
-                  ),
+                   GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, 
+                      MaterialPageRoute(
+                        builder: (context) => OtherProfilePage(userId: widget.post!.authorId!))
+                      );
+                    },
+                     child: CircleAvatar(
+                      radius: 18,
+                      backgroundImage: AssetImage(profileImg),
+                                       ),
+                   ),
                   SizedBox(width: 10,),
                   // Follow btn
                   CircleAvatar(
