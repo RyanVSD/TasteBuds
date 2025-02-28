@@ -1,6 +1,9 @@
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
+import 'package:tastebuds/model/user_model.dart';
+import 'package:tastebuds/pages/widget/post_card.dart';
+import 'package:tastebuds/pages/widget/post_grid.dart';
 import '../model/objects/post_item.dart';
 import 'package:provider/provider.dart';
 
@@ -66,9 +69,7 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         const CircleAvatar(
                           radius: 40,
-                          backgroundImage: NetworkImage(
-                            'https://www.shutterstock.com/image-photo/hiking-switzerland-interlaken-jungfrau-region-600nw-2272449171.jpg',
-                          ),
+                          backgroundImage: AssetImage('assets/blank_profile.png'),
                         ),
                         const SizedBox(width: 16),
                 
@@ -78,14 +79,14 @@ class _ProfilePageState extends State<ProfilePage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Granny Sue',
+                                context.watch<UserModel>().user?.preferredUsername ?? "User123",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                'TasteBuds ID: 93786',
+                                'TasteBuds ID: ${context.watch<UserModel>().user?.username ?? "-1"}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
@@ -109,9 +110,8 @@ class _ProfilePageState extends State<ProfilePage>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStatsItem('12', 'Posts'),
-                        _buildStatsItem('54', 'Following'),
-                        _buildStatsItem('23k', 'Followers'),
+                        _buildStatsItem(context.watch<UserModel>().user?.followingCount.toString() ?? '0' , 'Following'),
+                        _buildStatsItem(context.watch<UserModel>().user?.followerCount.toString() ?? '0' , 'Followers'),
                       ],
                     ),
                   ],
@@ -171,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage>
 
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts = context.watch<PostModel>().getPostList(0);
+    Future<List<PostItem?>> posts = context.watch<PostModel>().getPostList(10);
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,
@@ -187,91 +187,7 @@ class _ProfilePageState extends State<ProfilePage>
             return const Center(child: Text('No posts available.'));
           } else {
             List<PostItem?> posts = snapshot.data!;
-
-            return ListView.builder(
-                padding: const EdgeInsets.all(10),
-                itemCount: posts.length,
-                itemBuilder: (ctx, index) {
-                  final PostItem post = posts[index]!;
-
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Post Image
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(10)),
-                          child: Image.network(
-                            post.imageUrl,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-
-                        // Post Details
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Title
-                              Text(
-                                post.title,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              const SizedBox(height: 4),
-
-                              // Author Name
-                              Text(
-                                'By ${post.authorId}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[700],
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-                              // Likes & Favorites Row
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.thumb_up,
-                                          size: 16, color: Colors.blue),
-                                      const SizedBox(width: 4),
-                                      Text('${post.likes} Likes'),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.favorite,
-                                          size: 16, color: Colors.red),
-                                      const SizedBox(width: 4),
-                                      Text('${post.favorites} Favorites'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                });
+            return PostGrid(posts: Future.value(posts));
           }
         });
   }

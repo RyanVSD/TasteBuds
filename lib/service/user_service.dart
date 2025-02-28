@@ -13,6 +13,17 @@ Future<List<AuthUserAttribute>> getUserAttributes() async {
   }
 }
 
+Future<AuthSession?> getAuthSession() async {
+  try {
+    final result = await Amplify.Auth.fetchAuthSession();
+    return result;
+  } on AuthException catch (e) {
+    safePrint('Error retrieving auth session: ${e.message}');
+    return null;
+  }
+}
+
+
 Future<String> getUsername() async {
   try {
     final user = await Amplify.Auth.getCurrentUser();
@@ -43,7 +54,7 @@ Future<List<User?>> everyUser() async {
 
   // Returns followerCount of signed in user
   // Returns a negative value if there is an error
-   Future<int> followerCount() async {
+   Future<User?> getCurrentUser() async {
     try {
       final user = await Amplify.Auth.getCurrentUser();
       final id = user.userId;
@@ -53,12 +64,12 @@ Future<List<User?>> everyUser() async {
       final userInfo = response.data;
       if (userInfo == null) {
         safePrint("Error getting follower count");
-        return -1;
+        return null;
       }
-      return userInfo.followerCount ?? -1;
+      return userInfo;
     } on ApiException catch (e) {
       safePrint("fetch failed $e");
-      return -1;
+      return null;
     }
   }
 
