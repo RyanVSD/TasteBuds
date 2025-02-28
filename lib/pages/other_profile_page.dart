@@ -97,7 +97,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    u?.preferredUsername ?? "User123",
+                                    widget.userId,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
