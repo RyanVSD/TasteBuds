@@ -61,8 +61,8 @@ const schema = a
 
 		Post: a.model({
 			// Fields
-			id: a.id(),
-			authorId: a.id(),
+			id: a.id().required(),
+			authorId: a.id().required(),
 
 			title: a.string().required(),
 			description: a.string().required(),
