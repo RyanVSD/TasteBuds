@@ -11,17 +11,15 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
-
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;// Initially invisible
+  late TabController _tabController; // Initially invisible
 
   late ScrollController _scrollController;
-
 
   @override
   void initState() {
@@ -37,11 +35,9 @@ class _ProfilePageState extends State<ProfilePage>
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -51,21 +47,24 @@ class _ProfilePageState extends State<ProfilePage>
               // color: Theme.of(context).colorScheme.secondary,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: Theme.of(context).brightness == Brightness.dark ? 
-                   [Theme.of(context).colorScheme.surface,Theme.of(context).colorScheme.surface ] : [Theme.of(context).colorScheme.secondary, Theme.of(context).colorScheme.surface],
+                  colors: Theme.of(context).brightness == Brightness.dark
+                      ? [
+                          Theme.of(context).colorScheme.surface,
+                          Theme.of(context).colorScheme.surface
+                        ]
+                      : [
+                          Theme.of(context).colorScheme.secondary,
+                          Theme.of(context).colorScheme.surface
+                        ],
                   begin: Alignment.topCenter, // Start position
-                  end: Alignment(0,0.9), // End position
+                  end: Alignment(0, 0.9), // End position
                 ),
               ),
 
-              padding: const EdgeInsets.fromLTRB(16,30,16,10),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: 0,
-                    child:  SignOutButton()
-                    ),
-                  Column(
+              padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
+              child: Stack(children: [
+                Positioned(right: 0, child: SignOutButton()),
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
@@ -73,17 +72,22 @@ class _ProfilePageState extends State<ProfilePage>
                       children: [
                         const CircleAvatar(
                           radius: 40,
-                          backgroundImage: AssetImage('assets/blank_profile.png'),
+                          backgroundImage:
+                              AssetImage('assets/blank_profile.png'),
                         ),
                         const SizedBox(width: 16),
-                
+
                         //  Name & ID
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                context.watch<UserModel>().user?.preferredUsername ?? "User123",
+                                context
+                                        .watch<UserModel>()
+                                        .user
+                                        ?.preferredUsername ??
+                                    "User123",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -93,29 +97,45 @@ class _ProfilePageState extends State<ProfilePage>
                                 'TasteBuds ID: ${context.watch<UserModel>().user?.username ?? "-1"}',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.grey[500]
+                                      : Colors.grey[800],
                                 ),
                               ),
                             ],
                           ),
                         ),
-
                       ],
                     ),
-                
+
                     const SizedBox(height: 16),
-                
+
                     //  Stats Row: Posts, Following, Followers
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStatsItem(context.watch<UserModel>().user?.followingCount.toString() ?? '0' , 'Following'),
-                        _buildStatsItem(context.watch<UserModel>().user?.followerCount.toString() ?? '0' , 'Followers'),
+                        _buildStatsItem(
+                            context
+                                    .watch<UserModel>()
+                                    .user
+                                    ?.followingCount
+                                    .toString() ??
+                                '0',
+                            'Following'),
+                        _buildStatsItem(
+                            context
+                                    .watch<UserModel>()
+                                    .user
+                                    ?.followerCount
+                                    .toString() ??
+                                '0',
+                            'Followers'),
                       ],
                     ),
                   ],
-                ),]
-              ),
+                ),
+              ]),
             ),
           ),
 
@@ -170,7 +190,8 @@ class _ProfilePageState extends State<ProfilePage>
 
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts = context.watch<PostModel>().getPostList(10);
+    Future<List<PostItem?>> posts =
+        context.watch<PostModel>().getOwnPostList(10);
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,
