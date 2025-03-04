@@ -4,6 +4,7 @@ import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:tastebuds/service/auth_service.dart';
+import './user_service.dart';
 
 Future<List<Post?>> getPosts(int limit) async {
   try {
@@ -19,6 +20,7 @@ Future<List<Post?>> getPosts(int limit) async {
   }
 }
 
+
 Future<List<String>> getTags(Post post) async {
   List<String> tagStrings = [];
   final postTagQuery = PostTag.POST.contains(post.id);
@@ -33,10 +35,11 @@ Future<List<String>> getTags(Post post) async {
   return tagStrings;
 }
 
-Future<List<Post?>> getOwnPost(int limit) async {
+Future<List<Post?>> getUserPost(String userId, int limit) async {
+  String userId = await AuthService.getUserId();
+
   try {
-    String id = await AuthService.getUserId();
-    final postQuery = Post.AUTHOR.eq(id);
+    final postQuery = Post.AUTHOR.eq(userId);
     final postRequest = ModelQueries.list<Post>(Post.classType, where: postQuery);
     final postResponse = await Amplify.API.query(request: postRequest).response;
 
@@ -60,7 +63,7 @@ Future<String> getS3Url(String imPath) async {
   }
 }
 
-Future<Post?> getPost(String postId) async {
+Future<Post?> getPost(String? postId) async {
   try {
     final queryPredicate = Post.ID.eq(postId);
     final request = ModelQueries.list(Post.classType, where: queryPredicate);
@@ -86,6 +89,46 @@ Future<Tag?> createTag(String tag) async {
     return response.data;
   } on ApiException catch (e) {
     safePrint("Error creating tag: $e");
+  }
+}
+Future<bool> updatePostRating(String? postId, int tasteRating, int diffRating) async{
+ String userId = await AuthService.getUserId();
+  try {
+    final query1 = CompletedRecipe.RECIPE.eq(postId);
+    final query2 = CompletedRecipe.USER.eq(userId).and(query1);
+    final request = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where: query2);
+    final res = await Amplify.API.query(request: request).response;
+
+    if (res.data != null && res.data!.items.isNotEmpty) {
+      final post = res.data!.items.first;
+      final newPost = post!.copyWith(tasteRating: tasteRating, difficultyRating: diffRating);
+      Amplify.API.mutate(request: ModelMutations.update(newPost));
+      return Future.value(true);
+    }else {
+      return Future.value(false);
+    }
+    // print(response.data);
+  } on ApiException catch (e) {
+    safePrint("error fetching post: $e");
+    return Future.value(true);
+  }
+  
+}
+
+void createPostRating(Post? post, int tasteRating, int diffRating) async{
+  User? user = await getCurrentUser();
+  try {
+    final CompletedRecipe recipe = CompletedRecipe(
+        user: user,
+        recipe: post,
+        difficultyRating: diffRating, 
+        tasteRating: tasteRating
+    );
+    final request = ModelMutations.create(recipe);
+    await Amplify.API.mutate(request: request).response;
+    // print(response.data);
+  } on ApiException catch (e) {
+    safePrint("error fetching post: $e");
     return null;
   }
 }
@@ -120,7 +163,29 @@ Future<List<Post>> getPostsByTag(String tag) async {
     return [];
   }
 }
+Future<Map<String, int>?> getPostRating(String? postId) async {
+  String userId = await AuthService.getUserId();
+  try {
+    final query1 = CompletedRecipe.RECIPE.eq(postId);
+    final query2 = CompletedRecipe.USER.eq(userId).and(query1);
+    final request = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where: query2);
+    final response = await Amplify.API.query(request: request).response;
 
+    var map = <String, int>{"taste": 0, "difficulty": 0};
+    if (response.data != null && response.data!.items.isNotEmpty) {
+      map = <String, int>{
+        "taste": response.data!.items.first!.tasteRating
+      , "difficulty": response.data!.items.first!.difficultyRating};
+    }
+
+    return Future.value(map);
+    
+  } on ApiException catch (e) {
+
+    safePrint("Error fetching posts: $e");
+    return Future.value(null);
+  }
+}
 void createPost(PostItem postItem) async {
   try {
     // Get the user object of the author

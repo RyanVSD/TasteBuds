@@ -1,4 +1,3 @@
-import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/post_model.dart';
@@ -191,7 +190,8 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
 
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts = context.watch<PostModel>().getPostList(10);
+    Future<List<PostItem?>> posts = context.read<PostModel>().getUserPostList(u?.id ?? "", 10);
+
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,

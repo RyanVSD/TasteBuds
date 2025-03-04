@@ -33,8 +33,9 @@ class PostModel extends ChangeNotifier {
     return posts;
   }
 
-  Future<List<PostItem?>> getOwnPostList(int listSize) async {
-    List<Post?> apiResponse = await service.getOwnPost(listSize);
+  Future<List<PostItem?>> getUserPostList(String userId, int listSize) async {
+    if (userId == "" ) return Future.value([]);
+    List<Post?> apiResponse = await service.getUserPost(userId, listSize);
     List<PostItem?> posts = postsToPostItems(apiResponse);
     return posts;
   }
@@ -50,6 +51,19 @@ class PostModel extends ChangeNotifier {
   void sendPost(CreatePostFormData data) async {
     PostItem createdPost = await PostItem.fromCreateForm(data);
     createPost(createdPost);
+  }
+
+  void setPostRating(String? postId, int taste, int diff) async{
+
+      bool hasPost = await service.updatePostRating(postId, taste, diff);
+      if (!hasPost) {
+        Post? p = await service.getPost(postId);
+        service.createPostRating(p, taste, diff);
+      }
+  }
+
+  Future<Map<String, int>?> getPostRating(String? postId) async{
+    return service.getPostRating(postId);
   }
 
   List<PostItem?> postsToPostItems(List<Post?> lst) {
