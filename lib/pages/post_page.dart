@@ -4,8 +4,7 @@ import 'package:tastebuds/pages/other_profile_page.dart';
 import 'package:tastebuds/pages/widget/content.dart';
 import 'package:tastebuds/service/post_service.dart';
 
-class PostPage extends StatefulWidget
-{
+class PostPage extends StatefulWidget {
   const PostPage({super.key, required this.post});
 
   final PostItem? post;
@@ -16,7 +15,8 @@ class PostPage extends StatefulWidget
 
 class _PostPageState extends State<PostPage> {
   bool isFollowed = false;
-  String imUrl = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
+  String imUrl =
+      "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
   String profileImg = 'assets/blank_profile.png';
 
   Future<void> updImUrl() async {
@@ -31,11 +31,11 @@ class _PostPageState extends State<PostPage> {
   initState() {
     super.initState();
     updImUrl();
+    print(widget.post!.toJson().toString());
   }
 
   @override
-   Widget build(BuildContext context) {
-
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -48,9 +48,7 @@ class _PostPageState extends State<PostPage> {
               height: 400, // Fixed height for the image
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(
-                    imUrl
-                  ),
+                  image: NetworkImage(imUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -60,7 +58,7 @@ class _PostPageState extends State<PostPage> {
           DraggableScrollableSheet(
             initialChildSize: 0.6, // Starts below the image
             minChildSize: 0.6,
-            maxChildSize: 0.85, 
+            maxChildSize: 0.85,
             builder: (context, scrollController) {
               return Container(
                 decoration: BoxDecoration(
@@ -77,7 +75,9 @@ class _PostPageState extends State<PostPage> {
                 child: SingleChildScrollView(
                   controller: scrollController,
                   padding: EdgeInsets.all(20),
-                  child: Content(post: widget.post!,),
+                  child: Content(
+                    post: widget.post!,
+                  ),
                 ),
               );
             },
@@ -100,9 +100,9 @@ class _PostPageState extends State<PostPage> {
             top: kToolbarHeight / 2,
             right: 16,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), 
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.tertiaryContainer, 
+                color: Theme.of(context).colorScheme.tertiaryContainer,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
@@ -110,26 +110,32 @@ class _PostPageState extends State<PostPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   // Profile pic
-                   GestureDetector(
+                  GestureDetector(
                     onTap: () {
-                      Navigator.push(context, 
-                      MaterialPageRoute(
-                        builder: (context) => OtherProfilePage(userId: widget.post!.authorId!))
-                      );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OtherProfilePage(
+                                  userId: widget.post!.authorId!)));
                     },
-                     child: CircleAvatar(
+                    child: CircleAvatar(
                       radius: 18,
                       backgroundImage: AssetImage(profileImg),
-                                       ),
-                   ),
-                  SizedBox(width: 10,),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   // Follow btn
                   CircleAvatar(
                     radius: 18,
-                    backgroundColor: isFollowed ? Theme.of(context).colorScheme.tertiaryFixedDim : Theme.of(context).colorScheme.secondary,
+                    backgroundColor: isFollowed
+                        ? Theme.of(context).colorScheme.tertiaryFixedDim
+                        : Theme.of(context).colorScheme.secondary,
                     child: IconButton(
-                      icon: isFollowed ? 
-                        Icon(Icons.remove, color: const Color(0xFF000000)) : Icon(Icons.add, color: const Color(0xFF000000)),
+                      icon: isFollowed
+                          ? Icon(Icons.remove, color: const Color(0xFF000000))
+                          : Icon(Icons.add, color: const Color(0xFF000000)),
                       onPressed: () {
                         setState(() {
                           isFollowed = !isFollowed;
@@ -142,7 +148,6 @@ class _PostPageState extends State<PostPage> {
               ),
             ),
           ),
-
         ],
       ),
     );

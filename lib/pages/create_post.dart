@@ -16,14 +16,17 @@ class CreatePostFormData {
   List<String> steps;
   int difficulty;
   double priceEstimation;
-  CreatePostFormData(
-      {required this.title,
-      required this.description,
-      required this.file,
-      required this.ingredients,
-      required this.steps,
-      required this.difficulty,
-      required this.priceEstimation});
+  List<String> tags;
+  CreatePostFormData({
+    required this.title,
+    required this.description,
+    required this.file,
+    required this.ingredients,
+    required this.steps,
+    required this.difficulty,
+    required this.priceEstimation,
+    required this.tags,
+  });
 }
 
 class CreatePost extends StatefulWidget {
@@ -42,6 +45,7 @@ class _CreatePostState extends State<CreatePost> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   List<TextEditingController> stepControllers = [];
+  List<TextEditingController> tagControllers = [];
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController ingredientNameController =
@@ -65,6 +69,11 @@ class _CreatePostState extends State<CreatePost> {
       return "Must have at least one step";
     } else if (stepControllers.map((c) => c.text).contains("")) {
       return "Cannot have any empty steps";
+    } else if (tagControllers.map((c) => c.text).contains("")) {
+      return "Cannot have any empty tags";
+    } else if (tagControllers
+        .any((c) => c.text.contains(RegExp(r"[^[a-zA-Z]")))) {
+      return "Tags cannot have any non alphabetic characters";
     } else {
       return null;
     }
@@ -102,6 +111,18 @@ class _CreatePostState extends State<CreatePost> {
     });
   }
 
+  void _addTag() {
+    setState(() {
+      tagControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeTag(int index) {
+    setState(() {
+      tagControllers.removeAt(index);
+    });
+  }
+
   static String? validateTitle(String? title) {
     // Must have a title
     if (title == null || title.isEmpty) {
@@ -134,7 +155,6 @@ class _CreatePostState extends State<CreatePost> {
     }
     return null;
   }
-
 
   Widget _buildPriceEstimator() {
     Text priceInfoWidget;
@@ -192,7 +212,7 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-  bool validatePost()  {
+  bool validatePost() {
     final bool isValid = formKey.currentState?.validate() ?? false;
     if (!isValid) {
       print("not valid");
@@ -210,28 +230,30 @@ class _CreatePostState extends State<CreatePost> {
       return false;
     }
     CreatePostFormData data = CreatePostFormData(
-      title: titleController.text,
-      description: descriptionController.text,
-      file: _image!,
-      steps: stepControllers.map((c) => c.text).toList(),
-      ingredients: ingredients,
-      priceEstimation: priceEstimation,
-      difficulty: difficultyRating,
-    );
+        title: titleController.text,
+        description: descriptionController.text,
+        file: _image!,
+        steps: stepControllers.map((c) => c.text).toList(),
+        ingredients: ingredients,
+        priceEstimation: priceEstimation,
+        difficulty: difficultyRating,
+        tags: tagControllers.map((c) => c.text.toLowerCase()).toList());
     try {
       context.read<PostModel>().sendPost(data);
-    }on StateError catch (e) {
+    } on StateError catch (e) {
+      print(e);
       return false;
     }
     return true;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Theme.of(context).brightness == Brightness.dark ? Theme.of(context).colorScheme.surface : Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).colorScheme.surface
+            : Theme.of(context).colorScheme.secondary,
         scrolledUnderElevation: 0,
         title: Text(
           "Create post",
@@ -261,6 +283,39 @@ class _CreatePostState extends State<CreatePost> {
                   minLines: 3,
                   validator: validateDescription,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: tagControllers.length,
+                  itemBuilder: (context, index) {
+                    return Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: tagControllers[index],
+                            decoration:
+                                InputDecoration(labelText: 'Tag ${index + 1}'),
+                            minLines: 1,
+                            maxLines: 1,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle,
+                              color: Colors.red),
+                          onPressed: () => _removeTag(index),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Center(
+                  child: OutlinedButton.icon(
+                    label: Text("Add tag"),
+                    icon: const Icon(Icons.add_circle, color: Colors.green),
+                    onPressed: _addTag,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 FormField<File>(
@@ -414,7 +469,10 @@ class _CreatePostState extends State<CreatePost> {
           Center(
             child: OutlinedButton(
               onPressed: () {
-                if (validatePost()) {Navigator.pop(context);};
+                if (validatePost()) {
+                  Navigator.pop(context);
+                }
+                ;
               },
               child: const Text('Post'),
             ),

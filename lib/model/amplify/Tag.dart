@@ -27,7 +27,6 @@ import 'package:collection/collection.dart';
 /** This is an auto generated class representing the Tag type in your schema. */
 class Tag extends amplify_core.Model {
   static const classType = const _TagModelType();
-  final String id;
   final String? _value;
   final List<PostTag>? _posts;
   final amplify_core.TemporalDateTime? _createdAt;
@@ -38,16 +37,34 @@ class Tag extends amplify_core.Model {
   
   @Deprecated('[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.')
   @override
-  String getId() => id;
+  String getId() => modelIdentifier.serializeAsString();
   
   TagModelIdentifier get modelIdentifier {
+    try {
       return TagModelIdentifier(
-        id: id
+        value: _value!
       );
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
-  String? get value {
-    return _value;
+  String get value {
+    try {
+      return _value!;
+    } catch(e) {
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   List<PostTag>? get posts {
@@ -62,11 +79,10 @@ class Tag extends amplify_core.Model {
     return _updatedAt;
   }
   
-  const Tag._internal({required this.id, value, posts, createdAt, updatedAt}): _value = value, _posts = posts, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Tag._internal({required value, posts, createdAt, updatedAt}): _value = value, _posts = posts, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Tag({String? id, String? value, List<PostTag>? posts}) {
+  factory Tag({required String value, List<PostTag>? posts}) {
     return Tag._internal(
-      id: id == null ? amplify_core.UUID.getUUID() : id,
       value: value,
       posts: posts != null ? List<PostTag>.unmodifiable(posts) : posts);
   }
@@ -79,7 +95,6 @@ class Tag extends amplify_core.Model {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Tag &&
-      id == other.id &&
       _value == other._value &&
       DeepCollectionEquality().equals(_posts, other._posts);
   }
@@ -92,7 +107,6 @@ class Tag extends amplify_core.Model {
     var buffer = new StringBuffer();
     
     buffer.write("Tag {");
-    buffer.write("id=" + "$id" + ", ");
     buffer.write("value=" + "$_value" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
@@ -101,27 +115,23 @@ class Tag extends amplify_core.Model {
     return buffer.toString();
   }
   
-  Tag copyWith({String? value, List<PostTag>? posts}) {
+  Tag copyWith({List<PostTag>? posts}) {
     return Tag._internal(
-      id: id,
-      value: value ?? this.value,
+      value: value,
       posts: posts ?? this.posts);
   }
   
   Tag copyWithModelFieldValues({
-    ModelFieldValue<String?>? value,
     ModelFieldValue<List<PostTag>?>? posts
   }) {
     return Tag._internal(
-      id: id,
-      value: value == null ? this.value : value.value,
+      value: value,
       posts: posts == null ? this.posts : posts.value
     );
   }
   
   Tag.fromJson(Map<String, dynamic> json)  
-    : id = json['id'],
-      _value = json['value'],
+    : _value = json['value'],
       _posts = json['posts']  is Map
         ? (json['posts']['items'] is List
           ? (json['posts']['items'] as List)
@@ -139,11 +149,10 @@ class Tag extends amplify_core.Model {
       _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'value': _value, 'posts': _posts?.map((PostTag? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'value': _value, 'posts': _posts?.map((PostTag? e) => e?.toJson()).toList(), 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id,
     'value': _value,
     'posts': _posts,
     'createdAt': _createdAt,
@@ -151,7 +160,6 @@ class Tag extends amplify_core.Model {
   };
 
   static final amplify_core.QueryModelIdentifier<TagModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<TagModelIdentifier>();
-  static final ID = amplify_core.QueryField(fieldName: "id");
   static final VALUE = amplify_core.QueryField(fieldName: "value");
   static final POSTS = amplify_core.QueryField(
     fieldName: "posts",
@@ -171,11 +179,13 @@ class Tag extends amplify_core.Model {
         ])
     ];
     
-    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
+    modelSchemaDefinition.indexes = [
+      amplify_core.ModelIndex(fields: const ["value"], name: null)
+    ];
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: Tag.VALUE,
-      isRequired: false,
+      isRequired: true,
       ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
@@ -221,15 +231,15 @@ class _TagModelType extends amplify_core.ModelType<Tag> {
  * of [Tag] in your schema.
  */
 class TagModelIdentifier implements amplify_core.ModelIdentifier<Tag> {
-  final String id;
+  final String value;
 
-  /** Create an instance of TagModelIdentifier using [id] the primary key. */
+  /** Create an instance of TagModelIdentifier using [value] the primary key. */
   const TagModelIdentifier({
-    required this.id});
+    required this.value});
   
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
-    'id': id
+    'value': value
   });
   
   @override
@@ -242,7 +252,7 @@ class TagModelIdentifier implements amplify_core.ModelIdentifier<Tag> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'TagModelIdentifier(id: $id)';
+  String toString() => 'TagModelIdentifier(value: $value)';
   
   @override
   bool operator ==(Object other) {
@@ -251,10 +261,10 @@ class TagModelIdentifier implements amplify_core.ModelIdentifier<Tag> {
     }
     
     return other is TagModelIdentifier &&
-      id == other.id;
+      value == other.value;
   }
   
   @override
   int get hashCode =>
-    id.hashCode;
+    value.hashCode;
 }
