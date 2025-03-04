@@ -8,7 +8,7 @@ import 'package:tastebuds/model/objects/post_item.dart';
 class PostModel extends ChangeNotifier {
   PostItem? post;
   PostModel();
-    
+
   Future<PostItem?> getPost(String postId) async {
     Post? response = await service.getPost(postId);
     if (response == null) {
@@ -23,6 +23,13 @@ class PostModel extends ChangeNotifier {
   Future<List<PostItem?>> getPostList(int listSize) async {
     List<Post?> apiResponse = await service.getPosts(listSize);
     List<PostItem?> posts = postsToPostItems(apiResponse);
+    for (int i = 0; i < apiResponse.length; i++) {
+      Post? post = apiResponse[i];
+      if (post != null) {
+        List<String> tags = await service.getTags(post);
+        posts[i]!.tags = tags;
+      }
+    }
     return posts;
   }
 
@@ -32,23 +39,18 @@ class PostModel extends ChangeNotifier {
     return posts;
   }
 
-
   void createPost(PostItem? postItem) {
-      if (postItem != null) {
-        service.createPost(postItem);
-      }else {
-        throw ErrorHint("Empty post");
-      }
-    
+    if (postItem != null) {
+      service.createPost(postItem);
+    } else {
+      throw ErrorHint("Empty post");
+    }
   }
 
   void sendPost(CreatePostFormData data) async {
-   
     PostItem createdPost = await PostItem.fromCreateForm(data);
     createPost(createdPost);
-
   }
-
 
   List<PostItem?> postsToPostItems(List<Post?> lst) {
     return lst.map((p) => postToPostItem(p!)).toList();
@@ -73,7 +75,7 @@ class PostModel extends ChangeNotifier {
       price: p.price,
       likes: p.likes,
       favorites: p.favorites,
+      tags: [],
     );
   }
-
 }

@@ -23,6 +23,8 @@ class PostItem {
 
   final List<IngredientItem> ingredients; // Ingredients for the recipe
 
+  List<String> tags;
+
   PostItem({
     this.id,
     this.authorId,
@@ -36,6 +38,7 @@ class PostItem {
     required this.difficulty,
     required this.price,
     required this.ingredients,
+    required this.tags,
   });
 
   static Future<PostItem> fromCreateForm(CreatePostFormData data) async {
@@ -52,6 +55,7 @@ class PostItem {
       likes: 0,
       favorites: 0,
       authorId: authorId,
+      tags: data.tags,
     );
   }
 
@@ -70,9 +74,9 @@ class PostItem {
         difficulty: json['difficulty'],
         price: json['price'],
         ingredients: (List<Map<String, dynamic>>.from(json['ingredients']))
-            .map(
-                (item) => IngredientItem.fromJson(item))
-            .toList());
+            .map((item) => IngredientItem.fromJson(item))
+            .toList(),
+        tags: List<String>.from(json['tags']));
   }
 
   Map<String, dynamic> toJson() {
@@ -105,5 +109,6 @@ class PostItem {
     this.difficulty = 0,
     this.price = 0.0,
     this.ingredients = const [],
+    this.tags = const [],
   }) : uploadTime = DateTime.now();
 }

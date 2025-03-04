@@ -10,11 +10,27 @@ Future<List<Post?>> getPosts(int limit) async {
     final firstRequest = ModelQueries.list<Post>(Post.classType, limit: limit);
     final firstResult = await Amplify.API.query(request: firstRequest).response;
     final firstPageData = firstResult.data;
+    for (Post? post in firstPageData?.items ?? []) {}
+
     return firstPageData?.items ?? <Post?>[];
   } on ApiException catch (e) {
     safePrint("Error fetching posts: $e");
     return const [];
   }
+}
+
+Future<List<String>> getTags(Post post) async {
+  List<String> tagStrings = [];
+  final postTagQuery = PostTag.POST.contains(post.id);
+  final postTagRequest =
+      ModelQueries.list<PostTag>(PostTag.classType, where: postTagQuery);
+  final tagRes = await Amplify.API.query(request: postTagRequest).response;
+  for (PostTag? edge in tagRes.data?.items ?? []) {
+    if (edge == null) throw StateError("null edge");
+    if (edge.tag == null) throw StateError("invalid edge retrieved");
+    tagStrings.add(edge.tag!.value);
+  }
+  return tagStrings;
 }
 
 Future<List<Post?>> getOwnPost(int limit) async {
@@ -59,6 +75,49 @@ Future<Post?> getPost(String postId) async {
   } on ApiException catch (e) {
     safePrint("error fetching post: $e");
     return null;
+  }
+}
+
+Future<Tag?> createTag(String tag) async {
+  try {
+    final toAddTag = Tag(value: tag);
+    final request = ModelMutations.create(toAddTag);
+    final response = await Amplify.API.mutate(request: request).response;
+    return response.data;
+  } on ApiException catch (e) {
+    safePrint("Error creating tag: $e");
+    return null;
+  }
+}
+
+Future<List<Post>> getPostsByTag(String tag) async {
+  try {
+    List<Post> psts = [];
+    final tagIdentifier = TagModelIdentifier(value: tag);
+    final tagQuery = ModelQueries.get<Tag>(Tag.classType, tagIdentifier);
+    final tagResponse = await Amplify.API.query(request: tagQuery).response;
+    Tag? tagObj = tagResponse.data;
+    if (tagObj == null) {
+      throw StateError("Error getting tag from db: ${tagResponse.errors}");
+    }
+
+    final postTagQuery = PostTag.TAG.contains(tag);
+    final postTagRequest =
+        ModelQueries.list<PostTag>(PostTag.classType, where: postTagQuery);
+    final tagRes = await Amplify.API.query(request: postTagRequest).response;
+    List<PostTag?> edges = tagRes.data?.items ?? [];
+    for (final edge in edges) {
+      if (edge == null) throw StateError("Null edge");
+      if (edge.post == null) throw StateError("Edge points to null post");
+      psts.add(edge.post!);
+    }
+    return psts;
+  } on ApiException catch (e) {
+    safePrint("Error getting posts by tag: $e");
+    return [];
+  } on StateError catch (e) {
+    safePrint(e);
+    return [];
   }
 }
 
@@ -127,6 +186,29 @@ void createPost(PostItem postItem) async {
 
     if (finalPost == null) {
       throw StateError("error updating object: ${updateResponse.errors}");
+    }
+
+    // Add tags
+    List<Future<Tag>> futureTags = postItem.tags.map((e) async {
+      final tagQuery = TagModelIdentifier(value: e);
+      final tagReq = ModelQueries.get<Tag>(Tag.classType, tagQuery);
+      final tagRes = await Amplify.API.query(request: tagReq).response;
+      Tag? t = tagRes.data;
+      t ??= await createTag(e);
+      return t!;
+    }).toList();
+
+    List<Tag> tags = await Future.wait(futureTags);
+
+    for (final tag in tags) {
+      PostTag edge = PostTag(post: finalPost, tag: tag);
+      final createEdge = ModelMutations.create(edge);
+      final createEdgeRes =
+          await Amplify.API.mutate(request: createEdge).response;
+      if (createEdgeRes.data == null) {
+        throw StateError(
+            "Edge: (Tag, $tag), (Post, $finalPost) was not created");
+      }
     }
 
     // return finalPost;

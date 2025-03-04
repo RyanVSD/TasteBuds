@@ -87,13 +87,15 @@ const schema = a
 			completed: a.hasMany("CompletedRecipe", "recipeId"),
 		}),
 
-		Tag: a.model({
-			// fields
-			value: a.string(),
+		Tag: a
+			.model({
+				// fields
+				value: a.id().required(),
 
-			// graph edges
-			posts: a.hasMany("PostTag", "tagId"),
-		}),
+				// graph edges
+				posts: a.hasMany("PostTag", "tagId"),
+			})
+			.identifier(["value"]),
 
 		// Graph edges
 		PostTag: a.model({
