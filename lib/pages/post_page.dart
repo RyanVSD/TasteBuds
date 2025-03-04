@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
+import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/pages/other_profile_page.dart';
 import 'package:tastebuds/pages/widget/step.dart';
 import 'package:tastebuds/service/post_service.dart';
+import 'package:provider/provider.dart';
+
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key, required this.post});
@@ -32,24 +35,42 @@ class _PostPageState extends State<PostPage> {
             index < rating ? Icons.star : Icons.star_border,
             color: Colors.amber,
           ),
-          onPressed: () => onRatingSelected(index + 1),
+          onPressed: () { 
+            int newRating = index + 1;
+            setState(() {
+              onRatingSelected(newRating);
+              context.read<PostModel>().setPostRating(widget.post!.id, tasteRating, difficultyRating);
+            });
+          },
         );
       }),
     );
   }
 
-  Future<void> updImUrl() async {
+  void updImUrl() async {
     PostItem? p = widget.post;
     if (p != null) {
       String newPath = await getS3Url(p.imageUrl);
       setState(() => imUrl = newPath);
-    } else {}
+    } 
+  }
+
+  void loadRating() async {
+    Map<String, int>? res;
+    if (widget.post != null) {
+      res = await context.read<PostModel>().getPostRating(widget.post!.id);
+    }
+    setState(() {
+      difficultyRating = res?["difficulty"] ?? 0;
+      tasteRating = res?["taste"] ?? 0;
+    });
   }
 
   @override
   initState() {
     super.initState();
     updImUrl();
+    loadRating();
   }
 
   @override
@@ -239,8 +260,7 @@ class _PostPageState extends State<PostPage> {
                             ),
                             _buildStarRating(
                                 difficultyRating,
-                                (rating) =>
-                                    setState(() => difficultyRating = rating)),
+                                (rating) =>difficultyRating = rating),
                             Text(
                               "Taste Ratings",
                               style: TextStyle(
@@ -250,8 +270,7 @@ class _PostPageState extends State<PostPage> {
                             ),
                             _buildStarRating(
                                 tasteRating,
-                                (rating) =>
-                                    setState(() => tasteRating = rating)),
+                                (rating) => tasteRating = rating),
                           ],
                         ),
                       ],
