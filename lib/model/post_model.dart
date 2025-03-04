@@ -92,4 +92,31 @@ class PostModel extends ChangeNotifier {
       tags: [],
     );
   }
+
+  
+  Future<List<PostItem?>> getRanking(String filter, String dateFilter) async{
+    int day = 1;
+    if (dateFilter == "3 Days") { day = 3;}
+    else if (dateFilter == "1 Week") { day = 7;}
+    else if (dateFilter == "1 Month") { day = 30;}
+
+    List<CompletedRecipe?> postList = await service.getPostByDate(DateTime.now().subtract(Duration(hours: day)));
+    postList = postList.where((post) => post != null).toList();
+    
+    if (postList.isNotEmpty) {
+      if (filter == "taste") {
+        List<CompletedRecipe?> sorted = postList..sort((a, b) => a!.tasteRating.compareTo(b!.tasteRating))
+        ..sublist(0, postList.length < 5 ? postList.length : 5);
+        return sorted.map((e) => postToPostItem(e!.recipe!)).toList();
+
+      }else if (filter == "diff") {
+        List<CompletedRecipe?> sorted = postList..sort((a, b) => a!.difficultyRating.compareTo(b!.difficultyRating))
+        ..sublist(0, postList.length < 5 ? postList.length : 5);
+        return sorted.map((e) => postToPostItem(e!.recipe!) ).toList();
+      }
+    } 
+    return Future.value([]);
+    
+  }
+
 }

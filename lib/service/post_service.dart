@@ -288,3 +288,37 @@ void createPost(PostItem postItem) async {
     return null;
   }
 }
+
+Future<List<CompletedRecipe?>> getPostByDate(DateTime beginDate) async{
+    try {
+
+      final dateQuery = Post.UPLOADTIME.gt(beginDate);
+      final request = ModelQueries.list<Post>(Post.classType, limit: 50, where: dateQuery);
+      final postsRes = await Amplify.API.query(request: request).response;
+
+      if (postsRes.data != null && postsRes.data!.items.isNotEmpty) {
+        final postItems = postsRes.data!.items;
+        List<String> postIds = postItems.map((post) => post!.id).toList();
+
+        final recipeRequests = postIds.map((e) async{
+          final recipeRequest = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where:CompletedRecipe.RECIPE.eq(e));
+          final res = await Amplify.API.query(request: recipeRequest).response;
+          return res.data;
+        });
+
+        final res = await Future.wait(recipeRequests);
+        int i = 0;
+        final recipes = res.where((e)=>e!.items.isNotEmpty).map(
+          (e){
+            double tasteAverage = 0;
+            double diffAverage = 0;
+            return e!.items.first!.copyWith(recipe: postItems[i++]);
+          }
+          ).toList();
+        return recipes;
+      }
+    } catch (e) {
+      print("Error fetching posts: $e");
+    }
+    return Future.value([]);
+}

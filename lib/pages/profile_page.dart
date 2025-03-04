@@ -63,7 +63,9 @@ class _ProfilePageState extends State<ProfilePage>
 
               padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
               child: Stack(children: [
-                Positioned(right: 0, child: SignOutButton()),
+                Positioned(right: 0, child: 
+                  ElevatedButton(onPressed: ()=>context.read<UserModel>().userLogout()
+                    ,child: Text("Sign Out"),)),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
