@@ -31,6 +31,19 @@ Future<List<Post?>> getOwnPost(int limit) async {
   }
 }
 
+Future<List<Post?>> getUserPost(String userId, int limit) async {
+  try {
+    final postQuery = Post.AUTHOR.eq(userId);
+    final postRequest = ModelQueries.list<Post>(Post.classType, where: postQuery);
+    final postResponse = await Amplify.API.query(request: postRequest).response;
+
+    return postResponse.data?.items ?? [];
+  } on ApiException catch (e) {
+    safePrint("Error fetching posts: $e");
+    return const [];
+  }
+}
+
 Future<String> getS3Url(String imPath) async {
   try {
     final result = await Amplify.Storage.getUrl(

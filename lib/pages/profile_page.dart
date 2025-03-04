@@ -181,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage>
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
     Future<List<PostItem?>> posts =
-        context.watch<PostModel>().getOwnPostList(10);
+        context.read<PostModel>().getUserPostList(context.watch<UserModel>().user?.id ?? "", 10);
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,

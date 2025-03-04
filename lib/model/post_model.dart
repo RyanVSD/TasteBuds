@@ -32,6 +32,13 @@ class PostModel extends ChangeNotifier {
     return posts;
   }
 
+  Future<List<PostItem?>> getUserPostList(String userId, int listSize) async {
+    if (userId == "" ) return Future.value([]);
+    List<Post?> apiResponse = await service.getUserPost(userId, listSize);
+    List<PostItem?> posts = postsToPostItems(apiResponse);
+    return posts;
+  }
+
 
   void createPost(PostItem? postItem) {
       if (postItem != null) {

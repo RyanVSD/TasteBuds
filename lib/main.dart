@@ -131,9 +131,8 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     const Text('Already have an account?'),
                     TextButton(
-                      onPressed: () => state.changeStep(
-                        AuthenticatorStep.signIn,
-                      ),
+                      onPressed: () { 
+                        state.changeStep(AuthenticatorStep.signIn,);},
                       child: const Text('Sign In'),
                     ),
                   ],
