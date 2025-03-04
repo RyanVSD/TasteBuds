@@ -104,7 +104,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
                                     ),
                                   ),
                                   Text(
-                                    'TasteBuds ID: ${u?.username ?? "-1"}',
+                                    'TasteBuds ID: ${u?.username ?? ""}',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
@@ -128,8 +128,8 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            _buildStatsItem(u?.followingCount.toString() ?? '0' , 'Following'),
-                            _buildStatsItem(u?.followerCount.toString() ?? '0' , 'Followers'),
+                            _buildStatsItem(u?.followingCount.toString() ?? '' , 'Following'),
+                            _buildStatsItem(u?.followerCount.toString() ?? '' , 'Followers'),
                           ],
                         ),
                       ],

@@ -87,14 +87,14 @@ class _ProfilePageState extends State<ProfilePage>
                                         .watch<UserModel>()
                                         .user
                                         ?.preferredUsername ??
-                                    "User123",
+                                    "",
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                'TasteBuds ID: ${context.watch<UserModel>().user?.username ?? "-1"}',
+                                'TasteBuds ID: ${context.watch<UserModel>().user?.username ?? ""}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Theme.of(context).brightness ==
@@ -116,21 +116,11 @@ class _ProfilePageState extends State<ProfilePage>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildStatsItem(
-                            context
-                                    .watch<UserModel>()
-                                    .user
-                                    ?.followingCount
-                                    .toString() ??
-                                '0',
-                            'Following'),
+                            context.watch<UserModel>().user
+                            ?.followingCount.toString() ?? '','Following'),
                         _buildStatsItem(
-                            context
-                                    .watch<UserModel>()
-                                    .user
-                                    ?.followerCount
-                                    .toString() ??
-                                '0',
-                            'Followers'),
+                            context.watch<UserModel>().user
+                            ?.followerCount.toString() ??'','Followers'),
                       ],
                     ),
                   ],

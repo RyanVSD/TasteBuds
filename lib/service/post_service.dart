@@ -4,7 +4,6 @@ import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'package:tastebuds/service/auth_service.dart';
-import './user_service.dart';
 
 Future<List<Post?>> getPosts(int limit) async {
   try {
@@ -22,8 +21,7 @@ Future<List<Post?>> getOwnPost(int limit) async {
   try {
     String id = await AuthService.getUserId();
     final postQuery = Post.AUTHOR.eq(id);
-    final postRequest =
-        ModelQueries.list<Post>(Post.classType, where: postQuery);
+    final postRequest = ModelQueries.list<Post>(Post.classType, where: postQuery);
     final postResponse = await Amplify.API.query(request: postRequest).response;
 
     return postResponse.data?.items ?? [];
