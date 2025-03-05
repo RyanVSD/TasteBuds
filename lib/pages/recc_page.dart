@@ -26,9 +26,11 @@ class ReccPage extends StatelessWidget {
           SizedBox(height: 4),
           // ReccRow(title: "For you", posts: context.watch<PostModel>().getPostList(5)),
           // ReccRow(title: "Nearest", posts: dummyPosts),
-          // ReccRow(title: "Training diet", posts: dummyPosts),
-          // ReccRow(title: "Chinese", posts: dummyPosts),
-          // ReccRow(title: "Japanese", posts: dummyPosts),
+          ReccRow(title: "Training diet", posts: context.watch<PostModel>().getPostListContaining("training")),
+          ReccRow(title: "Chinese", posts: context.watch<PostModel>().getPostListContaining("chinese")),
+          ReccRow(title: "Italian", posts: context.watch<PostModel>().getPostListContaining("italian")),
+          ReccRow(title: "Japanese", posts: context.watch<PostModel>().getPostListContaining("aa")),
+
         ],
       )
     );

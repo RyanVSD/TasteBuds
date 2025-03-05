@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:provider/provider.dart';
+import 'package:tastebuds/service/post_service.dart';
 import '../post_page.dart';
 
 class ReccRow extends StatelessWidget {
-  final List<PostItem> posts;
+  final Future<List<PostItem?>> posts;
   final String title;
 
   const ReccRow({super.key, required this.title, required this.posts});
@@ -29,25 +30,40 @@ class ReccRow extends StatelessWidget {
             ),
           ),
           SizedBox(height: 5),
-          SizedBox(
-            height: 180,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                SizedBox(width: 8,),
-                  ...List.generate(5, (index) {
-                  PostItem post = posts[index];
-                  return SizedBox(
-                    width: cardWidth, // Ensures 2 columns
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: ReccCard(post: post),
-                    ),
-                  );
-                }),
-                SizedBox(width: 8,),
-              ]
-            ),
+          FutureBuilder(
+            future: posts,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text('...');
+              } else {
+                List<PostItem?> postItems = snapshot.data!;
+                return SizedBox(
+                  height: 180,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      SizedBox(width: 8,),
+                        ...List.generate(postItems.length < 7 ? postItems.length : 7 , (index) {
+                        PostItem post = postItems[index]!;
+                        return SizedBox(
+                          width: cardWidth, // Ensures 2 columns
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            child: ReccCard(post: post),
+                          ),
+                        );
+                      }),
+                      SizedBox(width: 8,),
+                    ]
+                  ),
+                );
+              }}
           ),
         ],
       ),
@@ -78,16 +94,29 @@ class ReccCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
-              height: 100,
-              // width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(post.imageUrl),
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                ),
-              ),
+            FutureBuilder<String>(
+              future: getS3Url(post.imageUrl),
+              builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData || snapshot.data!.isEmpty) {
+                return Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }else{
+                  return Container(
+                    height: 100,
+                    // width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(snapshot.data ?? "https://placehold.co/600x400?text=Error"),
+                        fit: BoxFit.cover,
+                        alignment: Alignment.center,
+                      ),
+                    ),
+                  );
+              }
+              }
             ),
             Padding(
               padding: const EdgeInsets.all(10),
