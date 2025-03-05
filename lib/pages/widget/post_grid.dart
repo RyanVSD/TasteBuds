@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import './post_card.dart';
 
-
 class PostGrid extends StatelessWidget {
   final Future<List<PostItem?>> posts;
 
@@ -20,7 +19,9 @@ class PostGrid extends StatelessWidget {
             future: posts,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

@@ -34,9 +34,30 @@ class PostModel extends ChangeNotifier {
   }
 
   Future<List<PostItem?>> getUserPostList(String userId, int listSize) async {
-    if (userId == "" ) return Future.value([]);
+    if (userId == "") return Future.value([]);
     List<Post?> apiResponse = await service.getUserPost(userId, listSize);
     List<PostItem?> posts = postsToPostItems(apiResponse);
+    for (int i = 0; i < apiResponse.length; i++) {
+      Post? post = apiResponse[i];
+      if (post != null) {
+        List<String> tags = await service.getTags(post);
+        posts[i]!.tags = tags;
+      }
+    }
+    return posts;
+  }
+
+  Future<List<PostItem?>> getPostListContaining(String query) async {
+    if (query == "") return [];
+    List<Post?> apiResponse = await service.getPostsContaining(query);
+    List<PostItem?> posts = postsToPostItems(apiResponse);
+    for (int i = 0; i < apiResponse.length; i++) {
+      Post? post = apiResponse[i];
+      if (post != null) {
+        List<String> tags = await service.getTags(post);
+        posts[i]!.tags = tags;
+      }
+    }
     return posts;
   }
 
@@ -53,16 +74,15 @@ class PostModel extends ChangeNotifier {
     createPost(createdPost);
   }
 
-  void setPostRating(String? postId, int taste, int diff) async{
-
-      bool hasPost = await service.updatePostRating(postId, taste, diff);
-      if (!hasPost) {
-        Post? p = await service.getPost(postId);
-        service.createPostRating(p, taste, diff);
-      }
+  void setPostRating(String? postId, int taste, int diff) async {
+    bool hasPost = await service.updatePostRating(postId, taste, diff);
+    if (!hasPost) {
+      Post? p = await service.getPost(postId);
+      service.createPostRating(p, taste, diff);
+    }
   }
 
-  Future<Map<String, int>?> getPostRating(String? postId) async{
+  Future<Map<String, int>?> getPostRating(String? postId) async {
     return service.getPostRating(postId);
   }
 
