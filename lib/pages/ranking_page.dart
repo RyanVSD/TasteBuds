@@ -30,7 +30,10 @@ class _RankingPageState extends State<RankingPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Ranking'),
-          bottom: const TabBar(
+          bottom: TabBar(
+            labelColor: Theme.of(context).colorScheme.onSurface,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Theme.of(context).colorScheme.secondary,
             tabs: [
               Tab(text: 'Taste'),
               Tab(text: 'Difficulty'),

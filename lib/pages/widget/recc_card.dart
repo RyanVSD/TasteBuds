@@ -25,7 +25,7 @@ class ReccRow extends StatelessWidget {
               title,
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold
+                // fontWeight: FontWeight.bold
               ),
             ),
           ),
