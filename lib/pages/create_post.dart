@@ -388,7 +388,7 @@ class _CreatePostState extends State<CreatePost> {
                 child: TextFormField(
                   controller: ingredientValueController,
                   decoration: InputDecoration(labelText: "Amount"),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
               Expanded(
