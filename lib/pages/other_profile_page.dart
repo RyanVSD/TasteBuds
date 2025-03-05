@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/post_model.dart';
@@ -14,9 +16,11 @@ class OtherProfilePage extends StatefulWidget {
   State<OtherProfilePage> createState() => _OtherProfilePageState();
 }
 
-class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerProviderStateMixin {
-  late TabController _tabController;// Initially invisible
-
+class _OtherProfilePageState extends State<OtherProfilePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController; // Initially invisible
+  String search = "";
+  TextEditingController searchController = TextEditingController();
   late ScrollController _scrollController;
   User? u;
 
@@ -33,7 +37,6 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
     _tabController = TabController(length: 2, vsync: this);
     _scrollController = ScrollController();
     setUser();
-    
   }
 
   @override
@@ -42,11 +45,9 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -56,86 +57,94 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
               // color: Theme.of(context).colorScheme.secondary,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: Theme.of(context).brightness == Brightness.dark ? 
-                   [Theme.of(context).colorScheme.surface,Theme.of(context).colorScheme.surface ] : [Theme.of(context).colorScheme.secondary, Theme.of(context).colorScheme.surface],
+                  colors: Theme.of(context).brightness == Brightness.dark
+                      ? [
+                          Theme.of(context).colorScheme.surface,
+                          Theme.of(context).colorScheme.surface
+                        ]
+                      : [
+                          Theme.of(context).colorScheme.secondary,
+                          Theme.of(context).colorScheme.surface
+                        ],
                   begin: Alignment.topCenter, // Start position
-                  end: Alignment(0,0.9), // End position
+                  end: Alignment(0, 0.9), // End position
                 ),
               ),
 
-              padding: const EdgeInsets.fromLTRB(16,30,16,10),
-              child: 
-                  Stack(
+              padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: Platform.isIOS ? 10 : 0,
+                    left: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        child: IconButton(
-                            icon: Icon(Icons.arrow_back, color: Colors.white),
-                            onPressed: () => Navigator.pop(context),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const CircleAvatar(
+                            radius: 40,
+                            backgroundImage:
+                                AssetImage('assets/blank_profile.png'),
                           ),
-                        
+                          const SizedBox(width: 16),
+
+                          //  Name & ID
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.userId,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'TasteBuds ID: ${u?.username ?? ""}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.grey[500]
+                                        : Colors.grey[800],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // Plus Icon
+                          const Icon(
+                            Icons.add_circle,
+                            size: 30,
+                          ),
+                        ],
                       ),
 
+                      const SizedBox(height: 16),
 
-                      Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const CircleAvatar(
-                              radius: 40,
-                              backgroundImage: AssetImage('assets/blank_profile.png'),
-                            ),
-                            const SizedBox(width: 16),
-                                      
-                            //  Name & ID
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.userId,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'TasteBuds ID: ${u?.username ?? ""}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : Colors.grey[800],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                                      
-                            // Plus Icon
-                            const Icon(
-                              Icons.add_circle,
-                              size: 30,
-                            ),
-                          ],
-                        ),
-                                      
-                        const SizedBox(height: 16),
-                                      
-                        //  Stats Row: Posts, Following, Followers
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            _buildStatsItem(u?.followingCount.toString() ?? '' , 'Following'),
-                            _buildStatsItem(u?.followerCount.toString() ?? '' , 'Followers'),
-                          ],
-                        ),
-                      ],
-                                      ),
+                      //  Stats Row: Posts, Following, Followers
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildStatsItem(
+                              u?.followingCount.toString() ?? '', 'Following'),
+                          _buildStatsItem(
+                              u?.followerCount.toString() ?? '', 'Followers'),
+                        ],
+                      ),
                     ],
                   ),
-              
+                ],
+              ),
             ),
           ),
 
@@ -143,7 +152,13 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
           SliverPersistentHeader(
             pinned: true, // Keeps it at the top when scrolling
             delegate: _SliverAppBarDelegate(
-              TabBar(
+              searchController: searchController,
+              onSearchSubmitted: (text) {
+                setState(() {
+                  search = searchController.text;
+                });
+              },
+              tabBar: TabBar(
                 controller: _tabController,
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor: Colors.grey,
@@ -190,8 +205,11 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
 
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts = context.read<PostModel>().getUserPostList(u?.id ?? "", 10);
-
+    Future<List<PostItem?>> posts = search != ""
+        ? context
+            .read<PostModel>()
+            .getUserPostListContaining(u?.id ?? "", search)
+        : context.read<PostModel>().getUserPostList(u?.id ?? "", 10);
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,
@@ -216,12 +234,21 @@ class _OtherProfilePageState extends State<OtherProfilePage> with SingleTickerPr
 //  Helper class to keep the Tab Bar pinned at the top
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
-  _SliverAppBarDelegate(this.tabBar);
+  final TextEditingController searchController;
+  final void Function(String) onSearchSubmitted;
+
+  _SliverAppBarDelegate({
+    required this.tabBar,
+    required this.searchController,
+    required this.onSearchSubmitted,
+  });
 
   @override
-  double get minExtent => tabBar.preferredSize.height + 72;
+  double get minExtent =>
+      tabBar.preferredSize.height + 72 + (Platform.isIOS ? 40 : 0);
   @override
-  double get maxExtent => tabBar.preferredSize.height + 72;
+  double get maxExtent =>
+      tabBar.preferredSize.height + 72 + (Platform.isIOS ? 40 : 0);
 
   @override
   Widget build(
@@ -232,6 +259,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (Platform.isIOS) const SizedBox(height: 40),
           // TabBar remains at the top
           tabBar,
 
@@ -250,12 +278,13 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
+                    controller: searchController,
                     decoration: const InputDecoration(
                       hintText: 'Search...',
                       border: InputBorder.none, // Removes default underline
                     ),
-                    onChanged: (value) {
-                      // Search
+                    onSubmitted: (value) {
+                      onSearchSubmitted(searchController.text);
                     },
                   ),
                 ),

@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage>
 
           //  Tab Bar (This will scroll out of view)
           SliverPersistentHeader(
-            pinned: true, // Keeps it at the top when scrolling
+            pinned: true,
             delegate: _SliverAppBarDelegate(
               searchController: searchController,
               onSearchSubmitted: (text) {
@@ -242,9 +242,11 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  double get minExtent => tabBar.preferredSize.height + 72;
+  double get minExtent =>
+      tabBar.preferredSize.height + 72 + (Platform.isIOS ? 40 : 0);
   @override
-  double get maxExtent => tabBar.preferredSize.height + 72;
+  double get maxExtent =>
+      tabBar.preferredSize.height + 72 + (Platform.isIOS ? 40 : 0);
 
   @override
   Widget build(
@@ -256,6 +258,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // TabBar remains at the top
+          if (Platform.isIOS) const SizedBox(height: 40),
           tabBar,
 
           const SizedBox(height: 8), // Add spacing between tab bar and search

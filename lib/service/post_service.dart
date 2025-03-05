@@ -110,8 +110,6 @@ Future<List<String>> getTags(Post post) async {
 }
 
 Future<List<Post?>> getUserPost(String userId, int limit) async {
-  String userId = await AuthService.getUserId();
-
   try {
     final postQuery = Post.AUTHOR.eq(userId);
     final postRequest =
