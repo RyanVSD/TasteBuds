@@ -135,7 +135,7 @@ class PostModel extends ChangeNotifier {
     else if (dateFilter == "1 Week") { day = 7;}
     else if (dateFilter == "1 Month") { day = 30;}
 
-    List<CompletedRecipe?> postList = await service.getRecipeByDate(DateTime.now().subtract(Duration(hours: day)));
+    List<CompletedRecipe?> postList = await service.getRecipeByDate(DateTime.now().subtract(Duration(days: day)));
     postList = postList.where((post) => post != null).toList();
     
     if (postList.isNotEmpty) {
