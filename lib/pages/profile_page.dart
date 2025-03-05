@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/amplify/ModelProvider.dart';
@@ -63,9 +65,13 @@ class _ProfilePageState extends State<ProfilePage>
 
               padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
               child: Stack(children: [
-                Positioned(right: 0, child: 
-                  ElevatedButton(onPressed: ()=>context.read<UserModel>().userLogout()
-                    ,child: Text("Sign Out"),)),
+                Positioned(
+                    top: Platform.isIOS ? 20 : 0,
+                    right: 0,
+                    child: ElevatedButton(
+                      onPressed: () => context.read<UserModel>().userLogout(),
+                      child: Text("Sign Out"),
+                    )),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -118,11 +124,21 @@ class _ProfilePageState extends State<ProfilePage>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildStatsItem(
-                            context.watch<UserModel>().user
-                            ?.followingCount.toString() ?? '','Following'),
+                            context
+                                    .watch<UserModel>()
+                                    .user
+                                    ?.followingCount
+                                    .toString() ??
+                                '',
+                            'Following'),
                         _buildStatsItem(
-                            context.watch<UserModel>().user
-                            ?.followerCount.toString() ??'','Followers'),
+                            context
+                                    .watch<UserModel>()
+                                    .user
+                                    ?.followerCount
+                                    .toString() ??
+                                '',
+                            'Followers'),
                       ],
                     ),
                   ],
@@ -182,8 +198,9 @@ class _ProfilePageState extends State<ProfilePage>
 
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts =
-        context.read<PostModel>().getUserPostList(context.watch<UserModel>().user?.id ?? "", 10);
+    Future<List<PostItem?>> posts = context
+        .read<PostModel>()
+        .getUserPostList(context.watch<UserModel>().user?.id ?? "", 10);
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,
