@@ -1,8 +1,6 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tastebuds/model/amplify/Post.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/pages/post_page.dart';
@@ -59,8 +57,8 @@ class _RankingPageState extends State<RankingPage> {
         ),
         body: TabBarView(
           children: [
-            FoodPostList(postList: context.read<PostModel>().getRanking("taste", _selectedFilter),), // Taste
-            FoodPostList(postList: context.read<PostModel>().getRanking("diff", _selectedFilter),), // Diff
+            FoodPostList(rankingType: "taste", postList: context.read<PostModel>().getRanking("taste", _selectedFilter),), // Taste
+            FoodPostList(rankingType: "diff",postList: context.read<PostModel>().getRanking("diff", _selectedFilter),), // Diff
           ],
         ),
       ),
@@ -69,7 +67,8 @@ class _RankingPageState extends State<RankingPage> {
 }
 
 class FoodPostList extends StatelessWidget {
-  const FoodPostList({super.key, required this.postList});
+  const FoodPostList({super.key, required this.postList, required this.rankingType});
+  final String rankingType;
   final Future<List<PostItem?>> postList;
 
   @override
@@ -96,6 +95,8 @@ class FoodPostList extends StatelessWidget {
                 Navigator.push(context,MaterialPageRoute(builder: (context) => PostPage(post: post)));
               },
               child: Card(
+                color: Theme.of(context).brightness == Brightness.dark? 
+                   Colors.grey[800] : Theme.of(context).colorScheme.secondary,
                 margin: const EdgeInsets.all(12.0),
                 shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),),
@@ -131,12 +132,21 @@ class FoodPostList extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(12,0,12,5),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('#${index + 1} ${post?.title ?? ""}',
-                              style: const TextStyle(
-                                  fontSize: 18.0, fontWeight: FontWeight.bold)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('#${index + 1} ${post?.title ?? ""}',
+                                  style: const TextStyle(
+                                      fontSize: 18.0, fontWeight: FontWeight.bold)),
+                              Text(rankingType=="taste" ? post!.tasteRating.toStringAsFixed(1) : post!.diffRating.toStringAsFixed(1) ,
+                                  style: const TextStyle(
+                                      fontSize: 18.0, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                           const SizedBox(height: 4.0),
-                          Text(post?.authorId ?? ""),
+
                         ],
                       ),
                     ),

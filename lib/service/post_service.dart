@@ -11,8 +11,7 @@ Future<List<Post?>> getPosts(int limit) async {
     final firstRequest = ModelQueries.list<Post>(Post.classType, limit: limit);
     final firstResult = await Amplify.API.query(request: firstRequest).response;
     final firstPageData = firstResult.data;
-    for (Post? post in firstPageData?.items ?? []) {}
-
+    
     return firstPageData?.items ?? <Post?>[];
   } on ApiException catch (e) {
     safePrint("Error fetching posts: $e");
@@ -91,7 +90,7 @@ Future<Tag?> createTag(String tag) async {
     safePrint("Error creating tag: $e");
   }
 }
-Future<bool> updatePostRating(String? postId, int tasteRating, int diffRating) async{
+Future<bool> updatePostRating(String? postId, double tasteRating, double diffRating) async{
  String userId = await AuthService.getUserId();
   try {
     final query1 = CompletedRecipe.RECIPE.eq(postId);
@@ -115,7 +114,7 @@ Future<bool> updatePostRating(String? postId, int tasteRating, int diffRating) a
   
 }
 
-void createPostRating(Post? post, int tasteRating, int diffRating) async{
+void createPostRating(Post? post, double tasteRating, double diffRating) async{
   User? user = await getCurrentUser();
   try {
     final CompletedRecipe recipe = CompletedRecipe(
@@ -174,8 +173,8 @@ Future<Map<String, int>?> getPostRating(String? postId) async {
     var map = <String, int>{"taste": 0, "difficulty": 0};
     if (response.data != null && response.data!.items.isNotEmpty) {
       map = <String, int>{
-        "taste": response.data!.items.first!.tasteRating
-      , "difficulty": response.data!.items.first!.difficultyRating};
+        "taste": response.data!.items.first!.tasteRating.toInt()
+      , "difficulty": response.data!.items.first!.difficultyRating.toInt()};
     }
 
     return Future.value(map);
@@ -289,7 +288,38 @@ void createPost(PostItem postItem) async {
   }
 }
 
-Future<List<CompletedRecipe?>> getPostByDate(DateTime beginDate) async{
+Future<CompletedRecipe?> getRecipe(Post? post) async{
+  if (post == null) return Future.value(null);
+
+  String? postId = post.id;
+  final recipeRequest = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where:CompletedRecipe.RECIPE.eq(postId));
+  final res = await Amplify.API.query(request: recipeRequest).response;
+  List<CompletedRecipe?> items =  res.data?.items ?? [];
+
+  double tasteAverage = 0;
+  double diffAverage = 0;
+  int len = items.length;
+  for (final rep in items){
+    double a = rep!.tasteRating, b = rep.difficultyRating;
+    if (a!=0 && b!=0) {
+      tasteAverage += a;
+      diffAverage += b;
+    }else {
+      len--;
+    }
+  }
+  tasteAverage = tasteAverage != 0 ? tasteAverage / len : 0;
+  diffAverage = diffAverage != 0 ? diffAverage / len : 0;
+  if (items.isEmpty) return Future.value(null);
+  return items.first!.copyWith(recipe: post, tasteRating: tasteAverage, difficultyRating: diffAverage);
+}
+
+Future<List<CompletedRecipe?>> getRecipeListAndRatings(List<Post?> postItems) async {
+  final list = Future.wait(postItems.map((e)=>getRecipe(e)));
+  return Future.value(list);
+}
+
+Future<List<CompletedRecipe?>> getRecipeByDate(DateTime beginDate) async{
     try {
 
       final dateQuery = Post.UPLOADTIME.gt(beginDate);
@@ -298,24 +328,7 @@ Future<List<CompletedRecipe?>> getPostByDate(DateTime beginDate) async{
 
       if (postsRes.data != null && postsRes.data!.items.isNotEmpty) {
         final postItems = postsRes.data!.items;
-        List<String> postIds = postItems.map((post) => post!.id).toList();
-
-        final recipeRequests = postIds.map((e) async{
-          final recipeRequest = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where:CompletedRecipe.RECIPE.eq(e));
-          final res = await Amplify.API.query(request: recipeRequest).response;
-          return res.data;
-        });
-
-        final res = await Future.wait(recipeRequests);
-        int i = 0;
-        final recipes = res.where((e)=>e!.items.isNotEmpty).map(
-          (e){
-            double tasteAverage = 0;
-            double diffAverage = 0;
-            return e!.items.first!.copyWith(recipe: postItems[i++]);
-          }
-          ).toList();
-        return recipes;
+        return getRecipeListAndRatings(postItems);
       }
     } catch (e) {
       print("Error fetching posts: $e");

@@ -28,8 +28,8 @@ class CompletedRecipe extends amplify_core.Model {
   static const classType = const _CompletedRecipeModelType();
   final String id;
   final amplify_core.TemporalDateTime? _completedAt;
-  final int? _difficultyRating;
-  final int? _tasteRating;
+  final double? _difficultyRating;
+  final double? _tasteRating;
   final User? _user;
   final Post? _recipe;
   final amplify_core.TemporalDateTime? _createdAt;
@@ -52,7 +52,7 @@ class CompletedRecipe extends amplify_core.Model {
     return _completedAt;
   }
   
-  int get difficultyRating {
+  double get difficultyRating {
     try {
       return _difficultyRating!;
     } catch(e) {
@@ -65,7 +65,7 @@ class CompletedRecipe extends amplify_core.Model {
     }
   }
   
-  int get tasteRating {
+  double get tasteRating {
     try {
       return _tasteRating!;
     } catch(e) {
@@ -96,7 +96,7 @@ class CompletedRecipe extends amplify_core.Model {
   
   const CompletedRecipe._internal({required this.id, completedAt, required difficultyRating, required tasteRating, user, recipe, createdAt, updatedAt}): _completedAt = completedAt, _difficultyRating = difficultyRating, _tasteRating = tasteRating, _user = user, _recipe = recipe, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory CompletedRecipe({String? id, amplify_core.TemporalDateTime? completedAt, required int difficultyRating, required int tasteRating, User? user, Post? recipe}) {
+  factory CompletedRecipe({String? id, amplify_core.TemporalDateTime? completedAt, required double difficultyRating, required double tasteRating, User? user, Post? recipe}) {
     return CompletedRecipe._internal(
       id: id == null ? amplify_core.UUID.getUUID() : id,
       completedAt: completedAt,
@@ -143,7 +143,7 @@ class CompletedRecipe extends amplify_core.Model {
     return buffer.toString();
   }
   
-  CompletedRecipe copyWith({amplify_core.TemporalDateTime? completedAt, int? difficultyRating, int? tasteRating, User? user, Post? recipe}) {
+  CompletedRecipe copyWith({amplify_core.TemporalDateTime? completedAt, double? difficultyRating, double? tasteRating, User? user, Post? recipe}) {
     return CompletedRecipe._internal(
       id: id,
       completedAt: completedAt ?? this.completedAt,
@@ -155,8 +155,8 @@ class CompletedRecipe extends amplify_core.Model {
   
   CompletedRecipe copyWithModelFieldValues({
     ModelFieldValue<amplify_core.TemporalDateTime?>? completedAt,
-    ModelFieldValue<int>? difficultyRating,
-    ModelFieldValue<int>? tasteRating,
+    ModelFieldValue<double>? difficultyRating,
+    ModelFieldValue<double>? tasteRating,
     ModelFieldValue<User?>? user,
     ModelFieldValue<Post?>? recipe
   }) {
@@ -173,8 +173,8 @@ class CompletedRecipe extends amplify_core.Model {
   CompletedRecipe.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _completedAt = json['completedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['completedAt']) : null,
-      _difficultyRating = (json['difficultyRating'] as num?)?.toInt(),
-      _tasteRating = (json['tasteRating'] as num?)?.toInt(),
+      _difficultyRating = (json['difficultyRating'] as num?)?.toDouble(),
+      _tasteRating = (json['tasteRating'] as num?)?.toDouble(),
       _user = json['user'] != null
         ? json['user']['serializedData'] != null
           ? User.fromJson(new Map<String, dynamic>.from(json['user']['serializedData']))
@@ -240,13 +240,13 @@ class CompletedRecipe extends amplify_core.Model {
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: CompletedRecipe.DIFFICULTYRATING,
       isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.double)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: CompletedRecipe.TASTERATING,
       isRequired: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.double)
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.belongsTo(

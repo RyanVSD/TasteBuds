@@ -21,6 +21,9 @@ class PostItem {
 
   final double price;
 
+  double tasteRating = 0;
+  double diffRating = 0;
+
   final List<IngredientItem> ingredients; // Ingredients for the recipe
 
   List<String> tags;

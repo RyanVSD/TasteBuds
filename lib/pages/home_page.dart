@@ -67,8 +67,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Center(
           child: <Widget>[
-            PostGrid(posts: context.watch<PostModel>().getPostList(10)),
-            PostGrid(posts: context.watch<PostModel>().getPostList(10)),
+            PostGrid(posts: context.watch<PostModel>().getPostList(20)),
+            PostGrid(posts: context.watch<PostModel>().getPostList(20)),
           ][page],
         ));
   }
