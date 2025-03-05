@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
-import 'package:provider/provider.dart';
 import 'package:tastebuds/service/post_service.dart';
 import '../post_page.dart';
 

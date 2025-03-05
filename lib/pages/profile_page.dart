@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
-import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:tastebuds/model/post_model.dart';
 import 'package:tastebuds/model/user_model.dart';
-import 'package:tastebuds/pages/widget/post_card.dart';
 import 'package:tastebuds/pages/widget/post_grid.dart';
 import '../model/objects/post_item.dart';
 import 'package:provider/provider.dart';

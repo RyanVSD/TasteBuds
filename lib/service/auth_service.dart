@@ -1,7 +1,5 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:tastebuds/model/amplify/ModelProvider.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-
 
 class AuthService {
   /// Fetches the currently signed-in user's attributes
@@ -46,6 +44,7 @@ class AuthService {
     }
   }
 }
+
 Future<void> signOutCurrentUser() async {
   final result = await Amplify.Auth.signOut();
   if (result is CognitoCompleteSignOut) {
