@@ -11,8 +11,6 @@ Future<List<Post?>> getPosts(int limit) async {
     final firstRequest = ModelQueries.list<Post>(Post.classType, limit: limit);
     final firstResult = await Amplify.API.query(request: firstRequest).response;
     final firstPageData = firstResult.data;
-    for (Post? post in firstPageData?.items ?? []) {}
-
     return firstPageData?.items ?? <Post?>[];
   } on ApiException catch (e) {
     safePrint("Error fetching posts: $e");
@@ -20,6 +18,40 @@ Future<List<Post?>> getPosts(int limit) async {
   }
 }
 
+Future<List<Post?>> getPostsContaining(String s) async {
+  try {
+    final postQuery1 = Post.TITLE.contains(s);
+    final postQuery2 = Post.DESCRIPTION.contains(s);
+    var postQuery = postQuery1.or(postQuery2);
+    for (final word in s.split(" ").map((w) => w.toLowerCase())) {
+      final tagQuery = TagModelIdentifier(value: word);
+      final tagRequest = ModelQueries.get<Tag>(Tag.classType, tagQuery);
+      final tagResponse = await Amplify.API.query(request: tagRequest).response;
+      final tagData = tagResponse.data;
+      if (tagData != null) {
+        final postsQuery = ModelQueries.list<PostTag>(PostTag.classType,
+            where: PostTag.TAG.eq(word));
+        final postTags = await Amplify.API.query(request: postsQuery).response;
+        for (PostTag? edge in postTags.data?.items ?? []) {
+          if (edge == null) continue;
+          if (edge.post == null) continue;
+          final postQuery3 = Post.ID.eq(edge.post!.id);
+          postQuery = postQuery.or(postQuery3);
+        }
+      }
+    }
+    final postRequest =
+        ModelQueries.list<Post>(Post.classType, where: postQuery);
+    final postResponse = await Amplify.API.query(request: postRequest).response;
+
+    List<Post?> psts =
+        postResponse.data != null ? postResponse.data!.items : [];
+    return psts;
+  } on ApiException catch (e) {
+    safePrint("Error fetching posts containing $s: $e");
+    return [];
+  }
+}
 
 Future<List<String>> getTags(Post post) async {
   List<String> tagStrings = [];
@@ -40,7 +72,8 @@ Future<List<Post?>> getUserPost(String userId, int limit) async {
 
   try {
     final postQuery = Post.AUTHOR.eq(userId);
-    final postRequest = ModelQueries.list<Post>(Post.classType, where: postQuery);
+    final postRequest =
+        ModelQueries.list<Post>(Post.classType, where: postQuery);
     final postResponse = await Amplify.API.query(request: postRequest).response;
 
     return postResponse.data?.items ?? [];
@@ -89,22 +122,28 @@ Future<Tag?> createTag(String tag) async {
     return response.data;
   } on ApiException catch (e) {
     safePrint("Error creating tag: $e");
+    return null;
   }
 }
-Future<bool> updatePostRating(String? postId, int tasteRating, int diffRating) async{
- String userId = await AuthService.getUserId();
+
+Future<bool> updatePostRating(
+    String? postId, int tasteRating, int diffRating) async {
+  String userId = await AuthService.getUserId();
   try {
     final query1 = CompletedRecipe.RECIPE.eq(postId);
     final query2 = CompletedRecipe.USER.eq(userId).and(query1);
-    final request = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where: query2);
+    final request = ModelQueries.list<CompletedRecipe>(
+        CompletedRecipe.classType,
+        where: query2);
     final res = await Amplify.API.query(request: request).response;
 
     if (res.data != null && res.data!.items.isNotEmpty) {
       final post = res.data!.items.first;
-      final newPost = post!.copyWith(tasteRating: tasteRating, difficultyRating: diffRating);
+      final newPost = post!
+          .copyWith(tasteRating: tasteRating, difficultyRating: diffRating);
       Amplify.API.mutate(request: ModelMutations.update(newPost));
       return Future.value(true);
-    }else {
+    } else {
       return Future.value(false);
     }
     // print(response.data);
@@ -112,18 +151,16 @@ Future<bool> updatePostRating(String? postId, int tasteRating, int diffRating) a
     safePrint("error fetching post: $e");
     return Future.value(true);
   }
-  
 }
 
-void createPostRating(Post? post, int tasteRating, int diffRating) async{
+void createPostRating(Post? post, int tasteRating, int diffRating) async {
   User? user = await getCurrentUser();
   try {
     final CompletedRecipe recipe = CompletedRecipe(
         user: user,
         recipe: post,
-        difficultyRating: diffRating, 
-        tasteRating: tasteRating
-    );
+        difficultyRating: diffRating,
+        tasteRating: tasteRating);
     final request = ModelMutations.create(recipe);
     await Amplify.API.mutate(request: request).response;
     // print(response.data);
@@ -163,29 +200,32 @@ Future<List<Post>> getPostsByTag(String tag) async {
     return [];
   }
 }
+
 Future<Map<String, int>?> getPostRating(String? postId) async {
   String userId = await AuthService.getUserId();
   try {
     final query1 = CompletedRecipe.RECIPE.eq(postId);
     final query2 = CompletedRecipe.USER.eq(userId).and(query1);
-    final request = ModelQueries.list<CompletedRecipe>(CompletedRecipe.classType, where: query2);
+    final request = ModelQueries.list<CompletedRecipe>(
+        CompletedRecipe.classType,
+        where: query2);
     final response = await Amplify.API.query(request: request).response;
 
     var map = <String, int>{"taste": 0, "difficulty": 0};
     if (response.data != null && response.data!.items.isNotEmpty) {
       map = <String, int>{
-        "taste": response.data!.items.first!.tasteRating
-      , "difficulty": response.data!.items.first!.difficultyRating};
+        "taste": response.data!.items.first!.tasteRating,
+        "difficulty": response.data!.items.first!.difficultyRating
+      };
     }
 
     return Future.value(map);
-    
   } on ApiException catch (e) {
-
     safePrint("Error fetching posts: $e");
     return Future.value(null);
   }
 }
+
 void createPost(PostItem postItem) async {
   try {
     // Get the user object of the author

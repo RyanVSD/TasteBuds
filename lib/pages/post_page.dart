@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/model/post_model.dart';
@@ -5,7 +7,6 @@ import 'package:tastebuds/pages/other_profile_page.dart';
 import 'package:tastebuds/pages/widget/step.dart';
 import 'package:tastebuds/service/post_service.dart';
 import 'package:provider/provider.dart';
-
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key, required this.post});
@@ -35,11 +36,12 @@ class _PostPageState extends State<PostPage> {
             index < rating ? Icons.star : Icons.star_border,
             color: Colors.amber,
           ),
-          onPressed: () { 
+          onPressed: () {
             int newRating = index + 1;
             setState(() {
               onRatingSelected(newRating);
-              context.read<PostModel>().setPostRating(widget.post!.id, tasteRating, difficultyRating);
+              context.read<PostModel>().setPostRating(
+                  widget.post!.id, tasteRating, difficultyRating);
             });
           },
         );
@@ -52,7 +54,7 @@ class _PostPageState extends State<PostPage> {
     if (p != null) {
       String newPath = await getS3Url(p.imageUrl);
       setState(() => imUrl = newPath);
-    } 
+    }
   }
 
   void loadRating() async {
@@ -210,6 +212,23 @@ class _PostPageState extends State<PostPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(widget.post!.description),
+                            Wrap(
+                                children: widget.post!.tags
+                                    .map((tag) => SizedBox(
+                                          child: ElevatedButton(
+                                            onPressed: () => print(tag),
+                                            style: ElevatedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(0),
+                                              ),
+                                            ),
+                                            child: Text("#$tag",
+                                                textAlign: TextAlign.center),
+                                          ),
+                                        ))
+                                    .toList()),
                             Text(
                               "Ingredients",
                               style: TextStyle(
@@ -259,9 +278,8 @@ class _PostPageState extends State<PostPage> {
                                 fontSize: 18,
                               ),
                             ),
-                            _buildStarRating(
-                                difficultyRating,
-                                (rating) =>difficultyRating = rating),
+                            _buildStarRating(difficultyRating,
+                                (rating) => difficultyRating = rating),
                             Text(
                               "Taste Ratings",
                               style: TextStyle(
@@ -270,8 +288,7 @@ class _PostPageState extends State<PostPage> {
                               ),
                             ),
                             _buildStarRating(
-                                tasteRating,
-                                (rating) => tasteRating = rating),
+                                tasteRating, (rating) => tasteRating = rating),
                           ],
                         ),
                       ],
@@ -282,7 +299,7 @@ class _PostPageState extends State<PostPage> {
 
           /// Back Button on Top of Image
           Positioned(
-            top: kToolbarHeight / 2,
+            top: Platform.isIOS ? kToolbarHeight : kToolbarHeight / 2,
             left: 16,
             child: CircleAvatar(
               backgroundColor: Colors.black54,
@@ -294,7 +311,7 @@ class _PostPageState extends State<PostPage> {
           ),
 
           Positioned(
-            top: kToolbarHeight / 2,
+            top: Platform.isIOS ? kToolbarHeight : kToolbarHeight / 2,
             right: 16,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
