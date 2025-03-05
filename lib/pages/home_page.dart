@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tastebuds/model/objects/post_item.dart';
 import 'package:tastebuds/model/user_model.dart';
-import 'package:tastebuds/service/post_service.dart';
+import 'package:tastebuds/pages/search_page.dart';
 import './widget/post_grid.dart';
 import 'package:tastebuds/model/post_model.dart';
 
@@ -45,9 +42,7 @@ class _HomePageState extends State<HomePage> {
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  setState(() {
-                    searching = !(searching);
-                  });
+                  Navigator.push(context, MaterialPageRoute( builder: (context) => SearchPage()));
                 }),
           ],
           centerTitle: true,
@@ -89,26 +84,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: Center(
-          child: Column(children: [
-            searching
-                ? Padding(
-                    padding: EdgeInsets.all(4),
-                    child: TextFormField(
-                      controller: searchController,
-                      decoration: const InputDecoration(
-                        labelText: 'Search',
-                      ),
-                      onEditingComplete: onSearchSave,
-                    ))
-                : SizedBox.shrink(),
+          child: 
             <Widget>[
-              PostGrid(
-                  posts: searching
-                      ? context.watch<PostModel>().getPostListContaining(search)
-                      : context.watch<PostModel>().getPostList(10)),
-              PostGrid(posts: context.watch<PostModel>().getPostList(10)),
+              PostGrid(posts: context.watch<PostModel>().getPostList(20)),
+              PostGrid(posts: context.watch<PostModel>().getPostList(20)),
             ][page]
-          ]),
-        ));
+          ),
+        );
   }
 }

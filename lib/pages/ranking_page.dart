@@ -139,10 +139,10 @@ class FoodPostList extends StatelessWidget {
                             children: [
                               Text('#${index + 1} ${post?.title ?? ""}',
                                   style: const TextStyle(
-                                      fontSize: 18.0, fontWeight: FontWeight.bold)),
+                                      fontSize: 18.0, )),
                               Text(rankingType=="taste" ? post!.tasteRating.toStringAsFixed(1) : post!.diffRating.toStringAsFixed(1) ,
                                   style: const TextStyle(
-                                      fontSize: 18.0, fontWeight: FontWeight.bold)),
+                                      fontSize: 18.0)),
                             ],
                           ),
                           const SizedBox(height: 4.0),

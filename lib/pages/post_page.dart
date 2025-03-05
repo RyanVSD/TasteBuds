@@ -228,19 +228,23 @@ class _PostPageState extends State<PostPage> {
                             Text(widget.post!.description),
                             Wrap(
                                 children: widget.post!.tags
-                                    .map((tag) => SizedBox(
-                                          child: ElevatedButton(
+                                    .map((tag) => Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: ElevatedButton(
                                             onPressed: () => print(tag),
                                             style: ElevatedButton.styleFrom(
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(0),
+                                                    BorderRadius.circular(10),
                                               ),
                                             ),
-                                            child: Text("#$tag",
-                                                textAlign: TextAlign.center),
+                                            child: Text("#$tag",textAlign: TextAlign.center, 
+                                            style: TextStyle(
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                              fontSize: 14, // Golden color
+                                            ),),
                                           ),
-                                        ))
+                                    ),)
                                     .toList()),
                             Text(
                               "Ingredients",
