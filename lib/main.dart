@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/model/post_model.dart';
-import './pages/home_page.dart';
-import 'package:provider/provider.dart';
+import 'package:tastebuds/model/post_model.dart'; // Keep this import
+import './pages/home_page.dart'; // Keep this import
+import 'package:provider/provider.dart'; // Add this import
+import './pages/ranking_page.dart'; // Add this import
 
-import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-
-import 'amplify_outputs.dart';
-import 'model/ModelProvider.dart';
-
-Future<void> main() async {
-  runApp(const MyApp());
-  try {
-    final api = AmplifyAPI(
-        options: APIPluginOptions(modelProvider: ModelProvider.instance));
-    await Amplify.addPlugins([api]);
-    await Amplify.configure(amplifyConfig);
-
-    safePrint('Successfully configured Amplify');
-  } on Exception catch (e) {
-    safePrint('Error configuring Amplify: $e');
-  }
+void main() {
+  runApp(const MyAppRoot()); // NEW: Rename MyApp to MyAppRoot and wrap it in MultiProvider
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyAppRoot extends StatelessWidget { // NEW: Rename MyApp to MyAppRoot
+  const MyAppRoot({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => PostModel())],
-      child: MaterialApp(
-        home: HomePage(),
+      // NEW: Provide PostModel at the root level
+      providers: [
+        ChangeNotifierProvider(create: (context) => PostModel()),
+      ],
+      child: const MyApp(), // NEW: Wrap the original MyApp in MultiProvider
+    );
+  }
+}
+
+class MyApp extends StatelessWidget { // Keep as is, but now it’s a child of MultiProvider
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.yellow, // Yellow theme as requested
+        scaffoldBackgroundColor: Colors.white, // White background
       ),
+      home: HomePage(),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tastebuds/pages/ranking_page.dart';
+import 'package:tastebuds/pages/ranking_selection.dart';
 import 'package:tastebuds/pages/recc_page.dart';
 
 import '../pages/home_page.dart';
@@ -43,7 +43,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             onPressed: () {
               if (_currentPage != 1){
                 changePage(1);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RankingPage()),);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RankingSelectionPage()),);
               }
             },
           ),

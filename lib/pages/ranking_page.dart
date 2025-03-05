@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tastebuds/model/post_model.dart';
-import './post_page.dart';
-import 'package:tastebuds/model/dummy_data.dart';
-import 'package:tastebuds/model/objects/post.dart';
-import '/widgets/bottom_nav_bar.dart';
+import '../widgets/leaderboard_list.dart';
+import '../widgets/bottom_nav_bar.dart';
 
-class RankingPage extends StatelessWidget {
+class RankingPage extends StatelessWidget { // Simplified to StatelessWidget since state isn’t needed
   const RankingPage({super.key});
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       
-        bottomNavigationBar: BottomNavBar(),
-        floatingActionButton: AddPostButton(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        body: Center(
-          child: Text("Ranking"),
-        )
-      );
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+          // NEW: Back arrow to return to selection page
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.yellow,
+        title: const Text(
+          'LeaderBoard',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      
+      body: LeaderboardList(
+        posts: context.watch<PostModel>().getTopRecipes(10),
+      ),
+    );
   }
 }
-
