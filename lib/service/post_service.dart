@@ -25,6 +25,7 @@ Future<List<Post?>> getUserPostsContaining(String userId, String s) async {
     final postQuery2 = Post.DESCRIPTION.contains(s);
     final postQuery3 = Post.AUTHOR.eq(userId);
     var postQuery = postQuery1.or(postQuery2);
+
     for (final word in s.split(" ").map((w) => w.toLowerCase())) {
       final tagQuery = TagModelIdentifier(value: word);
       final tagRequest = ModelQueries.get<Tag>(Tag.classType, tagQuery);
@@ -42,9 +43,12 @@ Future<List<Post?>> getUserPostsContaining(String userId, String s) async {
         }
       }
     }
-    postQuery.and(postQuery3);
+
+    postQuery = postQuery.and(postQuery3);
+
     final postRequest =
         ModelQueries.list<Post>(Post.classType, where: postQuery);
+
     final postResponse = await Amplify.API.query(request: postRequest).response;
 
     List<Post?> psts =
