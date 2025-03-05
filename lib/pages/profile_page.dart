@@ -20,7 +20,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController; // Initially invisible
-
+  String search = "";
+  TextEditingController searchController = TextEditingController();
   late ScrollController _scrollController;
 
   @override
@@ -151,7 +152,13 @@ class _ProfilePageState extends State<ProfilePage>
           SliverPersistentHeader(
             pinned: true, // Keeps it at the top when scrolling
             delegate: _SliverAppBarDelegate(
-              TabBar(
+              searchController: searchController,
+              onSearchSubmitted: (text) {
+                setState(() {
+                  search = searchController.text;
+                });
+              },
+              tabBar: TabBar(
                 controller: _tabController,
                 labelColor: Theme.of(context).colorScheme.onSurface,
                 unselectedLabelColor: Colors.grey,
@@ -198,9 +205,12 @@ class _ProfilePageState extends State<ProfilePage>
 
   // _buildPostsList() method (scrolls inside TabBarView)
   Widget _buildPostsList() {
-    Future<List<PostItem?>> posts = context
-        .read<PostModel>()
-        .getUserPostList(context.watch<UserModel>().user?.id ?? "", 10);
+    Future<List<PostItem?>> posts = search != ""
+        ? context.read<PostModel>().getUserPostListContaining(
+            context.watch<UserModel>().user?.id ?? "", search)
+        : context
+            .read<PostModel>()
+            .getUserPostList(context.watch<UserModel>().user?.id ?? "", 10);
 
     return FutureBuilder<List<PostItem?>>(
         future: posts,
@@ -225,7 +235,14 @@ class _ProfilePageState extends State<ProfilePage>
 //  Helper class to keep the Tab Bar pinned at the top
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
-  _SliverAppBarDelegate(this.tabBar);
+  final TextEditingController searchController;
+  final void Function(String) onSearchSubmitted;
+
+  _SliverAppBarDelegate({
+    required this.tabBar,
+    required this.searchController,
+    required this.onSearchSubmitted,
+  });
 
   @override
   double get minExtent => tabBar.preferredSize.height + 72;
@@ -259,12 +276,13 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
                 const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
+                    controller: searchController,
                     decoration: const InputDecoration(
                       hintText: 'Search...',
                       border: InputBorder.none, // Removes default underline
                     ),
-                    onChanged: (value) {
-                      // Search
+                    onSubmitted: (value) {
+                      onSearchSubmitted(searchController.text);
                     },
                   ),
                 ),
