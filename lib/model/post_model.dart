@@ -28,6 +28,9 @@ class PostModel extends ChangeNotifier {
       if (post != null) {
         List<String> tags = await service.getTags(post);
         posts[i]!.tags = tags;
+        // CompletedRecipe? r = await service.getRecipe(post);
+        // posts[i]!.diffRating = r?.difficultyRating ?? 0;
+        // posts[i]!.tasteRating = r?.tasteRating ?? 0;
       }
     }
     return posts;
@@ -74,12 +77,15 @@ class PostModel extends ChangeNotifier {
     createPost(createdPost);
   }
 
-  void setPostRating(String? postId, int taste, int diff) async {
-    bool hasPost = await service.updatePostRating(postId, taste, diff);
-    if (!hasPost) {
-      Post? p = await service.getPost(postId);
-      service.createPostRating(p, taste, diff);
-    }
+  void setPostRating(String? postId, int t, int d) async{
+
+    double taste = t.toDouble();
+    double diff = d.toDouble();
+      bool hasPost = await service.updatePostRating(postId, taste, diff);
+      if (!hasPost) {
+        Post? p = await service.getPost(postId);
+        service.createPostRating(p, taste, diff);
+      }
   }
 
   Future<Map<String, int>?> getPostRating(String? postId) async {
@@ -112,4 +118,50 @@ class PostModel extends ChangeNotifier {
       tags: [],
     );
   }
+
+  Future<Map<String, double>> getPublicRatings(String? postId) async {
+    Post? post = await service.getPost(postId);
+    final recipe = await service.getRecipe(post);
+    return {
+      "taste": recipe?.tasteRating ?? 0,
+      "diff" : recipe?.difficultyRating ?? 0
+    };
+  }
+
+
+  Future<List<PostItem?>> getRanking(String filter, String dateFilter) async{
+    int day = 1;
+    if (dateFilter == "3 Days") { day = 3;}
+    else if (dateFilter == "1 Week") { day = 7;}
+    else if (dateFilter == "1 Month") { day = 30;}
+
+    List<CompletedRecipe?> postList = await service.getRecipeByDate(DateTime.now().subtract(Duration(hours: day)));
+    postList = postList.where((post) => post != null).toList();
+    
+    if (postList.isNotEmpty) {
+      if (filter == "taste") {
+        List<CompletedRecipe?> sorted = postList.where((e) => e!.tasteRating != 0,).toList();
+        sorted.sort((a, b) => b!.tasteRating.compareTo(a!.tasteRating));
+        sorted = sorted.sublist(0, sorted.length < 5 ? sorted.length : 5);
+        return sorted.map((e){
+          PostItem p = postToPostItem(e!.recipe!);
+          p.tasteRating = e.tasteRating;
+          return p;
+        }).toList();
+
+      }else if (filter == "diff") {
+        List<CompletedRecipe?> sorted = postList.where((e) => e!.difficultyRating != 0,).toList();
+        sorted.sort((a, b) => b!.difficultyRating.compareTo(a!.difficultyRating));
+        sorted = sorted.sublist(0, sorted.length < 5 ? sorted.length : 5);
+        return sorted.map((e){
+          PostItem p = postToPostItem(e!.recipe!);
+          p.diffRating = e.difficultyRating;
+          return p;
+        }).toList();
+      }
+    } 
+    return Future.value([]);
+    
+  }
+
 }

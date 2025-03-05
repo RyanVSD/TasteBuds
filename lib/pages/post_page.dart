@@ -26,10 +26,11 @@ class _PostPageState extends State<PostPage> {
   int tasteRating = 0;
   bool isLiked = false;
   bool isFavorited = false;
+  Map<String, double> publicRatings = {"taste": 0, "diff":0};
 
   Widget _buildStarRating(int rating, Function(int) onRatingSelected) {
     return Row(
-      children: List.generate(5, (index) {
+      children: [...List.generate(5, (index) {
         return IconButton(
           icon: Icon(
             size: 30,
@@ -46,6 +47,7 @@ class _PostPageState extends State<PostPage> {
           },
         );
       }),
+      ]
     );
   }
 
@@ -55,6 +57,16 @@ class _PostPageState extends State<PostPage> {
       String newPath = await getS3Url(p.imageUrl);
       setState(() => imUrl = newPath);
     }
+  }
+
+  void loadPublicRatings() async {
+    Map<String, double>? res;
+    if (widget.post != null) {
+      res = await context.read<PostModel>().getPublicRatings(widget.post!.id);
+    }
+    setState(() {
+      publicRatings = res ?? {"taste": 0, "diff":0};
+    });
   }
 
   void loadRating() async {
@@ -73,6 +85,7 @@ class _PostPageState extends State<PostPage> {
     super.initState();
     updImUrl();
     loadRating();
+    loadPublicRatings();
     // print(widget.post!.toJson().toString());
   }
 
@@ -272,7 +285,7 @@ class _PostPageState extends State<PostPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Difficulty Ratings",
+                              "Difficulty Ratings   ${publicRatings["diff"]?.toStringAsFixed(1)}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -281,7 +294,7 @@ class _PostPageState extends State<PostPage> {
                             _buildStarRating(difficultyRating,
                                 (rating) => difficultyRating = rating),
                             Text(
-                              "Taste Ratings",
+                              "Taste Ratings   ${publicRatings["taste"]?.toStringAsFixed(1)}",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
