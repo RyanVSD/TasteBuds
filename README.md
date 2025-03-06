@@ -1,3 +1,5 @@
+<img src="D:\document\TasteBuds\screenshot\logo.png" style="zoom:20%;" />
+
 # TasteBudz
 
 A social media app specifically designed around sharing what you're eating with friends and others online. In addition to using it as a food Instagram, it will feature a rating system to motivate you to cook more, try new recipes, and compete with friends!
