@@ -131,6 +131,7 @@ class ReccCard extends StatelessWidget {
                 children: [
                   Text(
                     post.title,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 16,
                       // fontWeight: FontWeight.bold,
