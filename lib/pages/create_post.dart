@@ -72,7 +72,7 @@ class _CreatePostState extends State<CreatePost> {
     } else if (tagControllers.map((c) => c.text).contains("")) {
       return "Cannot have any empty tags";
     } else if (tagControllers
-        .any((c) => c.text.contains(RegExp(r"[^[a-zA-Z\-1-9]")))) {
+        .any((c) => c.text.contains(RegExp(r"[^[a-zA-Z0-9\-]")))) {
       return "Tags cannot have any non alphabetic characters";
     } else {
       return null;
