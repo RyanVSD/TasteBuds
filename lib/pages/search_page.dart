@@ -11,7 +11,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  bool searching = false;
   TextEditingController searchController = TextEditingController();
   String search = "";
 
@@ -20,11 +19,7 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
   }
 
-  void onSearchSave() {
-    setState(() {
-      search = searchController.text;
-    });
-  }
+  void onSearchSave() {}
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +50,17 @@ class _SearchPageState extends State<SearchPage> {
                         labelText: 'Search',
                         border: InputBorder.none,
                       ),
-                      onEditingComplete: onSearchSave,
-                      onTap: () {
-                        searching = true;
-                      },
-                      onTapOutside: (e) {
-                        searching = false;
+                      onFieldSubmitted: (text) {
+                        setState(() {
+                          search = searchController.text;
+                        });
                       },
                     ))
                   ]))),
-          PostGrid(
-              posts: searching
-                  ? context.watch<PostModel>().getPostListContaining(search)
-                  : Future.value([]))
+          Expanded(
+              child: PostGrid(
+                  posts:
+                      context.watch<PostModel>().getPostListContaining(search)))
         ],
       ),
     );

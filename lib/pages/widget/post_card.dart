@@ -16,7 +16,7 @@ class CardWidget extends StatefulWidget {
 }
 
 final String defaultImPath =
-    "https://media.istockphoto.com/id/184276818/photo/red-apple.jpg?s=612x612&w=0&k=20&c=NvO-bLsG0DJ_7Ii8SSVoKLurzjmV0Qi4eGfn6nW3l5w=";
+    "https://cobblestone.me/wp-content/plugins/photonic/include/images/placeholder-Sm.png";
 
 class _CardWidgetState extends State<CardWidget> {
   String imUrl = defaultImPath;
