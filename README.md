@@ -1,16 +1,17 @@
-# tastebuds
+# TasteBudz
 
-A new Flutter project.
+A social media app specifically designed around sharing what you're eating with friends and others online. In addition to using it as a food Instagram, it will feature a rating system to motivate you to cook more, try new recipes, and compete with friends!
 
-## Getting Started
+**Core Features:** 
 
-This project is a starting point for a Flutter application.
+- Users can make posts featuring an image, food name, and recipe
+- Users can rate recipe shared by others
+- Search/querying system to look for specific types of food/recipes.
+- Post ranking by difficulty and taste ranked by the users
 
-A few resources to get you started if this is your first Flutter project:
+**Frontend**: Flutter
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+**Backend**: AWS (Amplify, DynamoDB, API Gateway, S3)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[**Demo screenshots**](./screenshot)
+
