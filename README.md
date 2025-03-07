@@ -1,4 +1,4 @@
-<img src="D:\document\TasteBuds\screenshot\logo.png" style="zoom:20%;" />
+<img src="./screenshot/logo.png" width=20% height=20%>
 
 # TasteBudz
 
